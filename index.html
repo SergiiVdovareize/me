@@ -1,31 +1,300 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="styles.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sergii Vdovareize - Portfolio</title>
+    <!-- Ukrainian Designed Fonts: Arsenal (Sans) and Yeseva One (Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arsenal:ital,wght@0,400;0,700;1,400&family=Yeseva+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <main class="content-wrapper">
+        <header class="hero">
+            <h1 class="name">Sergii Vdovareize</h1>
+            <p class="role">Senior Frontend / Fullstack Engineer</p>
+            <div class="contact-links">
+                <a href="mailto:servdo@gmail.com">servdo@gmail.com</a>
+                <span class="dot">•</span>
+                <a href="https://www.linkedin.com/in/sergiivdovareize" target="_blank">LinkedIn</a>
+                <span class="dot">•</span>
+                <a href="https://github.com/SergiiVdovareize" target="_blank">GitHub</a>
+            </div>
+        </header>
 
-<div class="main-container">
-    <div class="content">
-        <h1>Принеси поїсти</h1>
-        <p>
-            <img src="./ct.jpg"/>
-        </p>
-<!--         <div class="donates">
-            <div>
-                Актуальний збір:
-                <a href="https://www.instagram.com/p/C6bHwrINEt9">3 зенітні триноги під ПКМ для 3 БрОП «Спартан»</a>
+        <section class="intro">
+            <h2>Summary</h2>
+            <p>I have over 15 years of experience as a software engineer with a strong focus on frontend and product-oriented development. My background spans multiple domains including EdTech, Healthcare, Video Advertising, Telecom, and Web Platforms.</p>
+            <p>I’ve worked in small cross-functional teams where versatility is critical, as well as in large-scale enterprise environments with clearly defined roles and delivery pipelines. This experience has given me a solid understanding of architecture decisions, performance optimization, CI/CD, automated testing strategies, accessibility standards, analytics, and product growth mechanics.</p>
+            <p>I focus on building scalable, measurable, and maintainable systems. I continuously look for ways to improve performance, increase test coverage, automate workflows, enhance UX, and strengthen engineering culture.</p>
+        </section>
+
+        <div class="grid-layout">
+            <aside class="sidebar">
+                <div class="block">
+                    <h2>Education</h2>
+                    <div class="item">
+                        <h3>Kharkiv National University of Radioelectronics</h3>
+                        <p>Master’s Degree in Computer Science</p>
+                    </div>
+                    <div class="item">
+                        <h3>National Technical University of Ukraine «lgor Sikorsky Kyiv Polytechnic Institute»</h3>
+                        <p>Master’s Degree in Electronic communications and Radio Engineering</p>
+                    </div>
+                </div>
+
+                <div class="block">
+                    <h2>Languages</h2>
+                    <ul class="simple-list">
+                        <li><strong>English</strong> — Upper-Intermediate</li>
+                        <li><strong>Ukrainian</strong> — Fluent</li>
+                    </ul>
+                </div>
+
+                <div class="block skills-block">
+                    <h2>Key Skills</h2>
+                    
+                    <div class="skill-group">
+                        <h3>Languages</h3>
+                        <div class="tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">TypeScript</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">Java</span>
+                            <span class="tag">Ruby</span>
+                            <span class="tag">PHP</span>
+                            <span class="tag">C</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group">
+                        <h3>Frameworks & Libraries</h3>
+                        <div class="tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Next.js</span>
+                            <span class="tag">Nest.js</span>
+                            <span class="tag">Express.js</span>
+                            <span class="tag">Spring</span>
+                            <span class="tag">Ruby on Rails</span>
+                            <span class="tag">CodeIgniter</span>
+                            <span class="tag">Symfony</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group">
+                        <h3>Testing</h3>
+                        <div class="tags">
+                            <span class="tag">Mocha</span>
+                            <span class="tag">Sinon</span>
+                            <span class="tag">Enzyme</span>
+                            <span class="tag">Chai</span>
+                            <span class="tag">Jest</span>
+                            <span class="tag">Puppeteer</span>
+                            <span class="tag">Playwright</span>
+                            <span class="tag">PhantomJS</span>
+                            <span class="tag">Percy</span>
+                            <span class="tag">ArgosCI</span>
+                            <span class="tag">Selenium</span>
+                            <span class="tag">Nightwatch</span>
+                            <span class="tag">Jasmine</span>
+                            <span class="tag">RSpec</span>
+                            <span class="tag">Capybara</span>
+                            <span class="tag">MiniTest</span>
+                            <span class="tag">JUnit</span>
+                            <span class="tag">TestNG</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group">
+                        <h3>Databases</h3>
+                         <div class="tags">
+                            <span class="tag">MySQL</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">PostgreSQL</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-group">
+                        <h3>DevOps & Tools</h3>
+                        <div class="tags">
+                            <span class="tag">GitHub</span>
+                            <span class="tag">GitLab</span>
+                            <span class="tag">Jenkins</span>
+                            <span class="tag">TeamCity</span>
+                            <span class="tag">AWS</span>
+                            <span class="tag">S3</span>
+                            <span class="tag">Browserstack</span>
+                            <span class="tag">SauceLabs</span>
+                            <span class="tag">SonarCube</span>
+                            <span class="tag">Rollbar</span>
+                            <span class="tag">TrackJs</span>
+                            <span class="tag">Mixpanel</span>
+                            <span class="tag">PostHog</span>
+                            <span class="tag">Sentry</span>
+                            <span class="tag">PagerDuty</span>
+                            <span class="tag">Datadog</span>
+                            <span class="tag">Segment</span>
+                            <span class="tag">CustomerIO</span>
+                            <span class="tag">Jira</span>
+                            <span class="tag">YouTrack</span>
+                            <span class="tag">Trello</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="experience">
+                <h2>Experience</h2>
                 
-            </div>
-            <div>
-                Допомогти зі збором за посиланням: 
-                <a href="https://pkm.vdovareize.me">https://pkm.vdovareize.me</a>
-            </div>
-        </div> -->
-    </div>
-</div>
+                <article class="job">
+                    <div class="job-header">
+                        <h3>Lead Software Engineer — Clario</h3>
+                        <div class="job-subtitle">
+                            <span class="date">Aug 2024 – Present</span>
+                            <span class="location">Lviv</span>
+                        </div>
+                    </div>
+                    <p class="desc">Designing and scaling product-oriented applications with a focus on performance, analytics, UX optimization, and growth funnels.</p>
+                    <div class="tech-stack">Technologies: JavaScript, TypeScript, React, Next.js, Nest.js, Node.js, Playwright, Stripe</div>
+                    <ul>
+                        <li>Building and optimizing sales funnels to increase conversion and customer lifetime value</li>
+                        <li>Applying UX and behavioral design strategies to improve acquisition and retention</li>
+                        <li>Setting up analytics and tracking systems for data-driven decision making</li>
+                        <li>Designing automated visual regression testing workflows</li>
+                        <li>Maintaining UI consistency and preventing production regressions</li>
+                    </ul>
+                </article>
 
+                <article class="job">
+                    <div class="job-header">
+                        <h3>Senior Software Engineer — Beetroot</h3>
+                        <div class="job-subtitle">
+                            <span class="date">Mar 2020 – Jun 2024</span>
+                            <span class="location">Kharkiv / Lviv</span>
+                        </div>
+                    </div>
+                    <p class="meta">Project: Inspera (Digital Assessment Platform)</p>
+                    <p class="desc">A global assessment ecosystem used by educational institutions and professional organizations.</p>
+                    <div class="tech-stack">Technologies: JavaScript, TypeScript, React, Node.js, Java, Mocha, Sinon, Enzyme, Puppeteer, Percy, TeamCity, SonarCube</div>
+                    <ul>
+                        <li>Led development of major frontend features and platform improvements</li>
+                        <li>Led a frontend team of 5 engineers and reduced onboarding time</li>
+                        <li>Increased automated test coverage by 300%</li>
+                        <li>Integrated visual regression testing, reducing visual bugs 3x</li>
+                        <li>Implemented SVG theme automation to improve accessibility</li>
+                        <li>Contributed to achieving WCAG 2.1 AA compliance</li>
+                        <li>Added integration tests validating API integrity</li>
+                        <li>Contributed to video and audio proctoring systems</li>
+                        <li>Improved secure browser functionality</li>
+                        <li>Strengthened long-term client retention through consistent platform improvements</li>
+                    </ul>
+                </article>
 
+                <article class="job">
+                    <div class="job-header">
+                        <h3>Senior Frontend Engineer — Team International</h3>
+                        <div class="job-subtitle">
+                            <span class="date">Sep 2018 – Feb 2020</span>
+                            <span class="location">Kharkiv</span>
+                        </div>
+                    </div>
+                    <p class="meta">Client: Telenor Denmark</p>
+                    <p class="desc">Large telecom provider with 1.4M+ customers.</p>
+                    <div class="tech-stack">Technologies: JavaScript, React, Node.js, REST, Tealium, Adobe Analytics, TeamCity</div>
+                    <ul>
+                        <li>Participated in full redesign of the main customer portal</li>
+                        <li>Improved engagement and conversion metrics</li>
+                        <li>Implemented and maintained Tealium Tag Management</li>
+                        <li>Integrated Adobe Analytics tracking (marketing effectiveness +30%)</li>
+                        <li>Built client-side reporting tools</li>
+                        <li>Supported sales campaigns (+10% sales during campaign periods)</li>
+                        <li>Conducted internal training sessions</li>
+                    </ul>
+                </article>
+
+                <article class="job">
+                    <div class="job-header">
+                        <h3>Full Stack Software Engineer — Verizon Media (Oath / AOL)</h3>
+                        <div class="job-subtitle">
+                            <span class="date">Apr 2016 – Jul 2018</span>
+                            <span class="location">Dublin</span>
+                        </div>
+                    </div>
+                    <p class="meta">Project: One by AOL (Programmatic Video Platform)</p>
+                    <div class="tech-stack">Technologies: JavaScript, Java, Node.js, MongoDB, Jasmine, Nightwatch, Jenkins, S3, Datadog</div>
+                    <ul>
+                        <li>Developed high-performance HTML5 video player</li>
+                        <li>Increased ad revenue through new provider integrations</li>
+                        <li>Designed and maintained Player Version Manager (95% auto-update success rate)</li>
+                        <li>Reduced production issues 10x via automated version control</li>
+                        <li>Improved unit, UI, and mobile test coverage by 50%</li>
+                        <li>Enhanced CI/CD processes</li>
+                        <li>Refactored player into modular micro-components</li>
+                    </ul>
+                </article>
+
+                <article class="job">
+                    <div class="job-header">
+                        <h3>Full Stack Software Engineer — Sigma Software Group</h3>
+                        <div class="job-subtitle">
+                            <span class="date">Dec 2014 – Apr 2016</span>
+                            <span class="location">Kharkiv</span>
+                        </div>
+                    </div>
+                    <p class="meta">Project: Vidible (Video Advertising Platform)</p>
+                    <div class="tech-stack">Technologies: JavaScript, Java, Ruby, Gradle, MongoDB, Jenkins, RSpec, JUnit</div>
+                    <ul>
+                        <li>Extended and supported backend services</li>
+                        <li>Enhanced video player functionality</li>
+                        <li>Developed ad platform UI features</li>
+                        <li>Introduced new video ad providers</li>
+                        <li>Implemented player version switcher</li>
+                        <li>Automated deployment flow (50% faster releases)</li>
+                    </ul>
+                </article>
+
+                <article class="job">
+                    <div class="job-header">
+                        <h3>Software Engineer — Samsung Ukraine R&D Center</h3>
+                        <div class="job-subtitle">
+                            <span class="date">May 2013 – Dec 2014</span>
+                            <span class="location">Kharkiv</span>
+                        </div>
+                    </div>
+                    <div class="tech-stack">Technologies: Tizen OS, Tizen API, JavaScript, jQuery, Java, Android, Jenkins</div>
+                    <ul>
+                        <li>Developed Tizen web-based reference applications</li>
+                        <li>Built smart watch applications</li>
+                        <li>Implemented smartphone–wearable interaction protocols</li>
+                        <li>Worked on framework-level solutions for web apps</li>
+                        <li>Optimized performance, memory usage, and battery consumption</li>
+                        <li>Improved UI/UX for mobile and wearable environments</li>
+                    </ul>
+                </article>
+
+                <article class="job">
+                    <div class="job-header">
+                        <h3>Backend / Frontend Developer — Software Expert</h3>
+                        <div class="job-subtitle">
+                            <span class="date">Apr 2008 – May 2013</span>
+                            <span class="location">Kharkiv</span>
+                        </div>
+                    </div>
+                    <div class="tech-stack">Technologies: PHP5, CodeIgniter, Symfony, JavaScript, MySQL, Selenium, WebOS, Blackberry</div>
+                    <ul>
+                        <li>Implemented backend functionality for multiple web projects</li>
+                        <li>Designed database architecture</li>
+                        <li>Built reusable UI widgets (calendar, price calculator, rental forms)</li>
+                        <li>Integrated OAuth, Google APIs, IMAP</li>
+                        <li>Developed mobile applications (WebOS, Blackberry)</li>
+                        <li>Implemented Selenium-based UI testing</li>
+                        <li>Improved UX across multiple products</li>
+                    </ul>
+                </article>
+            </section>
+        </div>
+    </main>
 </body>
 </html>
-
