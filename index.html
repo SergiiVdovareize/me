@@ -18,6 +18,8 @@
             <div class="contact-links">
                 <a href="mailto:servdo@gmail.com">servdo@gmail.com</a>
                 <span class="dot">•</span>
+                <a href="https://wa.me/qr/EJQQGKHOLKCTM1">WhatsApp</a>
+                <span class="dot">•</span>
                 <a href="https://www.linkedin.com/in/sergiivdovareize" target="_blank">LinkedIn</a>
                 <span class="dot">•</span>
                 <a href="https://github.com/SergiiVdovareize" target="_blank">GitHub</a>
@@ -145,8 +147,14 @@
                 </div>
             </aside>
 
-            <section class="experience">
-                <h2>Experience</h2>
+            <section class="experience" id="experienceSection">
+                <div class="experience-header">
+                    <h2>Experience</h2>
+                    <div class="exp-toggle" id="expToggle" title="Switch experience format">
+                        <button class="exp-toggle-btn active" data-mode="detailed">Detailed</button>
+                        <button class="exp-toggle-btn" data-mode="short">Short</button>
+                    </div>
+                </div>
                 
                 <article class="job">
                     <div class="job-header">
@@ -158,12 +166,17 @@
                     </div>
                     <p class="desc">Designing and scaling product-oriented applications with a focus on performance, analytics, UX optimization, and growth funnels.</p>
                     <div class="tech-stack">Technologies: JavaScript, TypeScript, React, Next.js, Nest.js, Node.js, Playwright, Stripe</div>
-                    <ul>
+                    <ul class="achievements-full">
                         <li>Building and optimizing sales funnels to increase conversion and customer lifetime value</li>
                         <li>Applying UX and behavioral design strategies to improve acquisition and retention</li>
                         <li>Setting up analytics and tracking systems for data-driven decision making</li>
                         <li>Designing automated visual regression testing workflows</li>
                         <li>Maintaining UI consistency and preventing production regressions</li>
+                    </ul>
+                    <ul class="achievements-short">
+                        <li>Optimizing sales funnels and UX for conversion growth</li>
+                        <li>Analytics setup for data-driven decisions</li>
+                        <li>Visual regression testing workflows</li>
                     </ul>
                 </article>
 
@@ -178,7 +191,7 @@
                     <p class="meta">Project: Inspera (Digital Assessment Platform)</p>
                     <p class="desc">A global assessment ecosystem used by educational institutions and professional organizations.</p>
                     <div class="tech-stack">Technologies: JavaScript, TypeScript, React, Node.js, Java, Mocha, Sinon, Enzyme, Puppeteer, Percy, TeamCity, SonarCube</div>
-                    <ul>
+                    <ul class="achievements-full">
                         <li>Led development of major frontend features and platform improvements</li>
                         <li>Led a frontend team of 5 engineers and reduced onboarding time</li>
                         <li>Increased automated test coverage by 300%</li>
@@ -189,6 +202,11 @@
                         <li>Contributed to video and audio proctoring systems</li>
                         <li>Improved secure browser functionality</li>
                         <li>Strengthened long-term client retention through consistent platform improvements</li>
+                    </ul>
+                    <ul class="achievements-short">
+                        <li>Led frontend team of 5; cut onboarding time significantly</li>
+                        <li>Increased test coverage 300%; integrated visual regression (3x fewer bugs)</li>
+                        <li>WCAG 2.1 AA compliance, proctoring systems, secure browser</li>
                     </ul>
                 </article>
 
@@ -203,7 +221,7 @@
                     <p class="meta">Client: Telenor Denmark</p>
                     <p class="desc">Large telecom provider with 1.4M+ customers.</p>
                     <div class="tech-stack">Technologies: JavaScript, React, Node.js, REST, Tealium, Adobe Analytics, TeamCity</div>
-                    <ul>
+                    <ul class="achievements-full">
                         <li>Participated in full redesign of the main customer portal</li>
                         <li>Improved engagement and conversion metrics</li>
                         <li>Implemented and maintained Tealium Tag Management</li>
@@ -211,6 +229,11 @@
                         <li>Built client-side reporting tools</li>
                         <li>Supported sales campaigns (+10% sales during campaign periods)</li>
                         <li>Conducted internal training sessions</li>
+                    </ul>
+                    <ul class="achievements-short">
+                        <li>Full portal redesign; improved engagement & conversion</li>
+                        <li>Adobe Analytics integration (+30% marketing effectiveness)</li>
+                        <li>Campaign support (+10% sales) and internal training</li>
                     </ul>
                 </article>
 
@@ -224,7 +247,7 @@
                     </div>
                     <p class="meta">Project: One by AOL (Programmatic Video Platform)</p>
                     <div class="tech-stack">Technologies: JavaScript, Java, Node.js, MongoDB, Jasmine, Nightwatch, Jenkins, S3, Datadog</div>
-                    <ul>
+                    <ul class="achievements-full">
                         <li>Developed high-performance HTML5 video player</li>
                         <li>Increased ad revenue through new provider integrations</li>
                         <li>Designed and maintained Player Version Manager (95% auto-update success rate)</li>
@@ -233,9 +256,14 @@
                         <li>Enhanced CI/CD processes</li>
                         <li>Refactored player into modular micro-components</li>
                     </ul>
+                    <ul class="achievements-short">
+                        <li>High-performance HTML5 video player with new ad provider integrations</li>
+                        <li>Player Version Manager: 95% auto-update rate, 10x fewer production issues</li>
+                        <li>+50% test coverage; CI/CD improvements; modular refactor</li>
+                    </ul>
                 </article>
 
-                <article class="job">
+                <article class="job job-last-two">
                     <div class="job-header">
                         <h3>Full Stack Software Engineer — Sigma Software Group</h3>
                         <div class="job-subtitle">
@@ -245,7 +273,7 @@
                     </div>
                     <p class="meta">Project: Vidible (Video Advertising Platform)</p>
                     <div class="tech-stack">Technologies: JavaScript, Java, Ruby, Gradle, MongoDB, Jenkins, RSpec, JUnit</div>
-                    <ul>
+                    <ul class="achievements-full">
                         <li>Extended and supported backend services</li>
                         <li>Enhanced video player functionality</li>
                         <li>Developed ad platform UI features</li>
@@ -253,9 +281,13 @@
                         <li>Implemented player version switcher</li>
                         <li>Automated deployment flow (50% faster releases)</li>
                     </ul>
+                    <ul class="achievements-short">
+                        <li>Video ad platform UI, backend services, new ad providers</li>
+                        <li>Player version switcher; deployment automation (50% faster)</li>
+                    </ul>
                 </article>
 
-                <article class="job">
+                <article class="job job-last-two">
                     <div class="job-header">
                         <h3>Software Engineer — Samsung Ukraine R&D Center</h3>
                         <div class="job-subtitle">
@@ -264,7 +296,7 @@
                         </div>
                     </div>
                     <div class="tech-stack">Technologies: Tizen OS, Tizen API, JavaScript, jQuery, Java, Android, Jenkins</div>
-                    <ul>
+                    <ul class="achievements-full">
                         <li>Developed Tizen web-based reference applications</li>
                         <li>Built smart watch applications</li>
                         <li>Implemented smartphone–wearable interaction protocols</li>
@@ -272,9 +304,13 @@
                         <li>Optimized performance, memory usage, and battery consumption</li>
                         <li>Improved UI/UX for mobile and wearable environments</li>
                     </ul>
+                    <ul class="achievements-short">
+                        <li>Tizen web apps; smart watch & wearable interaction protocols</li>
+                        <li>Performance & battery optimisation; UI/UX improvements</li>
+                    </ul>
                 </article>
 
-                <article class="job">
+                <article class="job job-last-two">
                     <div class="job-header">
                         <h3>Backend / Frontend Developer — Software Expert</h3>
                         <div class="job-subtitle">
@@ -283,7 +319,7 @@
                         </div>
                     </div>
                     <div class="tech-stack">Technologies: PHP5, CodeIgniter, Symfony, JavaScript, MySQL, Selenium, WebOS, Blackberry</div>
-                    <ul>
+                    <ul class="achievements-full">
                         <li>Implemented backend functionality for multiple web projects</li>
                         <li>Designed database architecture</li>
                         <li>Built reusable UI widgets (calendar, price calculator, rental forms)</li>
@@ -292,9 +328,46 @@
                         <li>Implemented Selenium-based UI testing</li>
                         <li>Improved UX across multiple products</li>
                     </ul>
+                    <ul class="achievements-short">
+                        <li>Backend, DB architecture, reusable UI widgets for multiple projects</li>
+                        <li>OAuth/APIs integration; mobile apps; Selenium UI testing</li>
+                    </ul>
+                </article>
+
+                <!-- Merged card visible only in short mode -->
+                <article class="job job-merged">
+                    <div class="job-header">
+                        <h3>Earlier Experience — Sigma Software, Samsung, Software Expert</h3>
+                        <div class="job-subtitle">
+                            <span class="date">Apr 2008 – Apr 2016</span>
+                            <span class="location">Kharkiv</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li><strong>Sigma Software / Vidible</strong> — Video ad platform; new ad providers; deployment automation (50% faster releases)</li>
+                        <li><strong>Samsung Ukraine R&D</strong> — Tizen web apps, smart watch & wearable protocols, performance optimisation</li>
+                        <li><strong>Software Expert</strong> — Backend, DB architecture, reusable UI widgets, OAuth/APIs, mobile apps (WebOS, Blackberry)</li>
+                    </ul>
                 </article>
             </section>
         </div>
     </main>
+
+    <script>
+        const section = document.getElementById('experienceSection');
+        const btns = document.querySelectorAll('.exp-toggle-btn');
+
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                if (btn.dataset.mode === 'short') {
+                    section.classList.add('short-mode');
+                } else {
+                    section.classList.remove('short-mode');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

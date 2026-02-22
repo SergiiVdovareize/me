@@ -122,7 +122,6 @@ a:hover {
     margin-bottom: 1.5rem;
 }
 
-
 .contact-links {
     font-family: var(--font-heading);
     font-size: 1.1rem;
@@ -150,6 +149,8 @@ a:hover {
     .contact-links {
         flex-direction: column;
         gap: 0.5rem;
+        align-items: center;
+        width: auto;
     }
 }
 
@@ -261,7 +262,7 @@ a:hover {
 .experience h2 {
     font-family: var(--font-heading);
     font-size: 2.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
     color: var(--accent-black);
     text-transform: uppercase;
 }
@@ -273,11 +274,11 @@ a:hover {
     margin-bottom: 2rem;
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
     position: relative;
-    transition: transform 0.2s;
+    /* transition: transform 0.2s; */
 }
 
 .job:hover {
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
     box-shadow: 7px 7px 0 var(--accent-red);
     border-color: var(--accent-black);
 }
@@ -316,6 +317,7 @@ a:hover {
     font-style: italic;
     color: #555;
     margin-bottom: 0.5rem;
+    display: none;
 }
 
 .desc {
@@ -339,4 +341,86 @@ a:hover {
 
 .job li {
     margin-bottom: 0.5rem;
+}
+
+/* --- Experience Header & Toggle --- */
+.experience-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.experience-header h2 {
+    margin-bottom: 0;
+}
+
+.exp-toggle {
+    display: flex;
+    background: #e8e8e8;
+    border-radius: 999px;
+    padding: 3px;
+    gap: 2px;
+    border: 1px solid #ccc;
+    flex-shrink: 0;
+    align-self: center;
+    margin-top: 0.2rem;
+}
+
+.exp-toggle-btn {
+    all: unset;
+    cursor: pointer;
+    padding: 0.25rem 1rem;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #666;
+    transition: all 0.22s ease;
+    user-select: none;
+    letter-spacing: 0.02em;
+}
+
+.exp-toggle-btn.active {
+    background: var(--accent-red);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(209, 46, 46, 0.35);
+}
+
+.exp-toggle-btn:not(.active):hover {
+    color: var(--accent-black);
+    background: #d5d5d5;
+}
+
+/* --- Short-mode achievement lists --- */
+/* Default: show full, hide short */
+.achievements-short {
+    display: none;
+}
+
+/* Merged card hidden by default */
+.job-merged {
+    display: none;
+}
+
+/* Short mode overrides */
+.experience.short-mode .tech-stack {
+    display: none;
+}
+
+.experience.short-mode .achievements-full {
+    display: none;
+}
+
+.experience.short-mode .achievements-short {
+    display: block;
+}
+
+.experience.short-mode .job-last-two {
+    display: none;
+}
+
+.experience.short-mode .job-merged {
+    display: block;
 }
