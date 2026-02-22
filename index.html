@@ -384,32 +384,6 @@
         </div>
     </main>
 
-    <script>
-        const allBtns = document.querySelectorAll('.exp-toggle-btn');
-
-        function setMode(mode) {
-            allBtns.forEach(b => {
-                b.classList.toggle('active', b.dataset.mode === mode);
-            });
-            if (mode === 'short') {
-                document.body.classList.add('short-mode');
-            } else {
-                document.body.classList.remove('short-mode');
-            }
-        }
-
-        allBtns.forEach(btn => {
-            btn.addEventListener('click', () => setMode(btn.dataset.mode));
-        });
-
-        // Show sticky bar when hero scrolls out of view
-        const hero = document.querySelector('.hero');
-        const stickyBar = document.getElementById('stickyCvBar');
-        const observer = new IntersectionObserver(
-            ([entry]) => stickyBar.classList.toggle('visible', !entry.isIntersecting),
-            { threshold: 0 }
-        );
-        observer.observe(hero);
-    </script>
+    <script src="main.js" defer></script>
 </body>
 </html>
