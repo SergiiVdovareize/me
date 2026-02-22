@@ -1,4 +1,14 @@
 (() => {
+    // Obfuscated email — assembled at runtime so bots scraping static HTML won't find it
+    const el = document.getElementById('email-link');
+    const parts = ['servdo', '@', 'gmail', '.', 'com'];
+    const addr = parts.join('');
+    const a = document.createElement('a');
+    let stickyBarVisible = false;
+    a.href = 'mailto:' + addr;
+    a.textContent = addr;
+    el.replaceWith(a);
+
     const allBtns = document.querySelectorAll('.exp-toggle-btn');
 
     function setMode(mode) {
@@ -16,8 +26,6 @@
         btn.addEventListener('click', () => setMode(btn.dataset.mode));
     });
 
-    // Show sticky bar only when scrolling up (past hero toggle), hide 7s after scroll-up stops
-    const hero = document.querySelector('.hero');
     const stickyBar = document.getElementById('stickyCvBar');
     const heroToggle = document.querySelector('.cv-format-toggle');
     let lastY = window.scrollY;
@@ -28,14 +36,22 @@
     }
 
     function showBar() {
+        if (stickyBarVisible) return;
         stickyBar.classList.add('visible');
         clearTimeout(hideTimer);
-        hideTimer = setTimeout(() => stickyBar.classList.remove('visible'), 5000);
+        stickyBarVisible = true;
+        hideTimer = setTimeout(hideBar, 5000);
+    }
+
+    function hideBar() {
+        if (!stickyBarVisible) return;
+        stickyBar.classList.remove('visible');
+        stickyBarVisible = false;
     }
 
     stickyBar.addEventListener('mouseenter', () => clearTimeout(hideTimer));
     stickyBar.addEventListener('mouseleave', () => {
-        hideTimer = setTimeout(() => stickyBar.classList.remove('visible'), 5000);
+        hideTimer = setTimeout(hideBar, 5000);
     });
 
     let rafPending = false;
@@ -53,10 +69,21 @@
             } else if (!scrollingUp || heroToggleVisible()) {
                 // scrolling down or toggle back in view — hide immediately
                 clearTimeout(hideTimer);
-                stickyBar.classList.remove('visible');
+                hideBar();
             }
             lastY = currentY;
             rafPending = false;
         });
     }, { passive: true });
+
+    // const hero = document.querySelector('.hero');
+    // const observer = new IntersectionObserver(
+    //     ([entry]) => {
+    //         if (!entry.isIntersecting) {
+    //             showBar();
+    //         }
+    //     },
+    //     { threshold: 0 }
+    // );
+    // observer.observe(hero);
 })();
