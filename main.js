@@ -1,47 +1,62 @@
-const allBtns = document.querySelectorAll('.exp-toggle-btn');
+(() => {
+    const allBtns = document.querySelectorAll('.exp-toggle-btn');
 
-function setMode(mode) {
-    allBtns.forEach(b => {
-        b.classList.toggle('active', b.dataset.mode === mode);
+    function setMode(mode) {
+        allBtns.forEach(b => {
+            b.classList.toggle('active', b.dataset.mode === mode);
+        });
+        if (mode === 'short') {
+            document.body.classList.add('short-mode');
+        } else {
+            document.body.classList.remove('short-mode');
+        }
+    }
+
+    allBtns.forEach(btn => {
+        btn.addEventListener('click', () => setMode(btn.dataset.mode));
     });
-    if (mode === 'short') {
-        document.body.classList.add('short-mode');
-    } else {
-        document.body.classList.remove('short-mode');
+
+    // Show sticky bar only when scrolling up (past hero toggle), hide 7s after scroll-up stops
+    const hero = document.querySelector('.hero');
+    const stickyBar = document.getElementById('stickyCvBar');
+    const heroToggle = document.querySelector('.cv-format-toggle');
+    let lastY = window.scrollY;
+    let hideTimer = null;
+
+    function heroToggleVisible() {
+        return heroToggle.getBoundingClientRect().bottom > 0;
     }
-}
 
-allBtns.forEach(btn => {
-    btn.addEventListener('click', () => setMode(btn.dataset.mode));
-});
-
-// Show sticky bar only when scrolling up (past hero toggle), hide 7s after scroll-up stops
-const hero = document.querySelector('.hero');
-const stickyBar = document.getElementById('stickyCvBar');
-const heroToggle = document.querySelector('.cv-format-toggle');
-let lastY = window.scrollY;
-let hideTimer = null;
-
-function heroToggleVisible() {
-    return heroToggle.getBoundingClientRect().bottom > 0;
-}
-
-function showBar() {
-    stickyBar.classList.add('visible');
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => stickyBar.classList.remove('visible'), 7000);
-}
-
-window.addEventListener('scroll', () => {
-    const currentY = window.scrollY;
-    const scrollingUp = currentY < lastY;
-
-    if (scrollingUp && !heroToggleVisible()) {
-        showBar();
-    } else if (!scrollingUp || heroToggleVisible()) {
-        // scrolling down or toggle back in view — hide immediately
+    function showBar() {
+        stickyBar.classList.add('visible');
         clearTimeout(hideTimer);
-        stickyBar.classList.remove('visible');
+        hideTimer = setTimeout(() => stickyBar.classList.remove('visible'), 5000);
     }
-    lastY = currentY;
-}, { passive: true });
+
+    stickyBar.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+    stickyBar.addEventListener('mouseleave', () => {
+        hideTimer = setTimeout(() => stickyBar.classList.remove('visible'), 5000);
+    });
+
+    let rafPending = false;
+
+    window.addEventListener('scroll', () => {
+        if (rafPending) return;
+        rafPending = true;
+
+        requestAnimationFrame(() => {
+            const currentY = window.scrollY;
+            const scrollingUp = currentY < lastY;
+
+            if (scrollingUp && !heroToggleVisible()) {
+                showBar();
+            } else if (!scrollingUp || heroToggleVisible()) {
+                // scrolling down or toggle back in view — hide immediately
+                clearTimeout(hideTimer);
+                stickyBar.classList.remove('visible');
+            }
+            lastY = currentY;
+            rafPending = false;
+        });
+    }, { passive: true });
+})();
