@@ -11,6 +11,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Sticky toggle bar (appears on scroll) -->
+    <div class="sticky-cv-bar" id="stickyCvBar">
+        <span class="cv-format-label">CV Format:</span>
+        <div class="exp-toggle">
+            <button class="exp-toggle-btn sticky-btn active" data-mode="detailed">Detailed</button>
+            <button class="exp-toggle-btn sticky-btn" data-mode="short">Short</button>
+        </div>
+    </div>
     <main class="content-wrapper">
         <header class="hero">
             <h1 class="name">Sergii Vdovareize</h1>
@@ -23,6 +31,13 @@
                 <a href="https://www.linkedin.com/in/sergiivdovareize" target="_blank">LinkedIn</a>
                 <span class="dot">•</span>
                 <a href="https://github.com/SergiiVdovareize" target="_blank">GitHub</a>
+            </div>
+            <div class="cv-format-toggle">
+                <span class="cv-format-label">CV Format:</span>
+                <div class="exp-toggle" id="expToggle">
+                    <button class="exp-toggle-btn active" data-mode="detailed">Detailed</button>
+                    <button class="exp-toggle-btn" data-mode="short">Short</button>
+                </div>
             </div>
         </header>
 
@@ -57,6 +72,27 @@
 
                 <div class="block skills-block">
                     <h2>Key Skills</h2>
+                    <!-- Short mode: flat, top-skills only -->
+                    <div class="skills-short">
+                        <div class="tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">TypeScript</span>
+                            <span class="tag">React</span>
+                            <span class="tag">Next.js</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">Nest.js</span>
+                            <span class="tag">Java</span>
+                            <span class="tag">PostgreSQL</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">Jest</span>
+                            <span class="tag">Playwright</span>
+                            <span class="tag">AWS</span>
+                            <span class="tag">Docker</span>
+                            <span class="tag">CI/CD</span>
+                        </div>
+                    </div>
+                    <!-- Detailed mode: grouped -->
+                    <div class="skills-detailed">
                     
                     <div class="skill-group">
                         <h3>Languages</h3>
@@ -144,17 +180,12 @@
                             <span class="tag">Trello</span>
                         </div>
                     </div>
+                    </div>
                 </div>
             </aside>
 
             <section class="experience" id="experienceSection">
-                <div class="experience-header">
-                    <h2>Experience</h2>
-                    <div class="exp-toggle" id="expToggle" title="Switch experience format">
-                        <button class="exp-toggle-btn active" data-mode="detailed">Detailed</button>
-                        <button class="exp-toggle-btn" data-mode="short">Short</button>
-                    </div>
-                </div>
+                <h2>Experience</h2>
                 
                 <article class="job">
                     <div class="job-header">
@@ -354,20 +385,31 @@
     </main>
 
     <script>
-        const section = document.getElementById('experienceSection');
-        const btns = document.querySelectorAll('.exp-toggle-btn');
+        const allBtns = document.querySelectorAll('.exp-toggle-btn');
 
-        btns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                btns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                if (btn.dataset.mode === 'short') {
-                    section.classList.add('short-mode');
-                } else {
-                    section.classList.remove('short-mode');
-                }
+        function setMode(mode) {
+            allBtns.forEach(b => {
+                b.classList.toggle('active', b.dataset.mode === mode);
             });
+            if (mode === 'short') {
+                document.body.classList.add('short-mode');
+            } else {
+                document.body.classList.remove('short-mode');
+            }
+        }
+
+        allBtns.forEach(btn => {
+            btn.addEventListener('click', () => setMode(btn.dataset.mode));
         });
+
+        // Show sticky bar when hero scrolls out of view
+        const hero = document.querySelector('.hero');
+        const stickyBar = document.getElementById('stickyCvBar');
+        const observer = new IntersectionObserver(
+            ([entry]) => stickyBar.classList.toggle('visible', !entry.isIntersecting),
+            { threshold: 0 }
+        );
+        observer.observe(hero);
     </script>
 </body>
 </html>
