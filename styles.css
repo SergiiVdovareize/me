@@ -13,6 +13,7 @@
 
     --font-heading: 'Yeseva One', serif;
     --font-body: 'Arsenal', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
 
     --pattern-size: 20px;
 }
@@ -289,6 +290,7 @@ a:hover {
     font-weight: 500;
     transition: all 0.2s;
     border: 1px solid #ddd;
+    font-family: var(--font-mono);
 }
 
 .tag:hover {
@@ -380,8 +382,23 @@ a:hover {
     padding: 0.5rem 1rem;
     margin-bottom: 1rem;
     border-left: 4px solid var(--accent-blue);
-    font-family: monospace;
+    font-family: var(--font-mono);
+    position: relative;
 }
+
+/* .tech-stack::before {
+    content: "Tech stack";
+    font-weight: 700;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent-blue);
+    width: 100%;
+    color: white;
+    padding: 2px 0.5rem;
+    font-size: 0.8rem;
+} */
 
 .job ul {
     margin-left: 1.2rem;
