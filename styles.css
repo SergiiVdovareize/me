@@ -500,3 +500,16 @@ a:hover {
 .short-mode .skills-short {
     display: block;
 }
+
+/* --- Desc short/full variants --- */
+.desc-short {
+    display: none;
+}
+
+.short-mode .desc-full {
+    display: none;
+}
+
+.short-mode .desc-short {
+    display: block;
+}
