@@ -164,6 +164,7 @@ a:hover {
 
 .role {
     font-size: 1.4rem;
+    font-family: var(--font-heading);
     color: var(--accent-red);
     font-weight: 700;
     text-transform: uppercase;
@@ -347,6 +348,20 @@ a:hover {
     font-size: 1.4rem;
     color: var(--accent-black);
     margin: 0;
+}
+
+a.company {
+    color: inherit;
+    text-decoration: none;
+    padding: 0;
+    text-decoration: underline;
+}
+
+a.company:hover {
+    color: var(--accent-red);
+    border-bottom-color: var(--accent-red);
+    background: none;
+    border-radius: 0;
 }
 
 .job-subtitle {
