@@ -45,6 +45,7 @@ a {
 a:hover {
     background-color: var(--accent-red);
     color: white;
+    border-radius: 4px;
 }
 
 /* --- Embroidery Borders --- */
@@ -484,7 +485,7 @@ a:hover {
     display: block;
 }
 
-.short-mode .job-last-two {
+.short-mode .job-detailed {
     display: none;
 }
 
