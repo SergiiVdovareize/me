@@ -545,3 +545,7 @@ a.company:hover {
 .short-mode .desc-short {
     display: block;
 }
+
+.short-mode .hobbies-block {
+    display: none;
+}
