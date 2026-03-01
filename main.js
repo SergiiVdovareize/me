@@ -44,10 +44,10 @@
     function setContrast(isHigh) {
         if (isHigh) {
             document.body.classList.add('high-contrast');
-            contrastBtns.forEach(btn => btn.innerHTML = '&#9681;'); // Show ◑ (filled right) when in contrast
+            contrastBtns.forEach(btn => btn.classList.add('active'));
         } else {
             document.body.classList.remove('high-contrast');
-            contrastBtns.forEach(btn => btn.innerHTML = '&#9680;'); // Show ◐ (filled left) when normal
+            contrastBtns.forEach(btn => btn.classList.remove('active'));
         }
         localStorage.setItem('high-contrast', isHigh);
     }
@@ -57,8 +57,16 @@
 
     contrastBtns.forEach(btn => {
         btn.addEventListener('click', () => {
+            isSwitchingMode = true;
+            clearTimeout(modeSwitchTimeout);
+
             isHighContrast = !isHighContrast;
             setContrast(isHighContrast);
+
+            modeSwitchTimeout = setTimeout(() => {
+                isSwitchingMode = false;
+                lastY = window.scrollY;
+            }, 150);
         });
     });
 
