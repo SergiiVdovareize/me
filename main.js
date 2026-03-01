@@ -10,8 +10,14 @@
     el.replaceWith(a);
 
     const allBtns = document.querySelectorAll('.exp-toggle-btn');
+    
+    let isSwitchingMode = false;
+    let modeSwitchTimeout = null;
 
     function setMode(mode) {
+        isSwitchingMode = true;
+        clearTimeout(modeSwitchTimeout);
+
         allBtns.forEach(b => {
             b.classList.toggle('active', b.dataset.mode === mode);
         });
@@ -20,6 +26,12 @@
         } else {
             document.body.classList.remove('short-mode');
         }
+
+        // Allow some time for layout changes and induced scrolling to settle
+        modeSwitchTimeout = setTimeout(() => {
+            isSwitchingMode = false;
+            lastY = window.scrollY; // Update lastY to prevent false positive scroll direction
+        }, 150);
     }
 
     allBtns.forEach(btn => {
@@ -62,14 +74,22 @@
 
         requestAnimationFrame(() => {
             const currentY = window.scrollY;
+            
+            if (isSwitchingMode) {
+                lastY = currentY;
+                rafPending = false;
+                return;
+            }
+
             const scrollingUp = currentY < lastY;
 
             if (scrollingUp && !heroToggleVisible()) {
                 showBar();
             } else if (!scrollingUp || heroToggleVisible()) {
                 // scrolling down or toggle back in view — hide immediately
+                
                 clearTimeout(hideTimer);
-                hideBar();
+                hideTimer = setTimeout(hideBar, 200);
             }
             lastY = currentY;
             rafPending = false;
