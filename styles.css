@@ -460,8 +460,40 @@ a.company:hover {
 
 .desc {
     font-size: 1.1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     line-height: 1.5;
+}
+
+.try-it-link {
+    display: inline-flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    padding: 0;
+    transition: color 0.2s, text-decoration-color 0.2s;
+    gap: 0.25rem;
+}
+
+.try-it-icon {
+    font-size: 1.2em;
+    font-style: normal;
+    font-family: var(--font-body);
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.try-it-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.try-it-link:hover {
+    color: var(--accent-red);
+    background-color: transparent;
+    text-decoration: underline;
+    text-underline-offset: 4px;
 }
 
 .tech-stack {
@@ -706,6 +738,25 @@ body.high-contrast .intro p {
 
 body.high-contrast .desc {
     font-size: 1.25rem;
+}
+
+body.high-contrast .try-it-link {
+    font-size: 1.15rem;
+    color: #eee;
+    text-decoration-color: var(--accent-yellow);
+}
+
+body.high-contrast .try-it-link {
+    color: #fff;
+}
+
+body.high-contrast .try-it-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+body.high-contrast .try-it-link:hover {
+    color: var(--accent-yellow);
 }
 
 body.high-contrast .tech-stack {
