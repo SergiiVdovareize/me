@@ -40,14 +40,17 @@
 
   const contrastBtns = document.querySelectorAll(".contrast-toggle-btn");
   let isHighContrast = localStorage.getItem("high-contrast") === "true";
+  const themeColorMeta = document.getElementById("theme-color-meta");
 
   function setContrast(isHigh) {
     if (isHigh) {
       document.body.classList.add("high-contrast");
       contrastBtns.forEach((btn) => btn.classList.add("active"));
+      if (themeColorMeta) themeColorMeta.setAttribute("content", "#000000");
     } else {
       document.body.classList.remove("high-contrast");
       contrastBtns.forEach((btn) => btn.classList.remove("active"));
+      if (themeColorMeta) themeColorMeta.setAttribute("content", "#faf9f6");
     }
     localStorage.setItem("high-contrast", isHigh);
   }
