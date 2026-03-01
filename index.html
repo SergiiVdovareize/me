@@ -14,11 +14,19 @@
 <body>
     <!-- Sticky toggle bar (appears on scroll) -->
     <div class="sticky-cv-bar" id="stickyCvBar">
-        <span class="cv-format-label">CV Format:</span>
-        <div class="exp-toggle">
-            <span class="slider"></span>
-            <button class="exp-toggle-btn sticky-btn active" data-mode="detailed">Detailed</button>
-            <button class="exp-toggle-btn sticky-btn" data-mode="short">Short</button>
+        <div class="toggles-container">
+            <div class="toggles-wrapper">
+                <span class="cv-format-label">CV Format:</span>
+                <div class="exp-toggle">
+                    <span class="slider"></span>
+                    <button class="exp-toggle-btn sticky-btn active" data-mode="detailed">Detailed</button>
+                    <button class="exp-toggle-btn sticky-btn" data-mode="short">Short</button>
+                </div>
+            </div>
+            <div class="toggles-wrapper">
+                <span class="cv-format-label">Contrast:</span>
+                <button class="contrast-toggle-btn" aria-label="Toggle High Contrast" title="Toggle High Contrast">◐</button>
+            </div>
         </div>
     </div>
     <main class="content-wrapper">
@@ -34,12 +42,18 @@
                 <span class="dot">•</span>
                 <a href="https://github.com/SergiiVdovareize" target="_blank">GitHub</a>
             </div>
-            <div class="cv-format-toggle">
-                <span class="cv-format-label">CV Format:</span>
-                <div class="exp-toggle" id="expToggle">
-                    <span class="slider"></span>
-                    <button class="exp-toggle-btn active" data-mode="detailed">Detailed</button>
-                    <button class="exp-toggle-btn" data-mode="short">Short</button>
+            <div class="toggles-container" style="margin-top: 1.5rem;">
+                <div class="toggles-wrapper cv-format-toggle" style="margin-top: 0;">
+                    <span class="cv-format-label">CV Format:</span>
+                    <div class="exp-toggle" id="expToggle">
+                        <span class="slider"></span>
+                        <button class="exp-toggle-btn active" data-mode="detailed">Detailed</button>
+                        <button class="exp-toggle-btn" data-mode="short">Short</button>
+                    </div>
+                </div>
+                <div class="toggles-wrapper">
+                    <span class="cv-format-label">Contrast:</span>
+                    <button class="contrast-toggle-btn" aria-label="Toggle High Contrast" title="Toggle High Contrast">◐</button>
                 </div>
             </div>
         </header>

@@ -38,6 +38,30 @@
         btn.addEventListener('click', () => setMode(btn.dataset.mode));
     });
 
+    const contrastBtns = document.querySelectorAll('.contrast-toggle-btn');
+    let isHighContrast = localStorage.getItem('high-contrast') === 'true';
+
+    function setContrast(isHigh) {
+        if (isHigh) {
+            document.body.classList.add('high-contrast');
+            contrastBtns.forEach(btn => btn.innerHTML = '&#9681;'); // Show ◑ (filled right) when in contrast
+        } else {
+            document.body.classList.remove('high-contrast');
+            contrastBtns.forEach(btn => btn.innerHTML = '&#9680;'); // Show ◐ (filled left) when normal
+        }
+        localStorage.setItem('high-contrast', isHigh);
+    }
+    
+    // Initialize contrast from localStorage
+    setContrast(isHighContrast);
+
+    contrastBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            isHighContrast = !isHighContrast;
+            setContrast(isHighContrast);
+        });
+    });
+
     const stickyBar = document.getElementById('stickyCvBar');
     const heroToggle = document.querySelector('.cv-format-toggle');
     let lastY = window.scrollY;
