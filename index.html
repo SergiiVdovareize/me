@@ -1,499 +1,885 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- <meta name="theme-color" content="#fffafa"> -->
     <title>Sergii Vdovareize - Portfolio</title>
     <!-- Ukrainian Designed Fonts: Arsenal (Sans) and Yeseva One (Serif) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Arsenal:ital,wght@0,400;0,700;1,400;1,700&family=Yeseva+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Arsenal:ital,wght@0,400;0,700;1,400;1,700&family=Yeseva+One&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <!-- Sticky toggle bar (appears on scroll) -->
     <div class="sticky-cv-bar" id="stickyCvBar">
-        <div class="toggles-container">
-            <div class="toggles-wrapper">
-                <div class="exp-toggle">
-                    <span class="slider"></span>
-                    <button class="exp-toggle-btn sticky-btn active" data-mode="detailed">Detailed</button>
-                    <button class="exp-toggle-btn sticky-btn" data-mode="short">Short</button>
-                </div>
-            </div>
-            <div class="toggles-wrapper">
-                <button class="contrast-toggle-btn" aria-label="Toggle High Contrast" title="Toggle High Contrast">
-                    <span class="contrast-slider"></span>
-                </button>
-            </div>
+      <div class="toggles-container">
+        <div class="toggles-wrapper">
+          <div class="exp-toggle">
+            <span class="slider"></span>
+            <button
+              class="exp-toggle-btn sticky-btn active"
+              data-mode="detailed"
+            >
+              Detailed
+            </button>
+            <button class="exp-toggle-btn sticky-btn" data-mode="short">
+              Short
+            </button>
+          </div>
         </div>
+        <div class="toggles-wrapper">
+          <button
+            class="contrast-toggle-btn"
+            aria-label="Toggle High Contrast"
+            title="Toggle High Contrast"
+          >
+            <span class="contrast-slider"></span>
+          </button>
+        </div>
+      </div>
     </div>
     <main class="content-wrapper">
-        <header class="hero">
-            <h1 class="name">Sergii Vdovareize</h1>
-            <p class="role">Senior Frontend / Fullstack Engineer</p>
-            <div class="contact-links">
-                <span id="email-link"></span>
-                <span class="dot">•</span>
-                <a href="https://wa.me/qr/EJQQGKHOLKCTM1">WhatsApp</a>
-                <span class="dot">•</span>
-                <a href="https://www.linkedin.com/in/sergiivdovareize" target="_blank">LinkedIn</a>
-                <span class="dot">•</span>
-                <a href="https://github.com/SergiiVdovareize" target="_blank">GitHub</a>
-            </div>
-            <div class="toggles-container" style="margin-top: 1.5rem;">
-                <div class="toggles-wrapper cv-format-toggle" style="margin-top: 0;">
-                    <span class="cv-format-label">CV Format:</span>
-                    <div class="exp-toggle" id="expToggle">
-                        <span class="slider"></span>
-                        <button class="exp-toggle-btn active" data-mode="detailed">Detailed</button>
-                        <button class="exp-toggle-btn" data-mode="short">Short</button>
-                    </div>
-                </div>
-                <div class="toggles-wrapper">
-                    <span class="cv-format-label">Contrast:</span>
-                    <button class="contrast-toggle-btn" aria-label="Toggle High Contrast" title="Toggle High Contrast">
-                        <span class="contrast-slider"></span>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <section class="intro">
-            <h2>Summary</h2>
-            <p>Over 16 years of experience as a software engineer, with a strong focus on frontend and product-oriented fullstack development. My background spans Consumer &amp; AI Apps, EdTech, Programmatic Video Advertising, Telecom, and Wearables — from early fullstack work on web platforms and mobile apps to leading frontend teams at scale.</p>
-            <p>I've worked in small cross-functional teams where versatility is critical, as well as in large-scale enterprise environments with clearly defined roles and delivery pipelines. This experience has given me a solid understanding of architecture decisions, performance optimization, CI/CD, automated testing strategies, accessibility standards, analytics, and product growth mechanics.</p>
-            <p>I focus on building scalable, measurable, and maintainable systems — continuously looking for ways to improve performance, increase test coverage, automate workflows, enhance UX, and strengthen engineering culture.</p>
-        </section>
-
-        <div class="grid-layout">
-            <aside class="sidebar">
-                <div class="block">
-                    <h2>Education</h2>
-                    <div class="item">
-                        <h3>Kharkiv National University of Radioelectronics</h3>
-                        <p>Master’s Degree in Computer Science</p>
-                    </div>
-                    <div class="item">
-                        <h3>National Technical University of Ukraine «lgor Sikorsky Kyiv Polytechnic Institute»</h3>
-                        <p>Master’s Degree in Electronic communications and Radio Engineering</p>
-                    </div>
-                </div>
-
-                <div class="block">
-                    <h2>Languages</h2>
-                    <ul class="simple-list">
-                        <li><strong>English</strong> — Upper-Intermediate</li>
-                        <li><strong>Ukrainian</strong> — Fluent</li>
-                    </ul>
-                </div>
-
-                <div class="block skills-block">
-                    <h2>Key Skills</h2>
-                    <!-- Short mode: flat, top-skills only -->
-                    <div class="skills-short">
-                        <div class="tags">
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">TypeScript</span>
-                            <span class="tag">React</span>
-                            <span class="tag">Next.js</span>
-                            <span class="tag">Node.js</span>
-                            <span class="tag">Nest.js</span>
-                            <span class="tag">Java</span>
-                            <span class="tag">PostgreSQL</span>
-                            <span class="tag">MongoDB</span>
-                            <span class="tag">Jest</span>
-                            <span class="tag">Enzyme</span>
-                            <span class="tag">Chai</span>
-                            <span class="tag">Playwright</span>
-                            <span class="tag">AWS</span>
-                            <span class="tag">Docker</span>
-                            <span class="tag">CI/CD</span>
-                        </div>
-                    </div>
-                    <!-- Detailed mode: grouped -->
-                    <div class="skills-detailed">
-                    
-                    <div class="skill-group">
-                        <h3>Languages</h3>
-                        <div class="tags">
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">TypeScript</span>
-                            <span class="tag">Node.js</span>
-                            <span class="tag">Java</span>
-                            <span class="tag">Ruby</span>
-                            <span class="tag">PHP</span>
-                            <span class="tag">C</span>
-                        </div>
-                    </div>
-                    
-                    <div class="skill-group">
-                        <h3>Frameworks & Libraries</h3>
-                        <div class="tags">
-                            <span class="tag">React</span>
-                            <span class="tag">Next.js</span>
-                            <span class="tag">Nest.js</span>
-                            <span class="tag">Express.js</span>
-                            <span class="tag">Spring</span>
-                            <span class="tag">Ruby on Rails</span>
-                            <span class="tag">CodeIgniter</span>
-                            <span class="tag">Symfony</span>
-                        </div>
-                    </div>
-                    
-                    <div class="skill-group">
-                        <h3>Testing</h3>
-                        <div class="tags">
-                            <span class="tag">Mocha</span>
-                            <span class="tag">Sinon</span>
-                            <span class="tag">Enzyme</span>
-                            <span class="tag">Chai</span>
-                            <span class="tag">Jest</span>
-                            <span class="tag">Puppeteer</span>
-                            <span class="tag">Playwright</span>
-                            <span class="tag">PhantomJS</span>
-                            <span class="tag">Percy</span>
-                            <span class="tag">ArgosCI</span>
-                            <span class="tag">Selenium</span>
-                            <span class="tag">Nightwatch</span>
-                            <span class="tag">Jasmine</span>
-                            <span class="tag">RSpec</span>
-                            <span class="tag">Capybara</span>
-                            <span class="tag">MiniTest</span>
-                            <span class="tag">JUnit</span>
-                            <span class="tag">TestNG</span>
-                        </div>
-                    </div>
-                    
-                    <div class="skill-group">
-                        <h3>Databases</h3>
-                         <div class="tags">
-                            <span class="tag">MySQL</span>
-                            <span class="tag">MongoDB</span>
-                            <span class="tag">PostgreSQL</span>
-                        </div>
-                    </div>
-                    
-                    <div class="skill-group">
-                        <h3>DevOps & Tools</h3>
-                        <div class="tags">
-                            <span class="tag">GitHub</span>
-                            <span class="tag">GitLab</span>
-                            <span class="tag">Jenkins</span>
-                            <span class="tag">TeamCity</span>
-                            <span class="tag">AWS</span>
-                            <span class="tag">S3</span>
-                            <span class="tag">Browserstack</span>
-                            <span class="tag">SauceLabs</span>
-                            <span class="tag">SonarCube</span>
-                            <span class="tag">Rollbar</span>
-                            <span class="tag">TrackJs</span>
-                            <span class="tag">Mixpanel</span>
-                            <span class="tag">PostHog</span>
-                            <span class="tag">Sentry</span>
-                            <span class="tag">PagerDuty</span>
-                            <span class="tag">Datadog</span>
-                            <span class="tag">Segment</span>
-                            <span class="tag">CustomerIO</span>
-                            <span class="tag">Jira</span>
-                            <span class="tag">YouTrack</span>
-                            <span class="tag">Trello</span>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-
-                <div class="block hobbies-block">
-                    <h2>Interests</h2>
-                    <ul class="simple-list">
-                        <li>Football, badminton, volleyball, pong, cycling, piano, cross-country and mountain skiing, hiking, crafting, cooking, baking</li>
-                    </ul>
-                </div>
-            </aside>
-
-            <section class="experience" id="experienceSection">
-                <h2>Experience</h2>
-                
-                <article class="job">
-                    <div class="job-header">
-                        <h3>Lead Software Engineer — <a class="company" href="https://www.linkedin.com/company/clario-tech/" target="_blank">Clario</a></h3>
-                        <div class="job-subtitle">
-                            <span class="date">Aug 2024 – Present</span>
-                            <span class="location">Lviv</span>
-                        </div>
-                    </div>
-                    <p class="desc desc-full">Crafts smart yet simple apps with a human touch, empowering better productivity, security, and lifestyles. The engineering focus is on building and scaling consumer-facing subscription products: optimising growth funnels, improving acquisition and retention, and shipping data-driven UX improvements across global markets.</p>
-                    <p class="desc desc-short">Consumer-facing subscription products — growth funnels, retention, and data-driven UX at scale.</p>
-                    <div class="tech-stack">JavaScript, TypeScript, React, Next.js, Nest.js, Node.js, Playwright, Stripe</div>
-                    <ul class="achievements-full">
-                        <li>Building and optimizing sales funnels to increase conversion and customer lifetime value</li>
-                        <li>Applying UX and behavioral design strategies to improve acquisition and retention</li>
-                        <li>Setting up analytics and tracking systems for data-driven decision making</li>
-                        <li>Designing automated visual regression testing workflows</li>
-                        <li>Maintaining UI consistency and preventing production regressions</li>
-                    </ul>
-                    <ul class="achievements-short">
-                        <li>Optimizing sales funnels and UX for conversion growth</li>
-                        <li>Analytics setup for data-driven decisions</li>
-                        <li>Visual regression testing workflows</li>
-                    </ul>
-                </article>
-
-                <article class="job">
-                    <div class="job-header">
-                        <h3>Senior Software Engineer — <a class="company" href="https://www.linkedin.com/company/beetroot-se" target="_blank">Beetroot</a></h3>
-                        <div class="job-subtitle">
-                            <span class="date">Mar 2020 – Jun 2024</span>
-                            <span class="location">Kharkiv / Lviv</span>
-                        </div>
-                    </div>
-                    <p class="meta">Project: Inspera (Digital Assessment Platform)</p>
-                    <p class="desc desc-full"><strong>Inspera.</strong> A cloud-based, end-to-end digital assessment platform used by universities, certification bodies, and professional organisations worldwide. It covers the full exam lifecycle — question authoring (25+ question types), secure exam delivery via a lockdown browser, AI-powered proctoring, collaborative grading, and analytics.</p>
-                    <p class="desc desc-short"><strong>Inspera.</strong> Cloud-based digital assessment platform for universities and certification bodies — covering authoring, secure delivery, proctoring, and grading.</p>
-                    <div class="tech-stack">JavaScript, TypeScript, React, Node.js, Java, Mocha, Sinon, Enzyme, Puppeteer, Percy, TeamCity, SonarCube</div>
-                    <ul class="achievements-full">
-                        <li>Led development of major frontend features and platform improvements</li>
-                        <li>Led a frontend team of 5 engineers and reduced onboarding time</li>
-                        <li>Increased automated test coverage by 300%</li>
-                        <li>Integrated visual regression testing, reducing visual bugs 3x</li>
-                        <li>Implemented SVG theme automation to improve accessibility</li>
-                        <li>Contributed to achieving WCAG 2.1 AA compliance</li>
-                        <li>Added integration tests validating API integrity</li>
-                        <li>Contributed to video and audio proctoring systems</li>
-                        <li>Improved secure browser functionality</li>
-                        <li>Strengthened long-term client retention through consistent platform improvements</li>
-                    </ul>
-                    <ul class="achievements-short">
-                        <li>Led frontend team of 5; cut onboarding time significantly</li>
-                        <li>Increased test coverage 300%; integrated visual regression (3x fewer bugs)</li>
-                        <li>WCAG 2.1 AA compliance, proctoring systems, secure browser</li>
-                        <li>Contributed to video and audio proctoring systems</li>
-                        <li>Led a frontend team of 5 engineers and reduced onboarding time</li>
-                    </ul>
-                </article>
-
-                <article class="job">
-                    <div class="job-header">
-                        <h3>Senior Frontend Engineer — <a class="company" href="https://www.linkedin.com/company/team-international/" target="_blank">Team International</a></h3>
-                        <div class="job-subtitle">
-                            <span class="date">Sep 2018 – Feb 2020</span>
-                            <span class="location">Kharkiv</span>
-                        </div>
-                    </div>
-                    <p class="meta">Client: Telenor Denmark</p>
-                    <p class="desc desc-full"><strong>Telenor Denmark.</strong> One of Denmark's leading telecom operators serving 1.4M+ subscribers with mobile, broadband, and business connectivity. The main customer-facing product — <em>Mit Telenor</em> — is a self-service portal and app enabling subscription management, billing, data usage tracking, and personalised offers across both B2C and B2B segments.</p>
-                    <p class="desc desc-short"><strong>Telenor Denmark.</strong> Leading Danish telecom (1.4M+ subscribers) — redesign of the <em>Mit Telenor</em> self-service portal and app.</p>
-                    <div class="tech-stack">JavaScript, React, Node.js, REST, Tealium, Adobe Analytics, TeamCity</div>
-                    <ul class="achievements-full">
-                        <li>Participated in full redesign of the main customer portal</li>
-                        <li>Improved engagement and conversion metrics</li>
-                        <li>Implemented and maintained Tealium Tag Management</li>
-                        <li>Integrated Adobe Analytics tracking (marketing effectiveness +30%)</li>
-                        <li>Built client-side reporting tools</li>
-                        <li>Supported sales campaigns (+10% sales during campaign periods)</li>
-                        <li>Conducted internal training sessions</li>
-                    </ul>
-                    <ul class="achievements-short">
-                        <li>Full portal redesign; improved engagement & conversion</li>
-                        <li>Adobe Analytics integration (+30% marketing effectiveness)</li>
-                        <li>Campaign support (+10% sales) and internal training</li>
-                        <li>Built client-side reporting tools</li>
-                    </ul>
-                </article>
-
-                <article class="job job-detailed">
-                    <div class="job-header">
-                        <h3>Full Stack Software Engineer — <a class="company" href="https://www.linkedin.com/company/verizon-media/" target="_blank">Verizon Media</a></h3>
-                        <div class="job-subtitle">
-                            <span class="date">Apr 2016 – Jul 2018</span>
-                            <span class="location">Dublin</span>
-                        </div>
-                    </div>
-                    <!-- <p class="meta">Project: One by AOL (Programmatic Video Platform)</p> -->
-                    <p class="desc desc-full"><strong>One by AOL.</strong> A legacy unified programmatic advertising platform, launched in 2015 by consolidating its ad tech assets — including Vidible (acquired 2014) and Adap.tv — into a single cross-channel stack covering video, display, and TV. The platform gave publishers and advertisers a self-serve marketplace for programmatic video at scale. Following Verizon's acquisition of Yahoo in 2017, AOL merged into Oath Inc., which rebranded as Verizon Media in 2019 and ultimately became part of Yahoo.</p>
-                    <p class="desc desc-short"><strong>One by AOL.</strong> AOL's unified programmatic video &amp; display ad platform — later rebranded through Oath to Verizon Media (now Yahoo).</p>
-                    <div class="tech-stack">JavaScript, Java, Node.js, MongoDB, Jasmine, Nightwatch, Jenkins, S3, Datadog</div>
-                    <ul class="achievements-full">
-                        <li>Developed high-performance HTML5 video player</li>
-                        <li>Increased ad revenue through new provider integrations</li>
-                        <li>Designed and maintained Player Version Manager (95% auto-update success rate)</li>
-                        <li>Reduced production issues 10x via automated version control</li>
-                        <li>Improved unit, UI, and mobile test coverage by 50%</li>
-                        <li>Enhanced CI/CD processes</li>
-                        <li>Refactored player into modular micro-components</li>
-                    </ul>
-                </article>
-
-                <article class="job job-detailed">
-                    <div class="job-header">
-                        <h3>Full Stack Software Engineer — <a class="company" href="https://www.linkedin.com/company/sigma-software-group" target="_blank">Sigma Software Group</a></h3>
-                        <div class="job-subtitle">
-                            <span class="date">Dec 2014 – Apr 2016</span>
-                            <span class="location">Kharkiv</span>
-                        </div>
-                    </div>
-                    <!-- <p class="meta">Project: Vidible (Video Advertising Platform)</p> -->
-                    <p class="desc desc-full"><strong>Vidible.</strong> A former independent cross-screen video management and ad exchange platform founded in 2012. It enabled publishers to distribute and monetize video content across sites and devices through a self-serve marketplace. AOL acquired Vidible in December 2014 (~$50M) and integrated it into <em>One by AOL for Publishers</em>, expanding AOL's programmatic video stack globally.</p>
-                    <p class="desc desc-short"><strong>Vidible.</strong> Cross-screen video ad exchange acquired by AOL (~$50M, 2014) and integrated into One by AOL for Publishers.</p>
-                    <div class="tech-stack">JavaScript, Java, Ruby, Gradle, MongoDB, Jenkins, RSpec, JUnit</div>
-                    <ul class="achievements-full">
-                        <li>Extended and supported backend services</li>
-                        <li>Enhanced video player functionality</li>
-                        <li>Developed ad platform UI features</li>
-                        <li>Introduced new video ad providers</li>
-                        <li>Implemented player version switcher</li>
-                        <li>Automated deployment flow (50% faster releases)</li>
-                    </ul>
-                </article>
-
-                <article class="job job-detailed">
-                    <div class="job-header">
-                        <h3>Software Engineer — <a class="company" href="https://www.linkedin.com/company/samsung-electronics-ukraine-company/" target="_blank">Samsung Ukraine R&amp;D Center</a></h3>
-                        <div class="job-subtitle">
-                            <span class="date">May 2013 – Dec 2014</span>
-                            <span class="location">Kharkiv</span>
-                        </div>
-                    </div>
-                    <p class="desc desc-full"><strong>Tizen OS.</strong> A Linux-based, open-source OS developed by Samsung and the Linux Foundation as an alternative to Android — designed for wearables, mobile, and smart TVs, with HTML5 as the primary app development layer.</p>
-                    <p class="desc desc-short"><strong>Tizen OS.</strong> Samsung's Linux-based OS for wearables and mobile, using HTML5 for app development.</p>
-                    <div class="tech-stack">Tizen OS, Tizen API, JavaScript, jQuery, Java, Android, Jenkins</div>
-                    <ul class="achievements-full">
-                        <li>Developed Tizen web-based reference applications</li>
-                        <li>Built smart watch applications</li>
-                        <li>Implemented smartphone–wearable interaction protocols</li>
-                        <li>Worked on framework-level solutions for web apps</li>
-                        <li>Optimized performance, memory usage, and battery consumption</li>
-                        <li>Improved UI/UX for mobile and wearable environments</li>
-                    </ul>
-                </article>
-
-                <!-- Merged card visible only in short mode -->
-                <article class="job job-merged">
-                    <div class="job-header">
-                        <h3>Full Stack Software Engineer — <a class="company" href="https://www.linkedin.com/company/sigma-software-group/" target="_blank">Sigma Software Group</a>, <a class="company" href="https://www.linkedin.com/company/verizon-media/" target="_blank">Verizon Media</a></h3>
-                        <div class="job-subtitle">
-                            <span class="date">Dec 2014 – Jul 2018</span>
-                            <span class="location">Kharkiv, Dublin</span>
-                        </div>
-                    </div>
-                    <p class="desc desc-short"><strong>Vidible / One by AOL.</strong> A unified programmatic video &amp; display ad platform — later rebranded through Oath to Verizon Media (now Yahoo).</p>
-                    <ul class="achievements-short">
-                        <li>Developed high-performance HTML5 video player</li>
-                        <li>Increased ad revenue through new provider integrations</li>
-                        <li>Designed and maintained Player Version Manager (95% auto-update success rate)</li>
-                        <li>Reduced production issues 10x via automated version control</li>
-                        <li>Improved unit, UI, and mobile test coverage by 50%</li>
-                        <li>Developed ad platform UI features</li>
-                        <li>Automated deployment flow (50% faster releases)</li>
-                    </ul>
-                </article>
-
-                <article class="job job-detailed">
-                    <div class="job-header">
-                        <h3>Backend / Frontend Developer — <a class="company" href="https://www.linkedin.com/company/software-expert/" target="_blank">Software Expert</a></h3>
-                        <div class="job-subtitle">
-                            <span class="date">Apr 2008 – May 2013</span>
-                            <span class="location">Kharkiv</span>
-                        </div>
-                    </div>
-                    <div class="tech-stack">PHP5, CodeIgniter, Symfony, JavaScript, MySQL, Selenium, WebOS, Blackberry</div>
-                    <ul class="achievements-full">
-                        <li>Implemented backend functionality for multiple web projects</li>
-                        <li>Designed database architecture</li>
-                        <li>Built reusable UI widgets (calendar, price calculator, rental forms)</li>
-                        <li>Integrated OAuth, Google APIs, IMAP</li>
-                        <li>Developed mobile applications (WebOS, Blackberry)</li>
-                        <li>Implemented Selenium-based UI testing</li>
-                        <li>Improved UX across multiple products</li>
-                    </ul>
-                    <ul class="achievements-short">
-                        <li>Backend, DB architecture, reusable UI widgets for multiple projects</li>
-                        <li>OAuth/APIs integration; mobile apps; Selenium UI testing</li>
-                    </ul>
-                </article>
-
-                <!-- Merged card visible only in short mode -->
-                <article class="job job-merged">
-                    <div class="job-header">
-                        <h3>Earlier Experience</h3>
-                        <div class="job-subtitle">
-                            <span class="date">Apr 2008 – Apr 2016</span>
-                            <span class="location">Kharkiv</span>
-                        </div>
-                    </div>
-                    <ul>
-                        <li><strong><a class="company" href="https://www.linkedin.com/company/samsung-electronics-ukraine-company/" target="_blank">Samsung Ukraine R&D</a></strong> — Tizen web apps, smart watch & wearable protocols, performance optimisation</li>
-                        <li><strong><a class="company" href="https://www.linkedin.com/company/software-expert/" target="_blank">Software Expert</a></strong> — Backend, DB architecture, reusable UI widgets, OAuth/APIs, mobile apps (WebOS, Blackberry)</li>
-                    </ul>
-                </article>
-
-                <h2 style="margin-top: 2rem;">Recent Pet Projects</h2>
-
-                <!-- Merged card visible only in short mode -->
-                <article class="job job-merged">
-                    <ul>
-                        <li><a class="company" href="https://github.com/SergiiVdovareize/jar-tracker" target="_blank">Jar Tracker</a> — Monobank jars donation dynamics tracker.</li>
-                        <li><a class="company" href="https://github.com/SergiiVdovareize/snip" target="_blank">Snip</a> — Download videos from social media.</li>
-                        <li><a class="company" href="https://github.com/SergiiVdovareize/reactive-pages" target="_blank">Reactive Pages</a> — Serverless number computations benchmark.</li>
-                    </ul>
-                </article>
-                
-                <article class="job job-detailed">
-                    <div class="job-header">
-                        <h3><a class="company" href="https://github.com/SergiiVdovareize/jar-tracker" target="_blank">Jar Tracker</a></h3>
-                    </div>
-                    <p class="desc desc-full">A web application for tracking balance changes and donation dynamics in Monobank public jars (fundraising campaigns). The backend uses a serverless and distributed architecture to poll, cache, and persist data at completely free tiers using NestJS, PostgreSQL, Prisma, Vercel, and Upstash Redis.</p>
-                    <a href="https://jar.vdovareize.me" target="_blank" class="try-it-link">
-                        Try it 
-                        <span class="try-it-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                <polyline points="15 3 21 3 21 9"></polyline>
-                                <line x1="10" y1="14" x2="21" y2="3"></line>
-                            </svg>
-                        </span>
-                    </a>
-                </article>
-
-                <article class="job job-detailed">
-                    <div class="job-header">
-                        <h3><a class="company" href="https://github.com/SergiiVdovareize/snip" target="_blank">Snip</a></h3>
-                    </div>
-                    <p class="desc desc-full">A lightweight web application that allows you to download videos from popular social media platforms quickly and easily. Built to download media with a single click from TikTok, Instagram, Twitter/X, YouTube, Facebook, and LinkedIn directly using an intuitive interface with clipboard integration.</p>
-                    <a href="https://snip.vdovareize.me" target="_blank" class="try-it-link">
-                        Try it 
-                        <span class="try-it-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                <polyline points="15 3 21 3 21 9"></polyline>
-                                <line x1="10" y1="14" x2="21" y2="3"></line>
-                            </svg>
-                        </span>
-                    </a>
-                </article>
-
-                <article class="job job-detailed">
-                    <div class="job-header">
-                        <h3><a class="company" href="https://github.com/SergiiVdovareize/reactive-pages" target="_blank">Reactive Pages</a></h3>
-                    </div>
-                    <p class="desc desc-full">A React web app that benchmarks serverless number computations across three major cloud providers (AWS Lambda, Google Cloud Functions, and Azure Functions). Visualizes response times and lambda execution times over asynchronous and synchronous load patterns, built with React 19, Chakra UI 3, and Framer Motion.</p>
-                    <a href="https://reactive.vdovareize.me" target="_blank" class="try-it-link">
-                        Try it 
-                        <span class="try-it-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                <polyline points="15 3 21 3 21 9"></polyline>
-                                <line x1="10" y1="14" x2="21" y2="3"></line>
-                            </svg>
-                        </span>
-                    </a>
-                </article>
-            </section>
-
+      <header class="hero">
+        <h1 class="name">Sergii Vdovareize</h1>
+        <p class="role">Senior Frontend / Fullstack Engineer</p>
+        <div class="contact-links">
+          <span id="email-link"></span>
+          <span class="dot">•</span>
+          <a href="https://wa.me/qr/EJQQGKHOLKCTM1">WhatsApp</a>
+          <span class="dot">•</span>
+          <a href="https://www.linkedin.com/in/sergiivdovareize" target="_blank"
+            >LinkedIn</a
+          >
+          <span class="dot">•</span>
+          <a href="https://github.com/SergiiVdovareize" target="_blank"
+            >GitHub</a
+          >
         </div>
+        <div class="toggles-container" style="margin-top: 1.5rem">
+          <div class="toggles-wrapper cv-format-toggle" style="margin-top: 0">
+            <span class="cv-format-label">CV Format:</span>
+            <div class="exp-toggle" id="expToggle">
+              <span class="slider"></span>
+              <button class="exp-toggle-btn active" data-mode="detailed">
+                Detailed
+              </button>
+              <button class="exp-toggle-btn" data-mode="short">Short</button>
+            </div>
+          </div>
+          <div class="toggles-wrapper">
+            <span class="cv-format-label">Contrast:</span>
+            <button
+              class="contrast-toggle-btn"
+              aria-label="Toggle High Contrast"
+              title="Toggle High Contrast"
+            >
+              <span class="contrast-slider"></span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="intro">
+        <h2>Summary</h2>
+        <p>
+          Over 16 years of experience as a software engineer, with a strong
+          focus on frontend and product-oriented fullstack development. My
+          background spans Consumer &amp; AI Apps, EdTech, Programmatic Video
+          Advertising, Telecom, and Wearables — from early fullstack work on web
+          platforms and mobile apps to leading frontend teams at scale.
+        </p>
+        <p>
+          I've worked in small cross-functional teams where versatility is
+          critical, as well as in large-scale enterprise environments with
+          clearly defined roles and delivery pipelines. This experience has
+          given me a solid understanding of architecture decisions, performance
+          optimization, CI/CD, automated testing strategies, accessibility
+          standards, analytics, and product growth mechanics.
+        </p>
+        <p>
+          I focus on building scalable, measurable, and maintainable systems —
+          continuously looking for ways to improve performance, increase test
+          coverage, automate workflows, enhance UX, and strengthen engineering
+          culture.
+        </p>
+      </section>
+
+      <div class="grid-layout">
+        <aside class="sidebar">
+          <div class="block">
+            <h2>Education</h2>
+            <div class="item">
+              <h3>Kharkiv National University of Radioelectronics</h3>
+              <p>Master’s Degree in Computer Science</p>
+            </div>
+            <div class="item">
+              <h3>
+                National Technical University of Ukraine «lgor Sikorsky Kyiv
+                Polytechnic Institute»
+              </h3>
+              <p>
+                Master’s Degree in Electronic communications and Radio
+                Engineering
+              </p>
+            </div>
+          </div>
+
+          <div class="block">
+            <h2>Languages</h2>
+            <ul class="simple-list">
+              <li><strong>English</strong> — Upper-Intermediate</li>
+              <li><strong>Ukrainian</strong> — Fluent</li>
+            </ul>
+          </div>
+
+          <div class="block skills-block">
+            <h2>Key Skills</h2>
+            <!-- Short mode: flat, top-skills only -->
+            <div class="skills-short">
+              <div class="tags">
+                <span class="tag">JavaScript</span>
+                <span class="tag">TypeScript</span>
+                <span class="tag">React</span>
+                <span class="tag">Next.js</span>
+                <span class="tag">Node.js</span>
+                <span class="tag">Nest.js</span>
+                <span class="tag">Java</span>
+                <span class="tag">PostgreSQL</span>
+                <span class="tag">MongoDB</span>
+                <span class="tag">Jest</span>
+                <span class="tag">Enzyme</span>
+                <span class="tag">Chai</span>
+                <span class="tag">Playwright</span>
+                <span class="tag">AWS</span>
+                <span class="tag">Docker</span>
+                <span class="tag">CI/CD</span>
+              </div>
+            </div>
+            <!-- Detailed mode: grouped -->
+            <div class="skills-detailed">
+              <div class="skill-group">
+                <h3>Languages</h3>
+                <div class="tags">
+                  <span class="tag">JavaScript</span>
+                  <span class="tag">TypeScript</span>
+                  <span class="tag">Node.js</span>
+                  <span class="tag">Java</span>
+                  <span class="tag">Ruby</span>
+                  <span class="tag">PHP</span>
+                  <span class="tag">C</span>
+                </div>
+              </div>
+
+              <div class="skill-group">
+                <h3>Frameworks & Libraries</h3>
+                <div class="tags">
+                  <span class="tag">React</span>
+                  <span class="tag">Next.js</span>
+                  <span class="tag">Nest.js</span>
+                  <span class="tag">Express.js</span>
+                  <span class="tag">Spring</span>
+                  <span class="tag">Ruby on Rails</span>
+                  <span class="tag">CodeIgniter</span>
+                  <span class="tag">Symfony</span>
+                </div>
+              </div>
+
+              <div class="skill-group">
+                <h3>Testing</h3>
+                <div class="tags">
+                  <span class="tag">Mocha</span>
+                  <span class="tag">Sinon</span>
+                  <span class="tag">Enzyme</span>
+                  <span class="tag">Chai</span>
+                  <span class="tag">Jest</span>
+                  <span class="tag">Puppeteer</span>
+                  <span class="tag">Playwright</span>
+                  <span class="tag">PhantomJS</span>
+                  <span class="tag">Percy</span>
+                  <span class="tag">ArgosCI</span>
+                  <span class="tag">Selenium</span>
+                  <span class="tag">Nightwatch</span>
+                  <span class="tag">Jasmine</span>
+                  <span class="tag">RSpec</span>
+                  <span class="tag">Capybara</span>
+                  <span class="tag">MiniTest</span>
+                  <span class="tag">JUnit</span>
+                  <span class="tag">TestNG</span>
+                </div>
+              </div>
+
+              <div class="skill-group">
+                <h3>Databases</h3>
+                <div class="tags">
+                  <span class="tag">MySQL</span>
+                  <span class="tag">MongoDB</span>
+                  <span class="tag">PostgreSQL</span>
+                </div>
+              </div>
+
+              <div class="skill-group">
+                <h3>DevOps & Tools</h3>
+                <div class="tags">
+                  <span class="tag">GitHub</span>
+                  <span class="tag">GitLab</span>
+                  <span class="tag">Jenkins</span>
+                  <span class="tag">TeamCity</span>
+                  <span class="tag">AWS</span>
+                  <span class="tag">S3</span>
+                  <span class="tag">Browserstack</span>
+                  <span class="tag">SauceLabs</span>
+                  <span class="tag">SonarCube</span>
+                  <span class="tag">Rollbar</span>
+                  <span class="tag">TrackJs</span>
+                  <span class="tag">Mixpanel</span>
+                  <span class="tag">PostHog</span>
+                  <span class="tag">Sentry</span>
+                  <span class="tag">PagerDuty</span>
+                  <span class="tag">Datadog</span>
+                  <span class="tag">Segment</span>
+                  <span class="tag">CustomerIO</span>
+                  <span class="tag">Jira</span>
+                  <span class="tag">YouTrack</span>
+                  <span class="tag">Trello</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="block hobbies-block">
+            <h2>Interests</h2>
+            <ul class="simple-list">
+              <li>
+                Football, badminton, volleyball, pong, cycling, piano,
+                cross-country and mountain skiing, hiking, crafting, cooking,
+                baking
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <section class="experience" id="experienceSection">
+          <h2>Experience</h2>
+
+          <article class="job">
+            <div class="job-header">
+              <h3>
+                Lead Software Engineer —
+                <a
+                  class="company"
+                  href="https://www.linkedin.com/company/clario-tech/"
+                  target="_blank"
+                  >Clario</a
+                >
+              </h3>
+              <div class="job-subtitle">
+                <span class="date">Aug 2024 – Present</span>
+                <span class="location">Lviv</span>
+              </div>
+            </div>
+            <p class="desc desc-full">
+              Crafts smart yet simple apps with a human touch, empowering better
+              productivity, security, and lifestyles. The engineering focus is
+              on building and scaling consumer-facing subscription products:
+              optimising growth funnels, improving acquisition and retention,
+              and shipping data-driven UX improvements across global markets.
+            </p>
+            <p class="desc desc-short">
+              Consumer-facing subscription products — growth funnels, retention,
+              and data-driven UX at scale.
+            </p>
+            <div class="tech-stack">
+              JavaScript, TypeScript, React, Next.js, Nest.js, Node.js,
+              Playwright, Stripe
+            </div>
+            <ul class="achievements-full">
+              <li>
+                Building and optimizing sales funnels to increase conversion and
+                customer lifetime value
+              </li>
+              <li>
+                Applying UX and behavioral design strategies to improve
+                acquisition and retention
+              </li>
+              <li>
+                Setting up analytics and tracking systems for data-driven
+                decision making
+              </li>
+              <li>Designing automated visual regression testing workflows</li>
+              <li>
+                Maintaining UI consistency and preventing production regressions
+              </li>
+            </ul>
+            <ul class="achievements-short">
+              <li>Optimizing sales funnels and UX for conversion growth</li>
+              <li>Analytics setup for data-driven decisions</li>
+              <li>Visual regression testing workflows</li>
+            </ul>
+          </article>
+
+          <article class="job">
+            <div class="job-header">
+              <h3>
+                Senior Software Engineer —
+                <a
+                  class="company"
+                  href="https://www.linkedin.com/company/beetroot-se"
+                  target="_blank"
+                  >Beetroot</a
+                >
+              </h3>
+              <div class="job-subtitle">
+                <span class="date">Mar 2020 – Jun 2024</span>
+                <span class="location">Kharkiv / Lviv</span>
+              </div>
+            </div>
+            <p class="meta">Project: Inspera (Digital Assessment Platform)</p>
+            <p class="desc desc-full">
+              <strong>Inspera.</strong> A cloud-based, end-to-end digital
+              assessment platform used by universities, certification bodies,
+              and professional organisations worldwide. It covers the full exam
+              lifecycle — question authoring (25+ question types), secure exam
+              delivery via a lockdown browser, AI-powered proctoring,
+              collaborative grading, and analytics.
+            </p>
+            <p class="desc desc-short">
+              <strong>Inspera.</strong> Cloud-based digital assessment platform
+              for universities and certification bodies — covering authoring,
+              secure delivery, proctoring, and grading.
+            </p>
+            <div class="tech-stack">
+              JavaScript, TypeScript, React, Node.js, Java, Mocha, Sinon,
+              Enzyme, Puppeteer, Percy, TeamCity, SonarCube
+            </div>
+            <ul class="achievements-full">
+              <li>
+                Led development of major frontend features and platform
+                improvements
+              </li>
+              <li>
+                Led a frontend team of 5 engineers and reduced onboarding time
+              </li>
+              <li>Increased automated test coverage by 300%</li>
+              <li>
+                Integrated visual regression testing, reducing visual bugs 3x
+              </li>
+              <li>Implemented SVG theme automation to improve accessibility</li>
+              <li>Contributed to achieving WCAG 2.1 AA compliance</li>
+              <li>Added integration tests validating API integrity</li>
+              <li>Contributed to video and audio proctoring systems</li>
+              <li>Improved secure browser functionality</li>
+              <li>
+                Strengthened long-term client retention through consistent
+                platform improvements
+              </li>
+            </ul>
+            <ul class="achievements-short">
+              <li>Led frontend team of 5; cut onboarding time significantly</li>
+              <li>
+                Increased test coverage 300%; integrated visual regression (3x
+                fewer bugs)
+              </li>
+              <li>
+                WCAG 2.1 AA compliance, proctoring systems, secure browser
+              </li>
+              <li>Contributed to video and audio proctoring systems</li>
+              <li>
+                Led a frontend team of 5 engineers and reduced onboarding time
+              </li>
+            </ul>
+          </article>
+
+          <article class="job">
+            <div class="job-header">
+              <h3>
+                Senior Frontend Engineer —
+                <a
+                  class="company"
+                  href="https://www.linkedin.com/company/team-international/"
+                  target="_blank"
+                  >Team International</a
+                >
+              </h3>
+              <div class="job-subtitle">
+                <span class="date">Sep 2018 – Feb 2020</span>
+                <span class="location">Kharkiv</span>
+              </div>
+            </div>
+            <p class="meta">Client: Telenor Denmark</p>
+            <p class="desc desc-full">
+              <strong>Telenor Denmark.</strong> One of Denmark's leading telecom
+              operators serving 1.4M+ subscribers with mobile, broadband, and
+              business connectivity. The main customer-facing product —
+              <em>Mit Telenor</em> — is a self-service portal and app enabling
+              subscription management, billing, data usage tracking, and
+              personalised offers across both B2C and B2B segments.
+            </p>
+            <p class="desc desc-short">
+              <strong>Telenor Denmark.</strong> Leading Danish telecom (1.4M+
+              subscribers) — redesign of the <em>Mit Telenor</em> self-service
+              portal and app.
+            </p>
+            <div class="tech-stack">
+              JavaScript, React, Node.js, REST, Tealium, Adobe Analytics,
+              TeamCity
+            </div>
+            <ul class="achievements-full">
+              <li>Participated in full redesign of the main customer portal</li>
+              <li>Improved engagement and conversion metrics</li>
+              <li>Implemented and maintained Tealium Tag Management</li>
+              <li>
+                Integrated Adobe Analytics tracking (marketing effectiveness
+                +30%)
+              </li>
+              <li>Built client-side reporting tools</li>
+              <li>
+                Supported sales campaigns (+10% sales during campaign periods)
+              </li>
+              <li>Conducted internal training sessions</li>
+            </ul>
+            <ul class="achievements-short">
+              <li>Full portal redesign; improved engagement & conversion</li>
+              <li>
+                Adobe Analytics integration (+30% marketing effectiveness)
+              </li>
+              <li>Campaign support (+10% sales) and internal training</li>
+              <li>Built client-side reporting tools</li>
+            </ul>
+          </article>
+
+          <article class="job job-detailed">
+            <div class="job-header">
+              <h3>
+                Full Stack Software Engineer —
+                <a
+                  class="company"
+                  href="https://www.linkedin.com/company/verizon-media/"
+                  target="_blank"
+                  >Verizon Media</a
+                >
+              </h3>
+              <div class="job-subtitle">
+                <span class="date">Apr 2016 – Jul 2018</span>
+                <span class="location">Dublin</span>
+              </div>
+            </div>
+            <!-- <p class="meta">Project: One by AOL (Programmatic Video Platform)</p> -->
+            <p class="desc desc-full">
+              <strong>One by AOL.</strong> A legacy unified programmatic
+              advertising platform, launched in 2015 by consolidating its ad
+              tech assets — including Vidible (acquired 2014) and Adap.tv — into
+              a single cross-channel stack covering video, display, and TV. The
+              platform gave publishers and advertisers a self-serve marketplace
+              for programmatic video at scale. Following Verizon's acquisition
+              of Yahoo in 2017, AOL merged into Oath Inc., which rebranded as
+              Verizon Media in 2019 and ultimately became part of Yahoo.
+            </p>
+            <p class="desc desc-short">
+              <strong>One by AOL.</strong> AOL's unified programmatic video
+              &amp; display ad platform — later rebranded through Oath to
+              Verizon Media (now Yahoo).
+            </p>
+            <div class="tech-stack">
+              JavaScript, Java, Node.js, MongoDB, Jasmine, Nightwatch, Jenkins,
+              S3, Datadog
+            </div>
+            <ul class="achievements-full">
+              <li>Developed high-performance HTML5 video player</li>
+              <li>Increased ad revenue through new provider integrations</li>
+              <li>
+                Designed and maintained Player Version Manager (95% auto-update
+                success rate)
+              </li>
+              <li>
+                Reduced production issues 10x via automated version control
+              </li>
+              <li>Improved unit, UI, and mobile test coverage by 50%</li>
+              <li>Enhanced CI/CD processes</li>
+              <li>Refactored player into modular micro-components</li>
+            </ul>
+          </article>
+
+          <article class="job job-detailed">
+            <div class="job-header">
+              <h3>
+                Full Stack Software Engineer —
+                <a
+                  class="company"
+                  href="https://www.linkedin.com/company/sigma-software-group"
+                  target="_blank"
+                  >Sigma Software Group</a
+                >
+              </h3>
+              <div class="job-subtitle">
+                <span class="date">Dec 2014 – Apr 2016</span>
+                <span class="location">Kharkiv</span>
+              </div>
+            </div>
+            <!-- <p class="meta">Project: Vidible (Video Advertising Platform)</p> -->
+            <p class="desc desc-full">
+              <strong>Vidible.</strong> A former independent cross-screen video
+              management and ad exchange platform founded in 2012. It enabled
+              publishers to distribute and monetize video content across sites
+              and devices through a self-serve marketplace. AOL acquired Vidible
+              in December 2014 (~$50M) and integrated it into
+              <em>One by AOL for Publishers</em>, expanding AOL's programmatic
+              video stack globally.
+            </p>
+            <p class="desc desc-short">
+              <strong>Vidible.</strong> Cross-screen video ad exchange acquired
+              by AOL (~$50M, 2014) and integrated into One by AOL for
+              Publishers.
+            </p>
+            <div class="tech-stack">
+              JavaScript, Java, Ruby, Gradle, MongoDB, Jenkins, RSpec, JUnit
+            </div>
+            <ul class="achievements-full">
+              <li>Extended and supported backend services</li>
+              <li>Enhanced video player functionality</li>
+              <li>Developed ad platform UI features</li>
+              <li>Introduced new video ad providers</li>
+              <li>Implemented player version switcher</li>
+              <li>Automated deployment flow (50% faster releases)</li>
+            </ul>
+          </article>
+
+          <article class="job job-detailed">
+            <div class="job-header">
+              <h3>
+                Software Engineer —
+                <a
+                  class="company"
+                  href="https://www.linkedin.com/company/samsung-electronics-ukraine-company/"
+                  target="_blank"
+                  >Samsung Ukraine R&amp;D Center</a
+                >
+              </h3>
+              <div class="job-subtitle">
+                <span class="date">May 2013 – Dec 2014</span>
+                <span class="location">Kharkiv</span>
+              </div>
+            </div>
+            <p class="desc desc-full">
+              <strong>Tizen OS.</strong> A Linux-based, open-source OS developed
+              by Samsung and the Linux Foundation as an alternative to Android —
+              designed for wearables, mobile, and smart TVs, with HTML5 as the
+              primary app development layer.
+            </p>
+            <p class="desc desc-short">
+              <strong>Tizen OS.</strong> Samsung's Linux-based OS for wearables
+              and mobile, using HTML5 for app development.
+            </p>
+            <div class="tech-stack">
+              Tizen OS, Tizen API, JavaScript, jQuery, Java, Android, Jenkins
+            </div>
+            <ul class="achievements-full">
+              <li>Developed Tizen web-based reference applications</li>
+              <li>Built smart watch applications</li>
+              <li>Implemented smartphone–wearable interaction protocols</li>
+              <li>Worked on framework-level solutions for web apps</li>
+              <li>
+                Optimized performance, memory usage, and battery consumption
+              </li>
+              <li>Improved UI/UX for mobile and wearable environments</li>
+            </ul>
+          </article>
+
+          <!-- Merged card visible only in short mode -->
+          <article class="job job-merged">
+            <div class="job-header">
+              <h3>
+                Full Stack Software Engineer —
+                <a
+                  class="company"
+                  href="https://www.linkedin.com/company/sigma-software-group/"
+                  target="_blank"
+                  >Sigma Software Group</a
+                >,
+                <a
+                  class="company"
+                  href="https://www.linkedin.com/company/verizon-media/"
+                  target="_blank"
+                  >Verizon Media</a
+                >
+              </h3>
+              <div class="job-subtitle">
+                <span class="date">Dec 2014 – Jul 2018</span>
+                <span class="location">Kharkiv, Dublin</span>
+              </div>
+            </div>
+            <p class="desc desc-short">
+              <strong>Vidible / One by AOL.</strong> A unified programmatic
+              video &amp; display ad platform — later rebranded through Oath to
+              Verizon Media (now Yahoo).
+            </p>
+            <ul class="achievements-short">
+              <li>Developed high-performance HTML5 video player</li>
+              <li>Increased ad revenue through new provider integrations</li>
+              <li>
+                Designed and maintained Player Version Manager (95% auto-update
+                success rate)
+              </li>
+              <li>
+                Reduced production issues 10x via automated version control
+              </li>
+              <li>Improved unit, UI, and mobile test coverage by 50%</li>
+              <li>Developed ad platform UI features</li>
+              <li>Automated deployment flow (50% faster releases)</li>
+            </ul>
+          </article>
+
+          <article class="job job-detailed">
+            <div class="job-header">
+              <h3>
+                Backend / Frontend Developer —
+                <a
+                  class="company"
+                  href="https://www.linkedin.com/company/software-expert/"
+                  target="_blank"
+                  >Software Expert</a
+                >
+              </h3>
+              <div class="job-subtitle">
+                <span class="date">Apr 2008 – May 2013</span>
+                <span class="location">Kharkiv</span>
+              </div>
+            </div>
+            <div class="tech-stack">
+              PHP5, CodeIgniter, Symfony, JavaScript, MySQL, Selenium, WebOS,
+              Blackberry
+            </div>
+            <ul class="achievements-full">
+              <li>
+                Implemented backend functionality for multiple web projects
+              </li>
+              <li>Designed database architecture</li>
+              <li>
+                Built reusable UI widgets (calendar, price calculator, rental
+                forms)
+              </li>
+              <li>Integrated OAuth, Google APIs, IMAP</li>
+              <li>Developed mobile applications (WebOS, Blackberry)</li>
+              <li>Implemented Selenium-based UI testing</li>
+              <li>Improved UX across multiple products</li>
+            </ul>
+            <ul class="achievements-short">
+              <li>
+                Backend, DB architecture, reusable UI widgets for multiple
+                projects
+              </li>
+              <li>OAuth/APIs integration; mobile apps; Selenium UI testing</li>
+            </ul>
+          </article>
+
+          <!-- Merged card visible only in short mode -->
+          <article class="job job-merged">
+            <div class="job-header">
+              <h3>Earlier Experience</h3>
+              <div class="job-subtitle">
+                <span class="date">Apr 2008 – Apr 2016</span>
+                <span class="location">Kharkiv</span>
+              </div>
+            </div>
+            <ul>
+              <li>
+                <strong
+                  ><a
+                    class="company"
+                    href="https://www.linkedin.com/company/samsung-electronics-ukraine-company/"
+                    target="_blank"
+                    >Samsung Ukraine R&D</a
+                  ></strong
+                >
+                — Tizen web apps, smart watch & wearable protocols, performance
+                optimisation
+              </li>
+              <li>
+                <strong
+                  ><a
+                    class="company"
+                    href="https://www.linkedin.com/company/software-expert/"
+                    target="_blank"
+                    >Software Expert</a
+                  ></strong
+                >
+                — Backend, DB architecture, reusable UI widgets, OAuth/APIs,
+                mobile apps (WebOS, Blackberry)
+              </li>
+            </ul>
+          </article>
+
+          <h2 style="margin-top: 2rem">Recent Pet Projects</h2>
+
+          <!-- Merged card visible only in short mode -->
+          <article class="job job-merged">
+            <ul>
+              <li>
+                <a
+                  class="company"
+                  href="https://github.com/SergiiVdovareize/jar-tracker"
+                  target="_blank"
+                  >Jar Tracker</a
+                >
+                — Monobank jars donation dynamics tracker.
+              </li>
+              <li>
+                <a
+                  class="company"
+                  href="https://github.com/SergiiVdovareize/snip"
+                  target="_blank"
+                  >Snip</a
+                >
+                — Download videos from social media.
+              </li>
+              <li>
+                <a
+                  class="company"
+                  href="https://github.com/SergiiVdovareize/reactive-pages"
+                  target="_blank"
+                  >Reactive Pages</a
+                >
+                — Serverless number computations benchmark.
+              </li>
+            </ul>
+          </article>
+
+          <article class="job job-detailed">
+            <div class="job-header">
+              <h3>
+                <a
+                  class="company"
+                  href="https://github.com/SergiiVdovareize/jar-tracker"
+                  target="_blank"
+                  >Jar Tracker</a
+                >
+              </h3>
+            </div>
+            <p class="desc desc-full">
+              A web application for tracking balance changes and donation
+              dynamics in Monobank public jars (fundraising campaigns). The
+              backend uses a serverless and distributed architecture to poll,
+              cache, and persist data at completely free tiers using NestJS,
+              PostgreSQL, Prisma, Vercel, and Upstash Redis.
+            </p>
+            <a
+              href="https://jar.vdovareize.me"
+              target="_blank"
+              class="try-it-link"
+            >
+              Try it
+              <span class="try-it-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                  ></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </span>
+            </a>
+          </article>
+
+          <article class="job job-detailed">
+            <div class="job-header">
+              <h3>
+                <a
+                  class="company"
+                  href="https://github.com/SergiiVdovareize/snip"
+                  target="_blank"
+                  >Snip</a
+                >
+              </h3>
+            </div>
+            <p class="desc desc-full">
+              A lightweight web application that allows you to download videos
+              from popular social media platforms quickly and easily. Built to
+              download media with a single click from TikTok, Instagram,
+              Twitter/X, YouTube, Facebook, and LinkedIn directly using an
+              intuitive interface with clipboard integration.
+            </p>
+            <a
+              href="https://snip.vdovareize.me"
+              target="_blank"
+              class="try-it-link"
+            >
+              Try it
+              <span class="try-it-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                  ></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </span>
+            </a>
+          </article>
+
+          <article class="job job-detailed">
+            <div class="job-header">
+              <h3>
+                <a
+                  class="company"
+                  href="https://github.com/SergiiVdovareize/reactive-pages"
+                  target="_blank"
+                  >Reactive Pages</a
+                >
+              </h3>
+            </div>
+            <p class="desc desc-full">
+              A React web app that benchmarks serverless number computations
+              across three major cloud providers (AWS Lambda, Google Cloud
+              Functions, and Azure Functions). Visualizes response times and
+              lambda execution times over asynchronous and synchronous load
+              patterns, built with React 19, Chakra UI 3, and Framer Motion.
+            </p>
+            <a
+              href="https://reactive.vdovareize.me"
+              target="_blank"
+              class="try-it-link"
+            >
+              Try it
+              <span class="try-it-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                  ></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </span>
+            </a>
+          </article>
+        </section>
+      </div>
     </main>
 
     <script src="main.js" defer></script>
-</body>
+  </body>
 </html>
