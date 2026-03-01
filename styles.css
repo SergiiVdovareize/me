@@ -624,7 +624,7 @@ a.company:hover {
 /* --- High Contrast Overrides --- */
 body.high-contrast .cv-format-label,
 body.high-contrast .meta {
-    color: #bbb;
+    color: #fff;
 }
 
 body.high-contrast .sticky-cv-bar {
@@ -657,11 +657,12 @@ body.high-contrast .skill-group h3 {
 
 body.high-contrast .exp-toggle {
     background: #222;
-    border-color: #444;
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 0 1px var(--accent-yellow);
 }
 
 body.high-contrast .exp-toggle-btn {
-    color: #888;
+    color: #fff;
 }
 
 body.high-contrast .exp-toggle-btn.active {
@@ -708,6 +709,7 @@ body.high-contrast .tech-stack {
     background: #222;
     color: #eee;
     font-size: 1.15rem;
+    border-left: 4px solid #00ff25;
 }
 
 body.high-contrast .tag {
