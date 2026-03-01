@@ -191,6 +191,8 @@ a:hover {
 .contrast-toggle-btn.active {
     background: var(--accent-black);
     border-color: var(--accent-black);
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .contrast-toggle-btn.active .contrast-slider {
@@ -342,7 +344,7 @@ a:hover {
 .item h3,
 .skill-group h3 {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 18px;
     margin-bottom: 0.2rem;
 }
 
@@ -651,6 +653,7 @@ body.high-contrast .tag:hover {
     cursor: default;
 }
 
+body.high-contrast .item h3,
 body.high-contrast .skill-group h3 {
     font-size: 1.25rem;
 }
