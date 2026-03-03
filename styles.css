@@ -196,10 +196,14 @@ a:hover {
 }
 
 .contrast-slider::after {
-    content: "◑";
-    color: var(--accent-black);
-    font-size: 24px;
-    line-height: normal;
+    content: "";
+    display: block;
+    width: 22px;
+    height: 22px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%232c2c2c'/%3E%3Cpath d='M12 2a10 10 0 0 1 0 20V2z' fill='%23fff'/%3E%3Ccircle cx='12' cy='12' r='10' fill='none' stroke='%232c2c2c' stroke-width='2'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .contrast-toggle-btn.active {
@@ -214,7 +218,7 @@ a:hover {
 }
 
 .contrast-toggle-btn.active .contrast-slider::after {
-    content: "◐";
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%232c2c2c'/%3E%3Cpath d='M12 2a10 10 0 0 0 0 20V2z' fill='%23fff'/%3E%3Ccircle cx='12' cy='12' r='10' fill='none' stroke='%232c2c2c' stroke-width='2'/%3E%3C/svg%3E");
 }
 
 /* Sticky CV bar */
@@ -376,7 +380,7 @@ a:hover {
     border-radius: 4px;
     font-size: 0.9rem;
     font-weight: 500;
-    transition: all 0.2s;
+
     border: 1px solid #ddd;
     font-family: var(--font-mono);
 }
@@ -754,7 +758,7 @@ body.high-contrast .contrast-toggle-btn.active .contrast-slider {
 }
 
 body.high-contrast .contrast-toggle-btn.active .contrast-slider::after {
-    color: #000;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23000'/%3E%3Cpath d='M12 2a10 10 0 0 0 0 20V2z' fill='%23ffff00'/%3E%3Ccircle cx='12' cy='12' r='10' fill='none' stroke='%232c2c2c' stroke-width='2'/%3E%3C/svg%3E");
 }
 
 body.high-contrast .intro p {
