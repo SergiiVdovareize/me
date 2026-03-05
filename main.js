@@ -168,6 +168,7 @@
 
   const DOM = {
     section: document.getElementById("stroopGameSection"),
+    bottomScroller: document.getElementById("bottom-scroller"),
     intro: document.getElementById("stroopIntro"),
     container: document.getElementById("stroopGameContainer"),
     gameOver: document.getElementById("stroopGameOver"),
@@ -385,7 +386,13 @@
     
     if (DOM.intro) DOM.intro.classList.add("hidden");
     if (DOM.gameOver) DOM.gameOver.classList.add("hidden");
-    if (DOM.container) DOM.container.classList.remove("hidden");
+    if (DOM.container) {
+      DOM.container.classList.remove("hidden");
+      // Give the browser a tiny tick to render the display:block before scrolling
+      setTimeout(() => {
+        DOM.bottomScroller.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 50);
+    }
     
     renderButtons();
     nextWord();
