@@ -374,30 +374,25 @@
     if (DOM.finalScoreDisplay) DOM.finalScoreDisplay.textContent = gameState.score;
   };
 
-  const startStroopGame = () => {
-    initAudio();
-    playTone(TONE_TYPES.START);
-    
-    gameState.score = 0;
-    gameState.time = STROOP_CONFIG.defaultTime;
-    
-    if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
-    if (DOM.timerDisplay) DOM.timerDisplay.textContent = gameState.time;
-    
-    if (DOM.intro) DOM.intro.classList.add("hidden");
-    if (DOM.gameOver) DOM.gameOver.classList.add("hidden");
-    if (DOM.container) {
-      DOM.container.classList.remove("hidden");
-      // Give the browser a tiny tick to render the display:block before scrolling
-      setTimeout(() => {
-        DOM.bottomScroller.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      }, 50);
+  const pauseGame = () => {
+    if (gameState.timerInterval) {
+      clearInterval(gameState.timerInterval);
+      gameState.timerInterval = null;
     }
+    // Optional UI cue showing it's paused
+    if (DOM.container) {
+      DOM.container.style.opacity = "0.02";
+    }
+  };
+
+  const resumeGame = () => {
+    // Only resume if the game is actually active and not already ticking
+    if (!window.StroopGame.isActive() || gameState.time <= 0 || gameState.timerInterval) return;
     
-    renderButtons();
-    nextWord();
-    
-    clearInterval(gameState.timerInterval);
+    if (DOM.container) {
+      DOM.container.style.opacity = "1";
+    }
+
     gameState.timerInterval = setInterval(() => {
       gameState.time--;
       if (DOM.timerDisplay) DOM.timerDisplay.textContent = gameState.time;
@@ -414,14 +409,56 @@
     }, 1000);
   };
 
+  const startStroopGame = () => {
+    initAudio();
+    playTone(TONE_TYPES.START);
+    
+    gameState.score = 0;
+    gameState.time = STROOP_CONFIG.defaultTime;
+    
+    if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
+    if (DOM.timerDisplay) DOM.timerDisplay.textContent = gameState.time;
+    
+    if (DOM.intro) DOM.intro.classList.add("hidden");
+    if (DOM.gameOver) DOM.gameOver.classList.add("hidden");
+    if (DOM.container) {
+      DOM.container.classList.remove("hidden");
+      DOM.container.style.opacity = "1";
+      // Give the browser a tiny tick to render the display:block before scrolling
+      setTimeout(() => {
+        DOM.bottomScroller.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 50);
+    }
+    
+    renderButtons();
+    nextWord();
+    
+    if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+    gameState.timerInterval = null; // Clear out any existing to trigger a fresh resume
+    resumeGame();
+  };
+
   // Export minimal API for contrast toggling
   window.StroopGame = {
-    isActive: () => DOM.container && !DOM.container.classList.contains("hidden"),
+    isActive: () => DOM.container && !DOM.container.classList.contains("hidden") && DOM.gameOver.classList.contains("hidden"),
     reRender: () => {
       renderButtons();
       updateStroopWordColor();
     }
   };
+
+  // Handle visibility changes (switching tabs or minimizing)
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      pauseGame();
+    } else {
+      resumeGame();
+    }
+  });
+
+  // Handle window focus lost (clicking on another window while tab is still visible)
+  window.addEventListener("blur", pauseGame);
+  window.addEventListener("focus", resumeGame);
 
   if (DOM.startBtn && DOM.restartBtn) {
     DOM.startBtn.addEventListener("click", startStroopGame);
