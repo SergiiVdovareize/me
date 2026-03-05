@@ -1,3 +1,5 @@
+"use strict";
+
 (() => {
   // Obfuscated email — assembled at runtime so bots scraping static HTML won't find it
   const el = document.getElementById("email-link");
@@ -55,11 +57,8 @@
     localStorage.setItem("high-contrast", isHigh);
 
     // Re-render Stroop colors if game is active
-    const sGameContainer = document.getElementById("stroopGameContainer");
-    if (sGameContainer && !sGameContainer.classList.contains("hidden")) {
-      // Re-trigger global renderButtons if it's available in this scope
-      renderButtons()
-      updateStroopWordColor()
+    if (typeof window.StroopGame !== "undefined" && window.StroopGame.isActive()) {
+      window.StroopGame.reRender();
     }
   };
 
@@ -131,8 +130,6 @@
         if (scrollingUp && !heroToggleVisible()) {
           showBar();
         } else if (!scrollingUp || heroToggleVisible()) {
-          // scrolling down or toggle back in view — hide immediately
-
           clearTimeout(hideTimer);
           hideTimer = setTimeout(hideBar, 200);
         }
@@ -140,64 +137,151 @@
         rafPending = false;
       });
     },
-    { passive: true },
+    { passive: true }
   );
 
-  // const hero = document.querySelector('.hero');
-  // const observer = new IntersectionObserver(
-  //     ([entry]) => {
-  //         if (!entry.isIntersecting) {
-  //             showBar();
-  //         }
-  //     },
-  //     { threshold: 0 }
-  // );
-  // observer.observe(hero);
-
   // --- Stroop Game Logic ---
-  const colors = [
-    { name: "RED", hex: "#d12e2e" },
-    { name: "BLUE", hex: "#0057b7" },
-    { name: "GREEN", hex: "#2e8b57" },
-    { name: "YELLOW", hex: "#ffd700" },
-    { name: "BLACK", hex: "#1a1a1a" }
-  ];
 
-  const highContrastColors = [
-    { name: "RED", hex: "#ff3333" },
-    { name: "BLUE", hex: "#3399ff" },
-    { name: "GREEN", hex: "#33cc33" },
-    { name: "YELLOW", hex: "#ffff00" },
-    { name: "WHITE", hex: "#ffffff" }
-  ];
+  const STROOP_CONFIG = {
+    defaultTime: 60,
+    warningTime: 10,
+    tickTime: 3,
+    trickProbability: 0.3
+  };
 
-  const stroopGameSection = document.getElementById("stroopGameSection");
-  const stroopIntro = document.getElementById("stroopIntro");
-  const stroopGameContainer = document.getElementById("stroopGameContainer");
-  const stroopGameOver = document.getElementById("stroopGameOver");
-  const startStroopBtn = document.getElementById("startStroopBtn");
-  const restartStroopBtn = document.getElementById("restartStroopBtn");
-  const stroopWordDisplay = document.getElementById("stroopWord");
-  const stroopColorButtons = document.getElementById("stroopColorButtons");
-  const stroopScoreDisplay = document.getElementById("stroopScore");
-  const stroopTimerDisplay = document.getElementById("stroopTimer");
-  const finalScoreDisplay = document.getElementById("finalScore");
+  const GAME_COLORS = {
+    standard: [
+      { name: "RED", hex: "#d12e2e" },
+      { name: "BLUE", hex: "#0057b7" },
+      { name: "GREEN", hex: "#2e8b57" },
+      { name: "YELLOW", hex: "#ffd700" },
+      { name: "BLACK", hex: "#1a1a1a" }
+    ],
+    highContrast: [
+      { name: "RED", hex: "#ff3333" },
+      { name: "BLUE", hex: "#3399ff" },
+      { name: "GREEN", hex: "#33cc33" },
+      { name: "YELLOW", hex: "#ffff00" },
+      { name: "WHITE", hex: "#ffffff" }
+    ]
+  };
 
-  let stroopScore = 0;
-  const STROOP_TIME = 60;
-  let stroopTimerInterval;
-  let currentColorObj = null;
+  const DOM = {
+    section: document.getElementById("stroopGameSection"),
+    intro: document.getElementById("stroopIntro"),
+    container: document.getElementById("stroopGameContainer"),
+    gameOver: document.getElementById("stroopGameOver"),
+    startBtn: document.getElementById("startStroopBtn"),
+    restartBtn: document.getElementById("restartStroopBtn"),
+    wordDisplay: document.getElementById("stroopWord"),
+    colorButtons: document.getElementById("stroopColorButtons"),
+    scoreDisplay: document.getElementById("stroopScore"),
+    timerDisplay: document.getElementById("stroopTimer"),
+    finalScoreDisplay: document.getElementById("finalScore")
+  };
 
-  const getColors = () => {
-    const isHC = document.body.classList.contains("high-contrast");
-    return isHC ? highContrastColors : colors;
+  const gameState = {
+    score: 0,
+    time: STROOP_CONFIG.defaultTime,
+    timerInterval: null,
+    currentColorObj: null,
+    currentWordObj: null,
+    audioCtx: null
+  };
+
+  const initAudio = () => {
+    if (!gameState.audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) gameState.audioCtx = new AudioContext();
+    }
+    if (gameState.audioCtx && gameState.audioCtx.state === 'suspended') {
+      gameState.audioCtx.resume();
+    }
+  };
+
+  const playTone = (type) => {
+    if (!gameState.audioCtx) return;
+    if (gameState.audioCtx.state === 'suspended') gameState.audioCtx.resume();
+
+    const osc = gameState.audioCtx.createOscillator();
+    const gainNode = gameState.audioCtx.createGain();
+    
+    osc.connect(gainNode);
+    gainNode.connect(gameState.audioCtx.destination);
+    
+    const now = gameState.audioCtx.currentTime;
+
+    switch (type) {
+      case 'correct':
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+        gainNode.gain.setValueAtTime(0.1, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+        break;
+      case 'wrong':
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        gainNode.gain.setValueAtTime(0.1, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now);
+        osc.stop(now + 0.2);
+        break;
+      case 'start':
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(440, now);     
+        osc.frequency.setValueAtTime(554.37, now + 0.1); 
+        osc.frequency.setValueAtTime(659.25, now + 0.2); 
+        osc.frequency.setValueAtTime(880, now + 0.3);    
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(0.1, now + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+        osc.start(now);
+        osc.stop(now + 0.5);
+        break;
+      case 'end':
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(880, now);      
+        osc.frequency.exponentialRampToValueAtTime(110, now + 0.8); 
+        gainNode.gain.setValueAtTime(0.1, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+        osc.start(now);
+        osc.stop(now + 0.8);
+        break;
+      case 'warning10':
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.setValueAtTime(1000, now + 0.15);
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(0.1, now + 0.05);
+        gainNode.gain.setValueAtTime(0, now + 0.1); // gap
+        gainNode.gain.setValueAtTime(0.1, now + 0.15);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+        break;
+      case 'tick':
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, now);
+        gainNode.gain.setValueAtTime(0.1, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+        break;
+    }
+  };
+
+  const getActiveColors = () => {
+    return document.body.classList.contains("high-contrast") ? GAME_COLORS.highContrast : GAME_COLORS.standard;
   };
 
   const renderButtons = () => {
-    if (!stroopColorButtons) return;
-    stroopColorButtons.innerHTML = "";
-    const currentColors = getColors();
-    currentColors.forEach(color => {
+    if (!DOM.colorButtons) return;
+    DOM.colorButtons.innerHTML = "";
+    const colors = getActiveColors();
+    colors.forEach(color => {
       const btn = document.createElement("button");
       btn.className = "color-btn";
       btn.textContent = color.name;
@@ -205,244 +289,127 @@
       btn.style.color = (color.name === "YELLOW" || color.name === "WHITE") ? "#000" : "#fff";
       btn.style.borderColor = color.hex;
       btn.onclick = () => handleColorClick(color.name);
-      stroopColorButtons.appendChild(btn);
+      DOM.colorButtons.appendChild(btn);
     });
   };
-  // window.renderStroopButtons = renderButtons;
 
   const updateStroopWordColor = () => {
-    if (stroopWordDisplay && currentColorObj) {
-        nextWord();
+    if (DOM.wordDisplay && gameState.currentColorObj) {
+      nextWord();
     }
   };
-  // window.updateStroopWordColor = updateStroopWordColor;
-
-  let currentWordObj = null;
 
   const nextWord = () => {
-    if (!stroopWordDisplay) return;
-    const currentColors = getColors();
+    if (!DOM.wordDisplay) return;
+    const colors = getActiveColors();
     let wordIndex;
     let colorIndex;
 
     // Generate a new word that is different from the previous one
     do {
-      wordIndex = Math.floor(Math.random() * currentColors.length);
-    } while (currentWordObj && currentColors[wordIndex].name === currentWordObj.name);
+      wordIndex = Math.floor(Math.random() * colors.length);
+    } while (gameState.currentWordObj && colors[wordIndex].name === gameState.currentWordObj.name);
 
     // Generate a new color that is different from the previous one
     do {
-      colorIndex = Math.floor(Math.random() * currentColors.length);
-    } while (currentColorObj && currentColors[colorIndex].name === currentColorObj.name);
+      colorIndex = Math.floor(Math.random() * colors.length);
+    } while (gameState.currentColorObj && colors[colorIndex].name === gameState.currentColorObj.name);
     
     // Ensure word and color are different most of the time
-    if (Math.random() > 0.3) {
-      // Find a color that is not the same as the word, and not the same as the previous color
+    if (Math.random() > STROOP_CONFIG.trickProbability) {
       let attempt = 0;
       while (colorIndex === wordIndex && attempt < 10) {
-        let newColorIndex = Math.floor(Math.random() * currentColors.length);
-        if (!currentColorObj || currentColors[newColorIndex].name !== currentColorObj.name) {
+        let newColorIndex = Math.floor(Math.random() * colors.length);
+        if (!gameState.currentColorObj || colors[newColorIndex].name !== gameState.currentColorObj.name) {
              colorIndex = newColorIndex;
         }
         attempt++;
       }
     }
     
-    currentWordObj = currentColors[wordIndex];
-    currentColorObj = currentColors[colorIndex];
+    gameState.currentWordObj = colors[wordIndex];
+    gameState.currentColorObj = colors[colorIndex];
     
-    stroopWordDisplay.textContent = currentWordObj.name;
-    stroopWordDisplay.style.color = currentColorObj.hex;
-  };
-
-  let audioCtx = null;
-
-  const playSound = (isCorrect) => {
-    if (!audioCtx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (AudioContext) audioCtx = new AudioContext();
-    }
-    if (!audioCtx) return;
-
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-
-    const osc = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    
-    osc.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    
-    if (isCorrect) {
-      // High quick beep for correct
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-      
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-      
-      osc.start(audioCtx.currentTime);
-      osc.stop(audioCtx.currentTime + 0.1);
-    } else {
-      // Low buzz for wrong
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-      
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-      
-      osc.start(audioCtx.currentTime);
-      osc.stop(audioCtx.currentTime + 0.2);
-    }
+    DOM.wordDisplay.textContent = gameState.currentWordObj.name;
+    DOM.wordDisplay.style.color = gameState.currentColorObj.hex;
   };
 
   const handleColorClick = (clickedColorName) => {
-    if (clickedColorName === currentColorObj.name) {
-      // Correct!
-      playSound(true);
-      stroopScore++;
-      if (stroopScoreDisplay) stroopScoreDisplay.textContent = stroopScore;
-      if (stroopWordDisplay) {
-        stroopWordDisplay.style.transform = "scale(1.1)";
-        setTimeout(() => stroopWordDisplay.style.transform = "scale(1)", 100);
+    if (clickedColorName === gameState.currentColorObj.name) {
+      playTone('correct');
+      gameState.score++;
+      if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
+      if (DOM.wordDisplay) {
+        DOM.wordDisplay.style.transform = "scale(1.1)";
+        setTimeout(() => { if (DOM.wordDisplay) DOM.wordDisplay.style.transform = "scale(1)"; }, 100);
       }
       nextWord();
     } else {
-      // Wrong!
-      playSound(false);
-      stroopScore = Math.max(0, stroopScore - 1);
-      if (stroopScoreDisplay) stroopScoreDisplay.textContent = stroopScore;
-      if (stroopWordDisplay) {
-        stroopWordDisplay.style.transform = "translateX(-10px)";
-        setTimeout(() => stroopWordDisplay.style.transform = "translateX(10px)", 50);
-        setTimeout(() => stroopWordDisplay.style.transform = "translateX(0)", 100);
+      playTone('wrong');
+      gameState.score = Math.max(0, gameState.score - 1);
+      if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
+      if (DOM.wordDisplay) {
+        DOM.wordDisplay.style.transform = "translateX(-10px)";
+        setTimeout(() => { if (DOM.wordDisplay) DOM.wordDisplay.style.transform = "translateX(10px)"; }, 50);
+        setTimeout(() => { if (DOM.wordDisplay) DOM.wordDisplay.style.transform = "translateX(0)"; }, 100);
       }
     }
   };
 
-  const playTimerSound = (type) => {
-    if (!audioCtx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (AudioContext) audioCtx = new AudioContext();
-    }
-    if (!audioCtx) return;
-
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-
-    const osc = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    
-    osc.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    
-    if (type === 'start') {
-      // Ascending major arpeggio feel
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(440, audioCtx.currentTime);     // A4
-      osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.1); // C#5
-      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.2); // E5
-      osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.3);    // A5
-      
-      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-      
-      osc.start(audioCtx.currentTime);
-      osc.stop(audioCtx.currentTime + 0.5);
-    } else if (type === 'end') {
-      // Descending end chime
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(880, audioCtx.currentTime);      // A5
-      osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.8); // A2
-      
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
-      
-      osc.start(audioCtx.currentTime);
-      osc.stop(audioCtx.currentTime + 0.8);
-    } else if (type === 'warning10') {
-      // More urgent, distinct double-beep alert
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-      osc.frequency.setValueAtTime(1000, audioCtx.currentTime + 0.15);
-      
-      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05);
-      gainNode.gain.setValueAtTime(0, audioCtx.currentTime + 0.1); // gap
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime + 0.15);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-      
-      osc.start(audioCtx.currentTime);
-      osc.stop(audioCtx.currentTime + 0.3);
-    } else if (type === 'tick') {
-      // Short tick for last 3 seconds
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-      
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-      
-      osc.start(audioCtx.currentTime);
-      osc.stop(audioCtx.currentTime + 0.1);
-    }
+  const endStroopGame = () => {
+    playTone('end');
+    clearInterval(gameState.timerInterval);
+    if (DOM.container) DOM.container.classList.add("hidden");
+    if (DOM.gameOver) DOM.gameOver.classList.remove("hidden");
+    if (DOM.finalScoreDisplay) DOM.finalScoreDisplay.textContent = gameState.score;
   };
 
   const startStroopGame = () => {
-    // Attempt to resume AudioContext so start sound plays properly on the very first click
-    if (!audioCtx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (AudioContext) audioCtx = new AudioContext();
-    }
-    if (audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
+    initAudio();
+    playTone('start');
     
-    playTimerSound('start');
+    gameState.score = 0;
+    gameState.time = STROOP_CONFIG.defaultTime;
     
-    stroopScore = 0;
-    let stroopTime = STROOP_TIME;
-    if (stroopScoreDisplay) stroopScoreDisplay.textContent = stroopScore;
-    if (stroopTimerDisplay) stroopTimerDisplay.textContent = stroopTime;
+    if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
+    if (DOM.timerDisplay) DOM.timerDisplay.textContent = gameState.time;
     
-    if (stroopIntro) stroopIntro.classList.add("hidden");
-    if (stroopGameOver) stroopGameOver.classList.add("hidden");
-    if (stroopGameContainer) stroopGameContainer.classList.remove("hidden");
+    if (DOM.intro) DOM.intro.classList.add("hidden");
+    if (DOM.gameOver) DOM.gameOver.classList.add("hidden");
+    if (DOM.container) DOM.container.classList.remove("hidden");
     
     renderButtons();
     nextWord();
     
-    clearInterval(stroopTimerInterval);
-    stroopTimerInterval = setInterval(() => {
-      stroopTime--;
-      if (stroopTimerDisplay) stroopTimerDisplay.textContent = stroopTime;
+    clearInterval(gameState.timerInterval);
+    gameState.timerInterval = setInterval(() => {
+      gameState.time--;
+      if (DOM.timerDisplay) DOM.timerDisplay.textContent = gameState.time;
       
-      if (stroopTime === 10) {
-        // playTimerSound('warning10');
-      } else if (stroopTime <= 3 && stroopTime > 0) {
-        playTimerSound('tick');
+      if (gameState.time === STROOP_CONFIG.warningTime) {
+         playTone('warning10');
+      } else if (gameState.time <= STROOP_CONFIG.tickTime && gameState.time > 0) {
+         playTone('tick');
       }
 
-      if (stroopTime <= 0) {
+      if (gameState.time <= 0) {
         endStroopGame();
       }
     }, 1000);
   };
 
-  const endStroopGame = () => {
-    playTimerSound('end');
-    clearInterval(stroopTimerInterval);
-    if (stroopGameContainer) stroopGameContainer.classList.add("hidden");
-    if (stroopGameOver) stroopGameOver.classList.remove("hidden");
-    if (finalScoreDisplay) finalScoreDisplay.textContent = stroopScore;
+  // Export minimal API for contrast toggling
+  window.StroopGame = {
+    isActive: () => DOM.container && !DOM.container.classList.contains("hidden"),
+    reRender: () => {
+      renderButtons();
+      updateStroopWordColor();
+    }
   };
 
-  if (startStroopBtn && restartStroopBtn) {
-    startStroopBtn.addEventListener("click", startStroopGame);
-    restartStroopBtn.addEventListener("click", startStroopGame);
+  if (DOM.startBtn && DOM.restartBtn) {
+    DOM.startBtn.addEventListener("click", startStroopGame);
+    DOM.restartBtn.addEventListener("click", startStroopGame);
   }
 
 })();
