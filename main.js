@@ -199,6 +199,15 @@
     }
   };
 
+  const TONE_TYPES = {
+    CORRECT: 'correct',
+    WRONG: 'wrong',
+    START: 'start',
+    END: 'end',
+    WARNING10: 'warning10',
+    TICK: 'tick'
+  };
+
   const playTone = (type) => {
     if (!gameState.audioCtx) return;
     if (gameState.audioCtx.state === 'suspended') gameState.audioCtx.resume();
@@ -212,7 +221,7 @@
     const now = gameState.audioCtx.currentTime;
 
     switch (type) {
-      case 'correct':
+      case TONE_TYPES.CORRECT:
         osc.type = 'sine';
         osc.frequency.setValueAtTime(600, now);
         osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
@@ -221,7 +230,7 @@
         osc.start(now);
         osc.stop(now + 0.1);
         break;
-      case 'wrong':
+      case TONE_TYPES.WRONG:
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(150, now);
         gainNode.gain.setValueAtTime(0.1, now);
@@ -229,7 +238,7 @@
         osc.start(now);
         osc.stop(now + 0.2);
         break;
-      case 'start':
+      case TONE_TYPES.START:
         osc.type = 'square';
         osc.frequency.setValueAtTime(440, now);     
         osc.frequency.setValueAtTime(554.37, now + 0.1); 
@@ -241,7 +250,7 @@
         osc.start(now);
         osc.stop(now + 0.5);
         break;
-      case 'end':
+      case TONE_TYPES.END:
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(880, now);      
         osc.frequency.exponentialRampToValueAtTime(110, now + 0.8); 
@@ -250,7 +259,7 @@
         osc.start(now);
         osc.stop(now + 0.8);
         break;
-      case 'warning10':
+      case TONE_TYPES.WARNING10:
         osc.type = 'square';
         osc.frequency.setValueAtTime(1200, now);
         osc.frequency.setValueAtTime(1000, now + 0.15);
@@ -262,7 +271,7 @@
         osc.start(now);
         osc.stop(now + 0.3);
         break;
-      case 'tick':
+      case TONE_TYPES.TICK:
         osc.type = 'sine';
         osc.frequency.setValueAtTime(800, now);
         gainNode.gain.setValueAtTime(0.1, now);
@@ -336,7 +345,7 @@
 
   const handleColorClick = (clickedColorName) => {
     if (clickedColorName === gameState.currentColorObj.name) {
-      playTone('correct');
+      playTone(TONE_TYPES.CORRECT);
       gameState.score++;
       if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
       if (DOM.wordDisplay) {
@@ -345,7 +354,7 @@
       }
       nextWord();
     } else {
-      playTone('wrong');
+      playTone(TONE_TYPES.WRONG);
       gameState.score = Math.max(0, gameState.score - 1);
       if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
       if (DOM.wordDisplay) {
@@ -357,7 +366,7 @@
   };
 
   const endStroopGame = () => {
-    playTone('end');
+    playTone(TONE_TYPES.END);
     clearInterval(gameState.timerInterval);
     if (DOM.container) DOM.container.classList.add("hidden");
     if (DOM.gameOver) DOM.gameOver.classList.remove("hidden");
@@ -366,7 +375,7 @@
 
   const startStroopGame = () => {
     initAudio();
-    playTone('start');
+    playTone(TONE_TYPES.START);
     
     gameState.score = 0;
     gameState.time = STROOP_CONFIG.defaultTime;
@@ -387,9 +396,9 @@
       if (DOM.timerDisplay) DOM.timerDisplay.textContent = gameState.time;
       
       if (gameState.time === STROOP_CONFIG.warningTime) {
-         playTone('warning10');
+         playTone(TONE_TYPES.WARNING10);
       } else if (gameState.time <= STROOP_CONFIG.tickTime && gameState.time > 0) {
-         playTone('tick');
+         playTone(TONE_TYPES.TICK);
       }
 
       if (gameState.time <= 0) {
