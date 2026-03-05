@@ -882,6 +882,31 @@
           </article>
         </section>
       </div>
+
+      <section class="stroop-game-section" id="stroopGameSection">
+        <div class="game-intro" id="stroopIntro">
+          <h2>Bonus: <br/>Stroop Effect Game</h2>
+          <p>
+            You read the whole CV! Here is a little brain teaser.
+            Click the button that matches the <strong style="text-decoration: underline;">ink color</strong> of the text, not the word itself.
+          </p>
+          <button id="startStroopBtn" class="primary-btn">Start Game</button>
+        </div>
+        <div class="game-container hidden" id="stroopGameContainer">
+          <div class="game-header">
+            <div class="timer">Time: <span id="stroopTimer">30</span>s</div>
+            <div class="score">Score: <span id="stroopScore">0</span></div>
+          </div>
+          <div class="word-display" id="stroopWord" style="transition: transform 0.1s;">READY?</div>
+          <div class="color-buttons" id="stroopColorButtons"></div>
+        </div>
+        <div class="game-over hidden" id="stroopGameOver">
+          <h3>Time's up!</h3>
+          <p>Your score: <span id="finalScore">0</span></p>
+          <button id="restartStroopBtn" class="primary-btn">Play Again</button>
+        </div>
+      </section>
+
     </main>
 
     <script src="main.js" defer></script>

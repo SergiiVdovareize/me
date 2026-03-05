@@ -801,3 +801,165 @@ body.high-contrast .tag {
     color: #eee;
     font-size: 1.15rem;
 }
+
+/* --- Stroop Game --- */
+.stroop-game-section {
+    margin-top: 4rem;
+    padding: 2rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+body.high-contrast .stroop-game-section {
+    background: #111;
+    border-color: #444;
+    box-shadow: 5px 5px 0 #333;
+}
+
+.stroop-game-section h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--accent-black);
+    margin-bottom: 1rem;
+}
+
+body.high-contrast .stroop-game-section h2,
+body.high-contrast .stroop-game-section h3 {
+    color: var(--accent-yellow);
+}
+
+.stroop-game-section p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+body.high-contrast #stroopIntro p {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.primary-btn {
+    all: unset;
+    cursor: pointer;
+    background: var(--accent-red);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    padding: 0.8rem 2rem;
+    border-radius: 4px;
+    box-shadow: 3px 3px 0 var(--accent-black);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.primary-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--accent-black);
+}
+
+body.high-contrast .primary-btn {
+    background: var(--accent-yellow);
+    color: #000;
+    box-shadow: none;
+}
+
+body.high-contrast .primary-btn:active {
+    box-shadow: none;
+    transform: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.word-display {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    font-weight: bold;
+    margin: 2rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 2px 2px 4px #616161;
+}
+
+body.high-contrast .word-display {
+    text-shadow: 2px 2px 2px #e3e3e3;
+}
+
+.color-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.color-btn {
+    all: unset;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0.8rem 1.5rem;
+    border: 2px solid var(--accent-black);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--accent-black);
+    transition: all 0.2s;
+    min-width: 100px;
+}
+
+.color-btn:hover {
+    filter: brightness(0.9);
+}
+
+.color-btn:active {
+    transform: scale(0.95);
+    filter: brightness(0.8);
+}
+
+
+
+body.high-contrast .color-btn:hover {
+    filter: brightness(1.2);
+}
+
+.game-over h3 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--accent-red);
+}
+
+.game-over p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .word-display {
+        font-size: 2.5rem;
+        min-height: 60px;
+    }
+
+    .color-btn {
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        min-width: 80px;
+    }
+}
