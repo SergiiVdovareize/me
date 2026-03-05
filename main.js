@@ -14,7 +14,7 @@
   let isSwitchingMode = false;
   let modeSwitchTimeout = null;
 
-  function setMode(mode) {
+  const setMode = (mode) => {
     isSwitchingMode = true;
     clearTimeout(modeSwitchTimeout);
 
@@ -32,7 +32,7 @@
       isSwitchingMode = false;
       lastY = window.scrollY; // Update lastY to prevent false positive scroll direction
     }, 150);
-  }
+  };
 
   allBtns.forEach((btn) => {
     btn.addEventListener("click", () => setMode(btn.dataset.mode));
@@ -42,7 +42,7 @@
   let isHighContrast = localStorage.getItem("high-contrast") === "true";
   const themeColorMeta = document.getElementById("theme-color-meta");
 
-  function setContrast(isHigh) {
+  const setContrast = (isHigh) => {
     if (isHigh) {
       document.body.classList.add("high-contrast");
       contrastBtns.forEach((btn) => btn.classList.add("active"));
@@ -61,7 +61,7 @@
       renderButtons()
       updateStroopWordColor()
     }
-  }
+  };
 
   // Initialize contrast from localStorage
   setContrast(isHighContrast);
@@ -86,23 +86,23 @@
   let lastY = window.scrollY;
   let hideTimer = null;
 
-  function heroToggleVisible() {
+  const heroToggleVisible = () => {
     return heroToggle.getBoundingClientRect().bottom > 0;
-  }
+  };
 
-  function showBar() {
+  const showBar = () => {
     if (stickyBarVisible) return;
     stickyBar.classList.add("visible");
     clearTimeout(hideTimer);
     stickyBarVisible = true;
     hideTimer = setTimeout(hideBar, 5000);
-  }
+  };
 
-  function hideBar() {
+  const hideBar = () => {
     if (!stickyBarVisible) return;
     stickyBar.classList.remove("visible");
     stickyBarVisible = false;
-  }
+  };
 
   stickyBar.addEventListener("mouseenter", () => clearTimeout(hideTimer));
   stickyBar.addEventListener("mouseleave", () => {
@@ -184,16 +184,16 @@
   const finalScoreDisplay = document.getElementById("finalScore");
 
   let stroopScore = 0;
-  let stroopTime = 17;
+  const STROOP_TIME = 60;
   let stroopTimerInterval;
   let currentColorObj = null;
 
-  function getColors() {
+  const getColors = () => {
     const isHC = document.body.classList.contains("high-contrast");
     return isHC ? highContrastColors : colors;
-  }
+  };
 
-  function renderButtons() {
+  const renderButtons = () => {
     if (!stroopColorButtons) return;
     stroopColorButtons.innerHTML = "";
     const currentColors = getColors();
@@ -207,19 +207,19 @@
       btn.onclick = () => handleColorClick(color.name);
       stroopColorButtons.appendChild(btn);
     });
-  }
+  };
   // window.renderStroopButtons = renderButtons;
 
-  function updateStroopWordColor() {
+  const updateStroopWordColor = () => {
     if (stroopWordDisplay && currentColorObj) {
         nextWord();
     }
-  }
+  };
   // window.updateStroopWordColor = updateStroopWordColor;
 
   let currentWordObj = null;
 
-  function nextWord() {
+  const nextWord = () => {
     if (!stroopWordDisplay) return;
     const currentColors = getColors();
     let wordIndex;
@@ -253,11 +253,11 @@
     
     stroopWordDisplay.textContent = currentWordObj.name;
     stroopWordDisplay.style.color = currentColorObj.hex;
-  }
+  };
 
   let audioCtx = null;
 
-  function playSound(isCorrect) {
+  const playSound = (isCorrect) => {
     if (!audioCtx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (AudioContext) audioCtx = new AudioContext();
@@ -296,9 +296,9 @@
       osc.start(audioCtx.currentTime);
       osc.stop(audioCtx.currentTime + 0.2);
     }
-  }
+  };
 
-  function handleColorClick(clickedColorName) {
+  const handleColorClick = (clickedColorName) => {
     if (clickedColorName === currentColorObj.name) {
       // Correct!
       playSound(true);
@@ -320,9 +320,9 @@
         setTimeout(() => stroopWordDisplay.style.transform = "translateX(0)", 100);
       }
     }
-  }
+  };
 
-  function playTimerSound(type) {
+  const playTimerSound = (type) => {
     if (!audioCtx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (AudioContext) audioCtx = new AudioContext();
@@ -389,9 +389,9 @@
       osc.start(audioCtx.currentTime);
       osc.stop(audioCtx.currentTime + 0.1);
     }
-  }
+  };
 
-  function startStroopGame() {
+  const startStroopGame = () => {
     // Attempt to resume AudioContext so start sound plays properly on the very first click
     if (!audioCtx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -403,6 +403,8 @@
     
     playTimerSound('start');
     
+    stroopScore = 0;
+    let stroopTime = STROOP_TIME;
     if (stroopScoreDisplay) stroopScoreDisplay.textContent = stroopScore;
     if (stroopTimerDisplay) stroopTimerDisplay.textContent = stroopTime;
     
@@ -428,15 +430,15 @@
         endStroopGame();
       }
     }, 1000);
-  }
+  };
 
-  function endStroopGame() {
+  const endStroopGame = () => {
     playTimerSound('end');
     clearInterval(stroopTimerInterval);
     if (stroopGameContainer) stroopGameContainer.classList.add("hidden");
     if (stroopGameOver) stroopGameOver.classList.remove("hidden");
     if (finalScoreDisplay) finalScoreDisplay.textContent = stroopScore;
-  }
+  };
 
   if (startStroopBtn && restartStroopBtn) {
     startStroopBtn.addEventListener("click", startStroopGame);
