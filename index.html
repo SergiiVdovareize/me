@@ -4,10 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#faf9f6" id="theme-color-meta" />
-    <meta name="description" content="Sergii Vdovareize, a Senior Frontend / Fullstack Engineer. Passionate about performant user interfaces, robust APIs, and web technologies." />
+    <meta
+      name="description"
+      content="Sergii Vdovareize, a Senior Frontend / Fullstack Engineer. Passionate about performant user interfaces, robust APIs, and web technologies."
+    />
     <!-- SVG Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
-    
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>"
+    />
+
     <title>Sergii Vdovareize - Portfolio</title>
     <!-- Ukrainian Designed Fonts: Arsenal (Sans) and Yeseva One (Serif) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -885,16 +891,28 @@
 
       <section class="stroop-game-section" id="stroopGameSection">
         <div class="game-intro" id="stroopIntro">
-          <h2>Bonus: <br/>Stroop Effect Game</h2>
+          <h2>Bonus: <br />Stroop Effect Game</h2>
           <p class="game-description">
-            Thank you for reading through my entire CV. As a small token of my appreciation, I built a little brain teaser just for you!
-            <br>
-            Game rules: click the button that matches the <strong style="text-decoration: underline;">ink color</strong> of the text, not what the word says.
+            Thank you for reading through my entire CV. As a small token of my
+            appreciation, I built a little brain teaser just for you!
+            <br />
+            Game rules: click the button that matches the
+            <strong style="text-decoration: underline">ink color</strong> of the
+            text, not what the word says.
           </p>
           <div class="stroop-intro-actions">
             <div class="stroop-example">
               <span>Example: If you see </span>
-              <span class="example-word" style="color: #33cc33; font-weight: bold; font-size: 1.3rem; margin: 0 0.2rem;">RED</span>
+              <span
+                class="example-word"
+                style="
+                  color: #33cc33;
+                  font-weight: bold;
+                  font-size: 1.3rem;
+                  margin: 0 0.2rem;
+                "
+                >RED</span
+              >
               <span> you must click <strong>Green</strong>.</span>
             </div>
             <button id="startStroopBtn" class="primary-btn">Start Game</button>
@@ -905,7 +923,13 @@
             <div class="timer">Time: <span id="stroopTimer">30</span>s</div>
             <div class="score">Score: <span id="stroopScore">0</span></div>
           </div>
-          <div class="word-display" id="stroopWord" style="transition: transform 0.1s;">READY?</div>
+          <div
+            class="word-display"
+            id="stroopWord"
+            style="transition: transform 0.1s"
+          >
+            READY?
+          </div>
           <div class="color-buttons" id="stroopColorButtons"></div>
         </div>
         <div class="game-over hidden" id="stroopGameOver">
@@ -916,7 +940,6 @@
       </section>
 
       <div id="bottom-scroller">_</div>
-
     </main>
 
     <script src="main.js" defer></script>
