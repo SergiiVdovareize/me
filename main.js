@@ -377,6 +377,7 @@
     };
 
     const endStroopGame = () => {
+      trackEvent("EndGame", { score: gameState.score });
       playTone(TONE_TYPES.END);
       clearInterval(gameState.timerInterval);
       if (DOM.container) DOM.container.classList.add("hidden");
@@ -486,7 +487,7 @@
 
   // Create a globally accessible tracking method
   const trackEvent = (eventName, extraProperties = {}) => {
-    fetch("http://api.vdovareize.me/analytics/track", {
+    fetch("https://api.vdovareize.me/analytics/track", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
