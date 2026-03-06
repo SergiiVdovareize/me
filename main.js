@@ -516,7 +516,7 @@
 
     // Gather unchanging system/browser data once on load
     baseProperties = {
-      sessionId: sessionId,
+      distinctId: sessionId,
       source: "browser",
       userAgent: navigator.userAgent,
       language: navigator.language || navigator.userLanguage,
