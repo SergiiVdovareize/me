@@ -16,6 +16,7 @@
     const a = document.createElement("a");
     a.href = "mailto:" + addr;
     a.textContent = addr;
+    a.addEventListener("click", () => trackEvent("EmailLinkClicked"));
     el.replaceWith(a);
   };
 
@@ -31,8 +32,10 @@
       });
       if (mode === "short") {
         document.body.classList.add("short-mode");
+        trackEvent("SetShortCvFormat");
       } else {
         document.body.classList.remove("short-mode");
+        trackEvent("SetDetailedCvFormat");
       }
 
       // Allow some time for layout changes and induced scrolling to settle
@@ -83,6 +86,7 @@
 
         isHighContrast = !isHighContrast;
         setContrast(isHighContrast);
+        trackEvent(isHighContrast ? "SetContrastCvView" : "SetDefaultCvView");
 
         modeSwitchTimeout = setTimeout(() => {
           isSwitchingMode = false;
@@ -541,6 +545,43 @@
     });
   };
 
+  const getBrowser = (ua) => {
+    if (/CriOS|Chrome/.test(ua) && !/Edg/.test(ua)) return "Chrome";
+    if (/Safari/.test(ua) && !/Chrome/.test(ua)) return "Safari";
+    if (/Firefox|FxiOS/.test(ua)) return "Firefox";
+    if (/Edg/.test(ua)) return "Edge";
+    return "Unknown";
+  };
+
+  const getOS = (ua) => {
+    if (/Win/.test(ua)) return "Windows";
+    if (/Mac/.test(ua) && !/iPhone|iPad/.test(ua)) return "macOS";
+    if (/Android/.test(ua)) return "Android";
+    if (/iPhone|iPad/.test(ua)) return "iOS";
+    if (/Linux/.test(ua)) return "Linux";
+    return "Unknown";
+  };
+
+  const getDevice = (ua) => {
+    if (/iPhone/.test(ua)) return "iPhone";
+    if (
+      /iPad/.test(ua) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+    )
+      return "iPad";
+    if (/iPod/.test(ua)) return "iPod";
+    if (/Android/.test(ua)) {
+      const match = ua.match(/Android [0-9\.]+; ([A-Za-z0-9\- ]+)\b/);
+      if (match && match[1] && !match[1].includes("Build")) {
+        return match[1].trim();
+      }
+      return /Tablet/.test(ua) ? "Android Tablet" : "Android Phone";
+    }
+    if (/Mobi/.test(ua)) return "Mobile";
+    if (/Tablet/.test(ua)) return "Tablet";
+    return "Desktop";
+  };
+
   const initAnalytics = () => {
     // Generate or retrieve a session ID to link events together for this visit
     let sessionId = sessionStorage.getItem("cv_session_id");
@@ -552,49 +593,16 @@
       sessionStorage.setItem("cv_session_id", sessionId);
     }
 
-    // Parse basic user agent properties
     const ua = navigator.userAgent;
-    let browser = "Unknown";
-    let os = "Unknown";
-    let device = "Desktop";
-
-    // Basic Browser Detection
-    if (/CriOS|Chrome/.test(ua) && !/Edg/.test(ua)) browser = "Chrome";
-    else if (/Safari/.test(ua) && !/Chrome/.test(ua)) browser = "Safari";
-    else if (/Firefox|FxiOS/.test(ua)) browser = "Firefox";
-    else if (/Edg/.test(ua)) browser = "Edge";
-
-    // Basic OS Detection
-    if (/Win/.test(ua)) os = "Windows";
-    else if (/Mac/.test(ua) && !/iPhone|iPad/.test(ua)) os = "macOS";
-    else if (/Android/.test(ua)) os = "Android";
-    else if (/iPhone|iPad/.test(ua)) os = "iOS";
-    else if (/Linux/.test(ua)) os = "Linux";
-
-    // Basic Device Detection
-    if (/iPhone/.test(ua)) device = "iPhone";
-    else if (/iPad/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) device = "iPad";
-    else if (/iPod/.test(ua)) device = "iPod";
-    else if (/Android/.test(ua)) {
-      // Try to extract Android device model
-      const match = ua.match(/Android [0-9\.]+; ([A-Za-z0-9\- ]+)\b/);
-      if (match && match[1] && !match[1].includes("Build")) {
-        device = match[1].trim(); // e.g. "SM-G981B" or "Pixel 4"
-      } else {
-        device = /Tablet/.test(ua) ? "Android Tablet" : "Android Phone";
-      }
-    }
-    else if (/Mobi/.test(ua)) device = "Mobile";
-    else if (/Tablet/.test(ua)) device = "Tablet";
 
     // Gather unchanging system/browser data once on load
     baseProperties = {
       distinctId: sessionId,
       source: "browser",
       userAgent: ua,
-      browser: browser,
-      os: os,
-      device: device,
+      browser: getBrowser(ua),
+      os: getOS(ua),
+      device: getDevice(ua),
       language: navigator.language || navigator.userLanguage,
       screenWidth: window.screen.width,
       screenHeight: window.screen.height,
@@ -605,8 +613,41 @@
     trackEvent("CVShown");
   };
 
+  const initSocialLinks = () => {
+    const waLink = document.getElementById("whatsapp-link");
+    if (waLink)
+      waLink.addEventListener("click", () => trackEvent("WhatsappLinkClicked"));
+
+    const liLink = document.getElementById("linkedin-link");
+    if (liLink)
+      liLink.addEventListener("click", () => trackEvent("LinkedInLinkClicked"));
+
+    const ghLink = document.getElementById("github-link");
+    if (ghLink)
+      ghLink.addEventListener("click", () => trackEvent("GithubLinkClicked"));
+
+    // Track Pet Project Repository Links
+    const repoLinks = document.querySelectorAll(".project-repo");
+    repoLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        const project = link.closest("[data-project]")?.dataset.project;
+        trackEvent("RepositoryClicked", { project });
+      });
+    });
+
+    // Track Pet Project Demo Links
+    const demoLinks = document.querySelectorAll(".try-it-link");
+    demoLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        const project = link.closest("[data-project]")?.dataset.project;
+        trackEvent("DemoClicked", { project });
+      });
+    });
+  };
+
   // Initialize all modules
   initEmailObfuscation();
+  initSocialLinks();
   initExperienceToggles();
   initContrastToggles();
   initStickyBar();
