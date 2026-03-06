@@ -839,6 +839,31 @@ body.high-contrast .stroop-game-section h3 {
     font-size: 1.1rem;
 }
 
+.stroop-intro-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: stretch;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.stroop-example {
+    background-color: var(--bg-card);
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    /* match primary-btn rounding */
+    /* display: flex; */
+    /* align-items: center; */
+    border: 1px dashed var(--accent-black);
+    margin-bottom: 0;
+    /* overridden by flex-gap */
+}
+
+body.high-contrast .stroop-example {
+    border-color: var(--accent-yellow);
+}
+
 body.high-contrast #stroopIntro p {
     font-size: 1.25rem;
     font-weight: bold;
@@ -964,5 +989,14 @@ body.high-contrast .color-btn:hover {
     .color-btn {
         padding: 0.6rem 1rem;
         font-size: 1rem;
+    }
+
+    .game-description {
+        text-align: justify;
+    }
+
+    .job:hover {
+        border: 1px solid #ddd;
+        box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
     }
 }

@@ -886,11 +886,19 @@
       <section class="stroop-game-section" id="stroopGameSection">
         <div class="game-intro" id="stroopIntro">
           <h2>Bonus: <br/>Stroop Effect Game</h2>
-          <p>
-            You read the whole CV! Here is a little brain teaser.
-            Click the button that matches the <strong style="text-decoration: underline;">ink color</strong> of the text, not the word itself.
+          <p class="game-description">
+            Thank you for reading through my entire CV. As a small token of my appreciation, I built a little brain teaser just for you!
+            <br>
+            Game rules: click the button that matches the <strong style="text-decoration: underline;">ink color</strong> of the text, not what the word says.
           </p>
-          <button id="startStroopBtn" class="primary-btn">Start Game</button>
+          <div class="stroop-intro-actions">
+            <div class="stroop-example">
+              <span>Example: If you see </span>
+              <span class="example-word" style="color: #33cc33; font-weight: bold; font-size: 1.3rem; margin: 0 0.2rem;">RED</span>
+              <span> you must click <strong>Green</strong>.</span>
+            </div>
+            <button id="startStroopBtn" class="primary-btn">Start Game</button>
+          </div>
         </div>
         <div class="game-container hidden" id="stroopGameContainer">
           <div class="game-header">
