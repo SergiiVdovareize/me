@@ -5,6 +5,7 @@
   let isSwitchingMode = false;
   let modeSwitchTimeout = null;
   let lastY = window.scrollY;
+  let baseProperties = {};
 
   const initEmailObfuscation = () => {
     // Obfuscated email — assembled at runtime so bots scraping static HTML won't find it
@@ -495,17 +496,36 @@
       body: JSON.stringify({
         event: eventName,
         properties: {
-          source: "browser",
+          ...baseProperties,
           ...extraProperties
         }
       })
     }).catch(error => {
       // Fail silently to not disrupt the user experience if analytics server is down
-      console.warn("Analytics tracking failed:", error);
+      console.warn("tracking failed:", error);
     });
   };
 
   const initAnalytics = () => {
+    // Generate or retrieve a session ID to link events together for this visit
+    let sessionId = sessionStorage.getItem("cv_session_id");
+    if (!sessionId) {
+      sessionId = 'sess_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+      sessionStorage.setItem("cv_session_id", sessionId);
+    }
+
+    // Gather unchanging system/browser data once on load
+    baseProperties = {
+      sessionId: sessionId,
+      source: "browser",
+      userAgent: navigator.userAgent,
+      language: navigator.language || navigator.userLanguage,
+      screenWidth: window.screen.width,
+      screenHeight: window.screen.height,
+      timezoneOffset: new Date().getTimezoneOffset()
+    };
+
+    // Send tracking event when the CV page is shown
     trackEvent("CVShown");
   };
 
