@@ -552,11 +552,49 @@
       sessionStorage.setItem("cv_session_id", sessionId);
     }
 
+    // Parse basic user agent properties
+    const ua = navigator.userAgent;
+    let browser = "Unknown";
+    let os = "Unknown";
+    let device = "Desktop";
+
+    // Basic Browser Detection
+    if (/CriOS|Chrome/.test(ua) && !/Edg/.test(ua)) browser = "Chrome";
+    else if (/Safari/.test(ua) && !/Chrome/.test(ua)) browser = "Safari";
+    else if (/Firefox|FxiOS/.test(ua)) browser = "Firefox";
+    else if (/Edg/.test(ua)) browser = "Edge";
+
+    // Basic OS Detection
+    if (/Win/.test(ua)) os = "Windows";
+    else if (/Mac/.test(ua) && !/iPhone|iPad/.test(ua)) os = "macOS";
+    else if (/Android/.test(ua)) os = "Android";
+    else if (/iPhone|iPad/.test(ua)) os = "iOS";
+    else if (/Linux/.test(ua)) os = "Linux";
+
+    // Basic Device Detection
+    if (/iPhone/.test(ua)) device = "iPhone";
+    else if (/iPad/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) device = "iPad";
+    else if (/iPod/.test(ua)) device = "iPod";
+    else if (/Android/.test(ua)) {
+      // Try to extract Android device model
+      const match = ua.match(/Android [0-9\.]+; ([A-Za-z0-9\- ]+)\b/);
+      if (match && match[1] && !match[1].includes("Build")) {
+        device = match[1].trim(); // e.g. "SM-G981B" or "Pixel 4"
+      } else {
+        device = /Tablet/.test(ua) ? "Android Tablet" : "Android Phone";
+      }
+    }
+    else if (/Mobi/.test(ua)) device = "Mobile";
+    else if (/Tablet/.test(ua)) device = "Tablet";
+
     // Gather unchanging system/browser data once on load
     baseProperties = {
       distinctId: sessionId,
       source: "browser",
-      userAgent: navigator.userAgent,
+      userAgent: ua,
+      browser: browser,
+      os: os,
+      device: device,
       language: navigator.language || navigator.userLanguage,
       screenWidth: window.screen.width,
       screenHeight: window.screen.height,
