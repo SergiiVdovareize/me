@@ -309,12 +309,8 @@
       const colors = getActiveColors();
       colors.forEach((color) => {
         const btn = document.createElement("button");
-        btn.className = "color-btn";
+        btn.className = `color-btn color-${color.name.toLowerCase()}`;
         btn.textContent = color.name;
-        btn.style.backgroundColor = color.hex;
-        btn.style.color =
-          color.name === "YELLOW" || color.name === "WHITE" ? "#000" : "#fff";
-        btn.style.borderColor = color.hex;
         btn.onclick = () => handleColorClick(color.name);
         DOM.colorButtons.appendChild(btn);
       });
@@ -367,7 +363,7 @@
       gameState.currentColorObj = colors[colorIndex];
 
       DOM.wordDisplay.textContent = gameState.currentWordObj.name;
-      DOM.wordDisplay.style.color = gameState.currentColorObj.hex;
+      DOM.wordDisplay.className = `word-display color-${gameState.currentColorObj.name.toLowerCase()}`;
     };
 
     const handleColorClick = (clickedColorName) => {
@@ -376,9 +372,9 @@
         gameState.score++;
         if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
         if (DOM.wordDisplay) {
-          DOM.wordDisplay.style.transform = "scale(1.1)";
+          DOM.wordDisplay.classList.add("anim-pop");
           setTimeout(() => {
-            if (DOM.wordDisplay) DOM.wordDisplay.style.transform = "scale(1)";
+            if (DOM.wordDisplay) DOM.wordDisplay.classList.remove("anim-pop");
           }, 100);
         }
         nextWord();
@@ -387,15 +383,10 @@
         gameState.score = Math.max(0, gameState.score - 1);
         if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
         if (DOM.wordDisplay) {
-          DOM.wordDisplay.style.transform = "translateX(-10px)";
+          DOM.wordDisplay.classList.add("anim-shake");
           setTimeout(() => {
-            if (DOM.wordDisplay)
-              DOM.wordDisplay.style.transform = "translateX(10px)";
-          }, 50);
-          setTimeout(() => {
-            if (DOM.wordDisplay)
-              DOM.wordDisplay.style.transform = "translateX(0)";
-          }, 100);
+            if (DOM.wordDisplay) DOM.wordDisplay.classList.remove("anim-shake");
+          }, 150);
         }
       }
     };
@@ -423,7 +414,7 @@
       }
       // Optional UI cue showing it's paused
       if (DOM.container) {
-        DOM.container.style.opacity = "0.02";
+        DOM.container.classList.add("game-paused");
       }
     };
 
@@ -437,7 +428,7 @@
         return;
 
       if (DOM.container) {
-        DOM.container.style.opacity = "1";
+        DOM.container.classList.remove("game-paused");
       }
 
       gameState.timerInterval = setInterval(() => {
@@ -473,7 +464,7 @@
       if (DOM.gameOver) DOM.gameOver.classList.add("hidden");
       if (DOM.container) {
         DOM.container.classList.remove("hidden");
-        DOM.container.style.opacity = "1";
+        DOM.container.classList.remove("game-paused");
         // Give the browser a tiny tick to render the display:block before scrolling
         setTimeout(() => {
           if (DOM.bottomScroller) {

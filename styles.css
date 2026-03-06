@@ -156,13 +156,20 @@ a:hover {
   letter-spacing: 0.06em;
 }
 
-/* Toggles container */
 .toggles-container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.mt-1-5 {
+  margin-top: 1.5rem;
+}
+
+.mt-0 {
+  margin-top: 0;
 }
 
 .toggles-wrapper {
@@ -810,6 +817,10 @@ body.high-contrast .tag {
   font-size: 1.15rem;
 }
 
+.pet-projects-title {
+  margin-top: 2rem;
+}
+
 /* --- Stroop Game --- */
 .stroop-game-section {
   margin-top: 4rem;
@@ -862,6 +873,17 @@ body.high-contrast .stroop-game-section h3 {
   border: 1px dashed var(--accent-black);
   margin-bottom: 0;
   /* overridden by flex-gap */
+}
+
+.ink-color-highlight {
+  text-decoration: underline;
+}
+
+.example-word {
+  color: #33cc33;
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin: 0 0.2rem;
 }
 
 body.high-contrast .stroop-example {
@@ -935,10 +957,111 @@ body.high-contrast .primary-btn:active {
   align-items: center;
   justify-content: center;
   text-shadow: 2px 2px 4px #616161;
+  color: var(--game-color, inherit);
 }
 
 body.high-contrast .word-display {
   text-shadow: 2px 2px 2px #e3e3e3;
+}
+
+/* --- Stroop Dynamic Colors & Animations --- */
+.color-red {
+  --game-color: #d12e2e;
+  --game-text: #fff;
+}
+
+.color-blue {
+  --game-color: #0057b7;
+  --game-text: #fff;
+}
+
+.color-green {
+  --game-color: #2e8b57;
+  --game-text: #fff;
+}
+
+.color-yellow {
+  --game-color: #ffd700;
+  --game-text: #000;
+}
+
+.color-black {
+  --game-color: #1a1a1a;
+  --game-text: #fff;
+}
+
+.color-white {
+  --game-color: #ffffff;
+  --game-text: #000;
+}
+
+body.high-contrast .color-red {
+  --game-color: #ff3333;
+}
+
+body.high-contrast .color-blue {
+  --game-color: #3399ff;
+}
+
+body.high-contrast .color-green {
+  --game-color: #33cc33;
+}
+
+body.high-contrast .color-yellow {
+  --game-color: #ffff00;
+}
+
+body.high-contrast .color-black {
+  --game-color: #1a1a1a;
+}
+
+body.high-contrast .color-white {
+  --game-color: #ffffff;
+}
+
+.game-paused {
+  opacity: 0.02;
+  transition: opacity 0.2s;
+}
+
+@keyframes stroop-pop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.anim-pop {
+  animation: stroop-pop 0.1s ease-out;
+}
+
+@keyframes stroop-shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-10px);
+  }
+
+  75% {
+    transform: translateX(10px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.anim-shake {
+  animation: stroop-shake 0.15s ease-in-out;
 }
 
 .color-buttons {
@@ -956,10 +1079,10 @@ body.high-contrast .word-display {
   font-size: 1.2rem;
   font-weight: bold;
   padding: 0.8rem 1.5rem;
-  border: 2px solid var(--accent-black);
+  border: 2px solid var(--game-color, var(--accent-black));
   border-radius: 4px;
-  background: #fff;
-  color: var(--accent-black);
+  background-color: var(--game-color, #fff);
+  color: var(--game-text, var(--accent-black));
   transition: all 0.2s;
   min-width: 100px;
 }

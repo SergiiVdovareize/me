@@ -70,8 +70,8 @@
             >GitHub</a
           >
         </div>
-        <div class="toggles-container" style="margin-top: 1.5rem">
-          <div class="toggles-wrapper cv-format-toggle" style="margin-top: 0">
+        <div class="toggles-container mt-1-5">
+          <div class="toggles-wrapper cv-format-toggle mt-0">
             <span class="cv-format-label">CV Format:</span>
             <div class="exp-toggle" id="expToggle">
               <span class="slider"></span>
@@ -723,7 +723,7 @@
             </ul>
           </article>
 
-          <h2 style="margin-top: 2rem">Recent Pet Projects</h2>
+          <h2 class="pet-projects-title">Recent Pet Projects</h2>
 
           <!-- Merged card visible only in short mode -->
           <article class="job job-merged">
@@ -897,22 +897,13 @@
             appreciation, I built a little brain teaser just for you!
             <br />
             Game rules: click the button that matches the
-            <strong style="text-decoration: underline">ink color</strong> of the
-            text, not what the word says.
+            <strong class="ink-color-highlight">ink color</strong> of the text,
+            not what the word says.
           </p>
           <div class="stroop-intro-actions">
             <div class="stroop-example">
               <span>Example: If you see </span>
-              <span
-                class="example-word"
-                style="
-                  color: #33cc33;
-                  font-weight: bold;
-                  font-size: 1.3rem;
-                  margin: 0 0.2rem;
-                "
-                >RED</span
-              >
+              <span class="example-word">RED</span>
               <span> you must click <strong>Green</strong>.</span>
             </div>
             <button id="startStroopBtn" class="primary-btn">Start Game</button>
@@ -923,13 +914,7 @@
             <div class="timer">Time: <span id="stroopTimer">30</span>s</div>
             <div class="score">Score: <span id="stroopScore">0</span></div>
           </div>
-          <div
-            class="word-display"
-            id="stroopWord"
-            style="transition: transform 0.1s"
-          >
-            READY?
-          </div>
+          <div class="word-display" id="stroopWord">READY?</div>
           <div class="color-buttons" id="stroopColorButtons"></div>
         </div>
         <div class="game-over hidden" id="stroopGameOver">
