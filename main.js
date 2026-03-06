@@ -582,7 +582,29 @@
     return "Desktop";
   };
 
-  const initAnalytics = () => {
+  const fetchCountry = async () => {
+    try {
+      // Use ipapi.co for free geolocation (client-side)
+      const response = await fetch("https://ipapi.co/json/");
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          country: data.country_name,
+          countryCode: data.country_code,
+          city: data.city,
+          timezone: data.timezone,
+        };
+      }
+    } catch (e) {
+      console.warn("Country detection failed", e);
+    }
+    return {
+      country: "Unknown",
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    };
+  };
+
+  const initAnalytics = async () => {
     // Generate or retrieve a session ID to link events together for this visit
     let sessionId = sessionStorage.getItem("cv_session_id");
     if (!sessionId) {
@@ -593,6 +615,7 @@
       sessionStorage.setItem("cv_session_id", sessionId);
     }
 
+    const countryData = await fetchCountry();
     const ua = navigator.userAgent;
 
     // Gather unchanging system/browser data once on load
@@ -604,6 +627,10 @@
       os: getOS(ua),
       device: getDevice(ua),
       language: navigator.language || navigator.userLanguage,
+      country: countryData.country,
+      countryCode: countryData.countryCode,
+      city: countryData.city,
+      timezone: countryData.timezone,
       screenWidth: window.screen.width,
       screenHeight: window.screen.height,
       timezoneOffset: new Date().getTimezoneOffset(),
