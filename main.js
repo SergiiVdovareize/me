@@ -211,6 +211,7 @@
 
     const gameState = {
       score: 0,
+      maxScore: 0,
       time: STROOP_CONFIG.defaultTime,
       timerInterval: null,
       currentColorObj: null,
@@ -317,7 +318,7 @@
         ? [...GAME_COLORS.highContrast]
         : [...GAME_COLORS.standard];
       
-      if (gameState.score >= 10) {
+      if (gameState.maxScore >= 10) {
         const extraColors = isHighContrast
           ? GAME_COLORS.extraHighContrast
           : GAME_COLORS.extraStandard;
@@ -329,23 +330,91 @@
 
     const renderButtons = () => {
       if (!DOM.colorButtons) return;
-      DOM.colorButtons.innerHTML = "";
-      let colors = getActiveColors();
+
+      const colors = getActiveColors();
       
-      if (gameState.score >= 20) {
-        for (let i = colors.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [colors[i], colors[j]] = [colors[j], colors[i]];
-        }
+      // If container is empty (game start), just append all at once
+      if (DOM.colorButtons.children.length === 0) {
+        colors.forEach((color) => {
+          const btn = document.createElement("button");
+          btn.dataset.colorName = color.name;
+          btn.className = `color-btn color-${color.name.toLowerCase()}`;
+          btn.textContent = color.name;
+          btn.onclick = () => handleColorClick(color.name);
+          DOM.colorButtons.appendChild(btn);
+        });
+        return;
       }
 
-      colors.forEach((color) => {
-        const btn = document.createElement("button");
-        btn.className = `color-btn color-${color.name.toLowerCase()}`;
-        btn.textContent = color.name;
-        btn.onclick = () => handleColorClick(color.name);
-        DOM.colorButtons.appendChild(btn);
+      const existingButtons = Array.from(DOM.colorButtons.children);
+      const existingNames = existingButtons.map(b => b.dataset.colorName);
+      const targetNames = colors.map(c => c.name);
+
+      // Remove buttons that are no longer needed
+      existingButtons.forEach(btn => {
+        if (!targetNames.includes(btn.dataset.colorName)) {
+           btn.style.transform = 'scale(0.5)';
+           btn.style.opacity = '0';
+           btn.style.transition = 'all 0.2s ease-in';
+           btn.style.pointerEvents = 'none';
+           setTimeout(() => { if(btn.parentNode) btn.remove(); }, 200);
+        }
       });
+
+      // Add new buttons
+      colors.forEach(color => {
+        if (!existingNames.includes(color.name)) {
+          const btn = document.createElement("button");
+          btn.dataset.colorName = color.name;
+          btn.className = `color-btn color-${color.name.toLowerCase()} btn-enter`;
+          btn.textContent = color.name;
+          btn.onclick = () => handleColorClick(color.name);
+          btn.addEventListener('animationend', () => btn.classList.remove('btn-enter'), { once: true });
+          DOM.colorButtons.appendChild(btn);
+        }
+      });
+
+      // FLIP Animation logic when only shuffling is required (score >= 20)
+      if (gameState.maxScore >= 20) {
+        const children = Array.from(DOM.colorButtons.children).filter(b => targetNames.includes(b.dataset.colorName));
+        
+        // FIRST: get initial positions of all child elements before moving them
+        const firstPositions = children.map(child => {
+          return { el: child, rect: child.getBoundingClientRect(), color: child.dataset.colorName };
+        });
+        
+        // SHUFFLE DOM
+        const order = [...firstPositions];
+        for (let i = order.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [order[i], order[j]] = [order[j], order[i]];
+        }
+
+        // Append in new order (this instantly updates the layout)
+        order.forEach(({el}) => DOM.colorButtons.appendChild(el));
+
+        // LAST: measure new positions
+        const lastPositions = order.map(({el}) => el.getBoundingClientRect());
+
+        // INVERT & PLAY
+        order.forEach(({el}, index) => {
+          const first = firstPositions.find(fp => fp.color === el.dataset.colorName).rect;
+          const last = lastPositions[index];
+
+          const deltaX = first.left - last.left;
+          const deltaY = first.top - last.top;
+
+          // Apply immediate transform to invert the move
+          el.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+          el.style.transition = 'transform 0s';
+
+          // Wait one frame and then apply the fast transition to its native state
+          requestAnimationFrame(() => {
+            el.style.transition = 'transform 0.15s ease-out';
+            el.style.transform = '';
+          });
+        });
+      }
     };
 
     const updateStroopWordColor = () => {
@@ -400,9 +469,15 @@
 
     const handleColorClick = (clickedColorName) => {
       const prevScore = gameState.score;
-      if (clickedColorName === gameState.currentColorObj.name) {
+      const prevMaxScore = gameState.maxScore;
+      const isCorrect = clickedColorName === gameState.currentColorObj.name;
+      
+      if (isCorrect) {
         playTone(TONE_TYPES.CORRECT);
         gameState.score++;
+        if (gameState.score > gameState.maxScore) {
+          gameState.maxScore = gameState.score;
+        }
         if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
         if (DOM.wordDisplay) {
           DOM.wordDisplay.classList.add("anim-pop");
@@ -424,12 +499,23 @@
       }
 
       // Trigger a re-render of buttons for threshold crossings or >= 20 shuffling
-      const crossed10Up = prevScore < 10 && gameState.score >= 10;
-      const crossed10Down = prevScore >= 10 && gameState.score < 10;
-      const crossed20Down = prevScore >= 20 && gameState.score < 20;
+      // We only care about crossing thresholds upward now for adding features
+      const crossed10Up = prevMaxScore < 10 && gameState.maxScore >= 10;
       
-      if (crossed10Up || crossed10Down || crossed20Down || gameState.score >= 20) {
+      // We want to shuffle if maxScore >= 20 and the answer was correct, or if we just crossed 10
+      if (crossed10Up || (gameState.maxScore >= 20 && isCorrect)) {
         renderButtons();
+        
+        if (crossed10Up) {
+          setTimeout(() => {
+            if (DOM.bottomScroller) {
+              DOM.bottomScroller.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+              });
+            }
+          }, 350); // wait slightly longer for the entrance animation to finish
+        }
       }
     };
 
@@ -497,6 +583,7 @@
       playTone(TONE_TYPES.START);
 
       gameState.score = 0;
+      gameState.maxScore = 0;
       gameState.time = STROOP_CONFIG.defaultTime;
 
       if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
