@@ -67,22 +67,18 @@ a:hover {
   width: 40px;
   z-index: 100;
   background-image:
-    linear-gradient(
-      45deg,
+    linear-gradient(45deg,
       var(--accent-red) 25%,
       transparent 25%,
       transparent 75%,
       var(--accent-red) 75%,
-      var(--accent-red)
-    ),
-    linear-gradient(
-      45deg,
+      var(--accent-red)),
+    linear-gradient(45deg,
       var(--accent-red) 25%,
       transparent 25%,
       transparent 75%,
       var(--accent-red) 75%,
-      var(--accent-red)
-    );
+      var(--accent-red));
   background-position:
     0 0,
     10px 10px;
@@ -997,6 +993,21 @@ body.high-contrast .word-display {
   --game-text: #000;
 }
 
+.color-purple {
+  --game-color: #800080;
+  --game-text: #fff;
+}
+
+.color-orange {
+  --game-color: #ff8c00;
+  --game-text: #fff;
+}
+
+.color-cyan {
+  --game-color: #00bcd4;
+  --game-text: #fff;
+}
+
 body.high-contrast .color-red {
   --game-color: #ff3333;
 }
@@ -1019,6 +1030,19 @@ body.high-contrast .color-black {
 
 body.high-contrast .color-white {
   --game-color: #ffffff;
+}
+
+body.high-contrast .color-purple {
+  --game-color: #cc00cc;
+}
+
+body.high-contrast .color-orange {
+  --game-color: #ff9900;
+}
+
+body.high-contrast .color-cyan {
+  --game-color: #00ffff;
+  --game-text: #000;
 }
 
 .game-paused {

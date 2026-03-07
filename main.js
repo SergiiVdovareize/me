@@ -182,6 +182,16 @@
         { name: "YELLOW", hex: "#ffff00" },
         { name: "WHITE", hex: "#ffffff" },
       ],
+      extraStandard: [
+        { name: "PURPLE", hex: "#800080" },
+        { name: "ORANGE", hex: "#ff8c00" },
+        { name: "CYAN", hex: "#00bcd4" },
+      ],
+      extraHighContrast: [
+        { name: "PURPLE", hex: "#cc00cc" },
+        { name: "ORANGE", hex: "#ff9900" },
+        { name: "CYAN", hex: "#00ffff" },
+      ],
     };
 
     const DOM = {
@@ -302,9 +312,19 @@
     };
 
     const getActiveColors = () => {
-      return document.body.classList.contains("high-contrast")
-        ? GAME_COLORS.highContrast
-        : GAME_COLORS.standard;
+      const isHighContrast = document.body.classList.contains("high-contrast");
+      let colors = isHighContrast
+        ? [...GAME_COLORS.highContrast]
+        : [...GAME_COLORS.standard];
+      
+      if (gameState.score >= 10) {
+        const extraColors = isHighContrast
+          ? GAME_COLORS.extraHighContrast
+          : GAME_COLORS.extraStandard;
+        colors = colors.concat(extraColors);
+      }
+      
+      return colors;
     };
 
     const renderButtons = () => {
@@ -371,6 +391,7 @@
     };
 
     const handleColorClick = (clickedColorName) => {
+      const prevScore = gameState.score;
       if (clickedColorName === gameState.currentColorObj.name) {
         playTone(TONE_TYPES.CORRECT);
         gameState.score++;
@@ -392,6 +413,13 @@
             if (DOM.wordDisplay) DOM.wordDisplay.classList.remove("anim-shake");
           }, 150);
         }
+      }
+
+      // If we crossed the 10 threshold, trigger a re-render of buttons
+      const crossedUp = prevScore < 10 && gameState.score >= 10;
+      const crossedDown = prevScore >= 10 && gameState.score < 10;
+      if (crossedUp || crossedDown) {
+        renderButtons();
       }
     };
 
