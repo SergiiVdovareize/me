@@ -166,12 +166,12 @@
       tickTime: 3,
       trickProbability: 0.3,
       bonusSeconds: 5,
-      bonusInterval: 10,
+      bonusInterval: 5,
       stages: {
-        expansion: 10,
-        shuffle: 20,
-        greyMode: 30,
-        mismatched: 40,
+        expansion: 5,
+        shuffle: 10,
+        greyMode: 15,
+        mismatched: 20,
       },
     };
 
@@ -414,7 +414,7 @@
       const needsRender = existingNames.length !== targetNames.length;
 
       const isGreyModeStage = gameState.maxScore >= STROOP_CONFIG.stages.greyMode && gameState.maxScore < STROOP_CONFIG.stages.mismatched;
-      const isShuffleStage = (gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode) || gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
+      const isShuffleStage = gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode;
 
       if (needsRender || gameState.maxScore < STROOP_CONFIG.stages.shuffle || isGreyModeStage || gameState.maxScore >= STROOP_CONFIG.stages.mismatched) {
         DOM.colorButtons.innerHTML = "";
@@ -626,7 +626,7 @@
       const crossedGreyMode = prevMaxScore < STROOP_CONFIG.stages.greyMode && gameState.maxScore >= STROOP_CONFIG.stages.greyMode;
       const crossedMismatched = prevMaxScore < STROOP_CONFIG.stages.mismatched && gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
       
-      const isShuffleStage = (gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode) || gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
+      const isShuffleStage = gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode;
       
       // We want to shuffle if in shuffle stages and the answer was correct, or if we just crossed thresholds
       const shouldShuffle = isShuffleStage && isCorrect;

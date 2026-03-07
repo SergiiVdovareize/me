@@ -1120,7 +1120,7 @@ body.high-contrast .color-cyan {
   border-radius: 4px;
   background-color: var(--game-color, #fff);
   color: var(--game-text, var(--accent-black));
-  transition: all 0.2s;
+  transition: background-color 0.5s, color 0.5s, border-color 0.5s, transform 0.15s, opacity 0.2s;
   min-width: 100px;
 }
 
