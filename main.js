@@ -165,6 +165,14 @@
       warningTime: 10,
       tickTime: 3,
       trickProbability: 0.3,
+      bonusSeconds: 5,
+      bonusInterval: 10,
+      stages: {
+        expansion: 10,
+        shuffle: 20,
+        greyMode: 30,
+        mismatched: 40,
+      },
     };
 
     const GAME_COLORS = {
@@ -334,7 +342,7 @@
         ? [...GAME_COLORS.highContrast]
         : [...GAME_COLORS.standard];
       
-      if (gameState.maxScore >= 10) {
+      if (gameState.maxScore >= STROOP_CONFIG.stages.expansion) {
         const extraColors = isHighContrast
           ? GAME_COLORS.extraHighContrast
           : GAME_COLORS.extraStandard;
@@ -400,32 +408,35 @@
         }
       });
 
-      // FLIP Animation logic when only shuffling is required (score >= 20 and < 30)
+      // FLIP Animation logic when only shuffling is required (score >= shuffle and < greyMode)
       // This block is for shuffling existing buttons without adding/removing,
-      // or for applying grey-mode if maxScore >= 30.
+      // or for applying grey-mode if maxScore >= greyMode.
       const needsRender = existingNames.length !== targetNames.length;
 
-      if (needsRender || gameState.maxScore < 20 || (gameState.maxScore >= 30 && gameState.maxScore < 40) || gameState.maxScore >= 40) {
+      const isGreyModeStage = gameState.maxScore >= STROOP_CONFIG.stages.greyMode && gameState.maxScore < STROOP_CONFIG.stages.mismatched;
+      const isShuffleStage = (gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode) || gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
+
+      if (needsRender || gameState.maxScore < STROOP_CONFIG.stages.shuffle || isGreyModeStage || gameState.maxScore >= STROOP_CONFIG.stages.mismatched) {
         DOM.colorButtons.innerHTML = "";
         
-        if (gameState.maxScore >= 30 && gameState.maxScore < 40) {
+        if (isGreyModeStage) {
           DOM.colorButtons.classList.add("grey-mode");
         } else {
           DOM.colorButtons.classList.remove("grey-mode");
         }
 
         let displayColors = [...colors];
-        // Shuffle for 20-30 AND 40+ levels
-        if ((gameState.maxScore >= 20 && gameState.maxScore < 30) || gameState.maxScore >= 40) {
+        // Shuffle for shuffle stages
+        if (isShuffleStage) {
           for (let i = displayColors.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [displayColors[i], displayColors[j]] = [displayColors[j], displayColors[i]];
           }
         }
 
-        // Prepare mismatched assignments for backgrounds if at 40+
+        // Prepare mismatched assignments for backgrounds if at mismatched stage
         let backgroundColorsMap = {};
-        if (gameState.maxScore >= 40) {
+        if (gameState.maxScore >= STROOP_CONFIG.stages.mismatched) {
           // We need a derangement: a permutation where no element appears in its original position.
           // Since displayColors is already shuffled, we can just shift them by 1.
           // This ensures unique backgrounds and that background !== text (if array has > 1 element).
@@ -440,7 +451,7 @@
           btn.dataset.colorName = color.name;
           
           let colorClass = color.name.toLowerCase();
-          if (gameState.maxScore >= 40) {
+          if (gameState.maxScore >= STROOP_CONFIG.stages.mismatched) {
             colorClass = backgroundColorsMap[color.name];
           }
           
@@ -457,7 +468,7 @@
           
           DOM.colorButtons.appendChild(btn);
         });
-      } else if ((gameState.maxScore >= 20 && gameState.maxScore < 30) || gameState.maxScore >= 40) {
+      } else if (isShuffleStage) {
         // This is the FLIP animation for shuffling when buttons are already present
         // and no new buttons are added/removed.
         const children = Array.from(DOM.colorButtons.children).filter(b => targetNames.includes(b.dataset.colorName));
@@ -561,14 +572,14 @@
         
         let playedBonusSound = false;
         
-        // Track the highest score and give bonuses at every 10 points
+        // Track the highest score and give bonuses at every interval
         if (gameState.score > gameState.maxScore) {
           gameState.maxScore = gameState.score;
           
-          const currentMilestone = Math.floor(gameState.maxScore / 10);
-          if (currentMilestone > gameState.bonusMilestonesReached && gameState.maxScore > 0 && gameState.maxScore % 10 === 0) {
+          const currentMilestone = Math.floor(gameState.maxScore / STROOP_CONFIG.bonusInterval);
+          if (currentMilestone > gameState.bonusMilestonesReached && gameState.maxScore > 0 && gameState.maxScore % STROOP_CONFIG.bonusInterval === 0) {
             gameState.bonusMilestonesReached = currentMilestone;
-            gameState.time += 5;
+            gameState.time += STROOP_CONFIG.bonusSeconds;
             
             // Play positive bonus sound instead of the basic correct ping
             playTone(TONE_TYPES.BONUS);
@@ -609,19 +620,21 @@
         }
       }
 
-      // Trigger a re-render of buttons for threshold crossings or >= 20 shuffling
+      // Trigger a re-render of buttons for threshold crossings or shuffle stages
       // We only care about crossing thresholds upward now for adding features
-      const crossed10Up = prevMaxScore < 10 && gameState.maxScore >= 10;
-      const crossed30Up = prevMaxScore < 30 && gameState.maxScore >= 30;
-      const crossed40Up = prevMaxScore < 40 && gameState.maxScore >= 40;
+      const crossedExpansion = prevMaxScore < STROOP_CONFIG.stages.expansion && gameState.maxScore >= STROOP_CONFIG.stages.expansion;
+      const crossedGreyMode = prevMaxScore < STROOP_CONFIG.stages.greyMode && gameState.maxScore >= STROOP_CONFIG.stages.greyMode;
+      const crossedMismatched = prevMaxScore < STROOP_CONFIG.stages.mismatched && gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
       
-      // We want to shuffle if 20 <= maxScore < 30 or maxScore >= 40 and the answer was correct, or if we just crossed thresholds
-      const shouldShuffle = (gameState.maxScore >= 20 && gameState.maxScore < 30 && isCorrect) || (gameState.maxScore >= 40 && isCorrect);
+      const isShuffleStage = (gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode) || gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
       
-      if (crossed10Up || crossed30Up || crossed40Up || shouldShuffle) {
+      // We want to shuffle if in shuffle stages and the answer was correct, or if we just crossed thresholds
+      const shouldShuffle = isShuffleStage && isCorrect;
+      
+      if (crossedExpansion || crossedGreyMode || crossedMismatched || shouldShuffle) {
         renderButtons();
         
-        if (crossed10Up || crossed30Up || crossed40Up) {
+        if (crossedExpansion || crossedGreyMode || crossedMismatched) {
           setTimeout(() => {
             if (DOM.bottomScroller) {
               DOM.bottomScroller.scrollIntoView({
