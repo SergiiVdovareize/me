@@ -437,12 +437,23 @@
         // Prepare mismatched assignments for backgrounds if at mismatched stage
         let backgroundColorsMap = {};
         if (gameState.maxScore >= STROOP_CONFIG.stages.mismatched) {
-          // We need a derangement: a permutation where no element appears in its original position.
-          // Since displayColors is already shuffled, we can just shift them by 1.
-          // This ensures unique backgrounds and that background !== text (if array has > 1 element).
-          for (let i = 0; i < displayColors.length; i++) {
-            const nextIndex = (i + 1) % displayColors.length;
-            backgroundColorsMap[displayColors[i].name] = displayColors[nextIndex].name.toLowerCase();
+          const names = displayColors.map(c => c.name);
+          const shuffled = [...names];
+          
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          
+          for (let i = 0; i < names.length; i++) {
+            const label = names[i];
+            const bgCandidate = shuffled[i];
+            
+            if (bgCandidate === label) {
+              const swapIdx = (i + 1) % names.length;
+              [shuffled[i], shuffled[swapIdx]] = [shuffled[swapIdx], shuffled[i]];
+            }
+            backgroundColorsMap[label] = shuffled[i].toLowerCase();
           }
         }
         
@@ -627,11 +638,12 @@
       const crossedMismatched = prevMaxScore < STROOP_CONFIG.stages.mismatched && gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
       
       const isShuffleStage = gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode;
+      const isMismatchedStage = gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
       
-      // We want to shuffle if in shuffle stages and the answer was correct, or if we just crossed thresholds
-      const shouldShuffle = isShuffleStage && isCorrect;
+      // We want to shuffle positions in shuffle stage, or shuffle backgrounds in mismatched stage
+      const shouldUpdate = (isShuffleStage || isMismatchedStage) && isCorrect;
       
-      if (crossedExpansion || crossedGreyMode || crossedMismatched || shouldShuffle) {
+      if (crossedExpansion || crossedGreyMode || crossedMismatched || shouldUpdate) {
         renderButtons();
         
         if (crossedExpansion || crossedGreyMode || crossedMismatched) {
