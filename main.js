@@ -303,7 +303,7 @@
         case TONE_TYPES.WARNING10:
           osc.type = "triangle";
           // Create a more urgent "double heartbeat" pulse
-          [0, 0.2].forEach(offset => {
+          [0, 0.2].forEach((offset) => {
             const start = now + offset;
             osc.frequency.setValueAtTime(350, start);
             osc.frequency.exponentialRampToValueAtTime(280, start + 0.1);
@@ -342,14 +342,14 @@
       let colors = isHighContrast
         ? [...GAME_COLORS.highContrast]
         : [...GAME_COLORS.standard];
-      
+
       if (gameState.maxScore >= STROOP_CONFIG.stages.expansion) {
         const extraColors = isHighContrast
           ? GAME_COLORS.extraHighContrast
           : GAME_COLORS.extraStandard;
         colors = colors.concat(extraColors);
       }
-      
+
       return colors;
     };
 
@@ -357,12 +357,12 @@
       if (!DOM.colorButtons) return;
 
       const colors = getActiveColors();
-      
+
       // If container is empty (game start), just append all at once
       if (DOM.colorButtons.children.length === 0) {
         if (colors.length === 5) {
-          DOM.colorButtons.classList.add('max-5-layout');
-          DOM.colorButtons.classList.remove('max-8-layout');
+          DOM.colorButtons.classList.add("max-5-layout");
+          DOM.colorButtons.classList.remove("max-8-layout");
         }
 
         colors.forEach((color) => {
@@ -377,34 +377,40 @@
       }
 
       if (colors.length > 5) {
-        DOM.colorButtons.classList.add('max-8-layout');
-        DOM.colorButtons.classList.remove('max-5-layout');
+        DOM.colorButtons.classList.add("max-8-layout");
+        DOM.colorButtons.classList.remove("max-5-layout");
       }
 
       const existingButtons = Array.from(DOM.colorButtons.children);
-      const existingNames = existingButtons.map(b => b.dataset.colorName);
-      const targetNames = colors.map(c => c.name);
+      const existingNames = existingButtons.map((b) => b.dataset.colorName);
+      const targetNames = colors.map((c) => c.name);
 
       // Remove buttons that are no longer needed
-      existingButtons.forEach(btn => {
+      existingButtons.forEach((btn) => {
         if (!targetNames.includes(btn.dataset.colorName)) {
-           btn.style.transform = 'scale(0.5)';
-           btn.style.opacity = '0';
-           btn.style.transition = 'all 0.2s ease-in';
-           btn.style.pointerEvents = 'none';
-           setTimeout(() => { if(btn.parentNode) btn.remove(); }, 200);
+          btn.style.transform = "scale(0.5)";
+          btn.style.opacity = "0";
+          btn.style.transition = "all 0.2s ease-in";
+          btn.style.pointerEvents = "none";
+          setTimeout(() => {
+            if (btn.parentNode) btn.remove();
+          }, 200);
         }
       });
 
       // Add new buttons
-      colors.forEach(color => {
+      colors.forEach((color) => {
         if (!existingNames.includes(color.name)) {
           const btn = document.createElement("button");
           btn.dataset.colorName = color.name;
           btn.className = `color-btn color-${color.name.toLowerCase()} btn-enter`;
           btn.textContent = color.name;
           btn.onclick = () => handleColorClick(color.name);
-          btn.addEventListener('animationend', () => btn.classList.remove('btn-enter'), { once: true });
+          btn.addEventListener(
+            "animationend",
+            () => btn.classList.remove("btn-enter"),
+            { once: true },
+          );
           DOM.colorButtons.appendChild(btn);
         }
       });
@@ -414,12 +420,23 @@
       // or for applying grey-mode if maxScore >= greyMode.
       const needsRender = existingNames.length !== targetNames.length;
 
-      const isGreyModeStage = gameState.maxScore >= STROOP_CONFIG.stages.greyMode && gameState.maxScore < STROOP_CONFIG.stages.mismatched;
-      const isShuffleStage = (gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode) || gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle;
+      const isGreyModeStage =
+        gameState.maxScore >= STROOP_CONFIG.stages.greyMode &&
+        gameState.maxScore < STROOP_CONFIG.stages.mismatched;
+      const isShuffleStage =
+        (gameState.maxScore >= STROOP_CONFIG.stages.shuffle &&
+          gameState.maxScore < STROOP_CONFIG.stages.greyMode) ||
+        gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle;
 
-      if (needsRender || gameState.maxScore < STROOP_CONFIG.stages.shuffle || isGreyModeStage || (gameState.maxScore >= STROOP_CONFIG.stages.mismatched && gameState.maxScore < STROOP_CONFIG.stages.mismatchedShuffle)) {
+      if (
+        needsRender ||
+        gameState.maxScore < STROOP_CONFIG.stages.shuffle ||
+        isGreyModeStage ||
+        (gameState.maxScore >= STROOP_CONFIG.stages.mismatched &&
+          gameState.maxScore < STROOP_CONFIG.stages.mismatchedShuffle)
+      ) {
         DOM.colorButtons.innerHTML = "";
-        
+
         if (isGreyModeStage) {
           DOM.colorButtons.classList.add("grey-mode");
         } else {
@@ -431,90 +448,107 @@
         if (isShuffleStage || forceShufflePositions) {
           for (let i = displayColors.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [displayColors[i], displayColors[j]] = [displayColors[j], displayColors[i]];
+            [displayColors[i], displayColors[j]] = [
+              displayColors[j],
+              displayColors[i],
+            ];
           }
         }
 
         // Prepare mismatched assignments for backgrounds if at mismatched stage
         let backgroundColorsMap = {};
         if (gameState.maxScore >= STROOP_CONFIG.stages.mismatched) {
-          const names = displayColors.map(c => c.name);
+          const names = displayColors.map((c) => c.name);
           const shuffled = [...names];
-          
+
           for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
           }
-          
+
           for (let i = 0; i < names.length; i++) {
             const label = names[i];
             const bgCandidate = shuffled[i];
-            
+
             if (bgCandidate === label) {
               const swapIdx = (i + 1) % names.length;
-              [shuffled[i], shuffled[swapIdx]] = [shuffled[swapIdx], shuffled[i]];
+              [shuffled[i], shuffled[swapIdx]] = [
+                shuffled[swapIdx],
+                shuffled[i],
+              ];
             }
             backgroundColorsMap[label] = shuffled[i].toLowerCase();
           }
         }
-        
+
         displayColors.forEach((color) => {
           const btn = document.createElement("button");
           btn.dataset.colorName = color.name;
-          
+
           let colorClass = color.name.toLowerCase();
           if (gameState.maxScore >= STROOP_CONFIG.stages.mismatched) {
             colorClass = backgroundColorsMap[color.name];
           }
-          
+
           // Only add entrance animation to buttons that weren't there before
           const isNewButton = !existingNames.includes(color.name);
-          btn.className = `color-btn color-${colorClass}${isNewButton ? ' btn-enter' : ''}`;
-          
+          btn.className = `color-btn color-${colorClass}${isNewButton ? " btn-enter" : ""}`;
+
           btn.textContent = color.name;
           btn.onclick = () => handleColorClick(color.name);
-          
+
           if (isNewButton) {
-            btn.addEventListener('animationend', () => btn.classList.remove('btn-enter'), { once: true });
+            btn.addEventListener(
+              "animationend",
+              () => btn.classList.remove("btn-enter"),
+              { once: true },
+            );
           }
-          
+
           DOM.colorButtons.appendChild(btn);
         });
       } else {
-        const children = Array.from(DOM.colorButtons.children).filter(b => targetNames.includes(b.dataset.colorName));
-        
+        const children = Array.from(DOM.colorButtons.children).filter((b) =>
+          targetNames.includes(b.dataset.colorName),
+        );
+
         // Handle mismatched background color shuffling for stage 50+
         if (gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle) {
-          const names = children.map(b => b.dataset.colorName);
+          const names = children.map((b) => b.dataset.colorName);
           const shuffled = [...names];
           let backgroundColorsMap = {};
-          
+
           for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
           }
-          
+
           for (let i = 0; i < names.length; i++) {
             const label = names[i];
             const bgCandidate = shuffled[i];
             if (bgCandidate === label) {
               const swapIdx = (i + 1) % names.length;
-              [shuffled[i], shuffled[swapIdx]] = [shuffled[swapIdx], shuffled[i]];
+              [shuffled[i], shuffled[swapIdx]] = [
+                shuffled[swapIdx],
+                shuffled[i],
+              ];
             }
             backgroundColorsMap[label] = shuffled[i].toLowerCase();
           }
 
-          children.forEach(btn => {
+          children.forEach((btn) => {
             const name = btn.dataset.colorName;
             btn.className = `color-btn color-${backgroundColorsMap[name]}`;
           });
         }
-        
+
         // This is the FLIP animation for shuffling positions
         if (isShuffleStage || forceShufflePositions) {
           // FIRST: get initial positions of all child elements before moving them
-          const firstPositions = children.map(child => ({
-            el: child, rect: child.getBoundingClientRect(), color: child.dataset.colorName
+          const firstPositions = children.map((child) => ({
+            el: child,
+            rect: child.getBoundingClientRect(),
+            color: child.dataset.colorName,
           }));
           // SHUFFLE DOM
           const order = [...firstPositions];
@@ -524,14 +558,18 @@
           }
 
           // Append in new order (this instantly updates the layout)
-          order.forEach(({el}) => DOM.colorButtons.appendChild(el));
+          order.forEach(({ el }) => DOM.colorButtons.appendChild(el));
 
           // LAST: measure new positions
-          const lastPositions = order.map(({el}) => el.getBoundingClientRect());
+          const lastPositions = order.map(({ el }) =>
+            el.getBoundingClientRect(),
+          );
 
           // INVERT & PLAY
-          order.forEach(({el}, index) => {
-            const first = firstPositions.find(fp => fp.color === el.dataset.colorName).rect;
+          order.forEach(({ el }, index) => {
+            const first = firstPositions.find(
+              (fp) => fp.color === el.dataset.colorName,
+            ).rect;
             const last = lastPositions[index];
 
             const deltaX = first.left - last.left;
@@ -539,12 +577,12 @@
 
             // Apply immediate transform to invert the move
             el.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-            el.style.transition = 'transform 0s';
+            el.style.transition = "transform 0s";
 
             // Wait one frame and then apply the fast transition to its native state
             requestAnimationFrame(() => {
-              el.style.transition = 'transform 0.15s ease-out';
-              el.style.transform = '';
+              el.style.transition = "transform 0.15s ease-out";
+              el.style.transform = "";
             });
           });
         }
@@ -605,21 +643,27 @@
       const prevScore = gameState.score;
       const prevMaxScore = gameState.maxScore;
       const isCorrect = clickedColorName === gameState.currentColorObj.name;
-      
+
       if (isCorrect) {
         gameState.score++;
-        
+
         let playedBonusSound = false;
-        
+
         // Track the highest score and give bonuses at every interval
         if (gameState.score > gameState.maxScore) {
           gameState.maxScore = gameState.score;
-          
-          const currentMilestone = Math.floor(gameState.maxScore / STROOP_CONFIG.bonusInterval);
-          if (currentMilestone > gameState.bonusMilestonesReached && gameState.maxScore > 0 && gameState.maxScore % STROOP_CONFIG.bonusInterval === 0) {
+
+          const currentMilestone = Math.floor(
+            gameState.maxScore / STROOP_CONFIG.bonusInterval,
+          );
+          if (
+            currentMilestone > gameState.bonusMilestonesReached &&
+            gameState.maxScore > 0 &&
+            gameState.maxScore % STROOP_CONFIG.bonusInterval === 0
+          ) {
             gameState.bonusMilestonesReached = currentMilestone;
             gameState.time += STROOP_CONFIG.bonusSeconds;
-            
+
             // Play positive bonus sound instead of the basic correct ping
             playTone(TONE_TYPES.BONUS);
             playedBonusSound = true;
@@ -629,16 +673,17 @@
               DOM.timerDisplay.textContent = gameState.time;
               DOM.timerDisplay.classList.add("anim-pop");
               setTimeout(() => {
-                if (DOM.timerDisplay) DOM.timerDisplay.classList.remove("anim-pop");
+                if (DOM.timerDisplay)
+                  DOM.timerDisplay.classList.remove("anim-pop");
               }, 100);
             }
           }
         }
-        
+
         if (!playedBonusSound) {
           playTone(TONE_TYPES.CORRECT);
         }
-        
+
         if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
         if (DOM.wordDisplay) {
           DOM.wordDisplay.classList.add("anim-pop");
@@ -661,23 +706,41 @@
 
       // Trigger a re-render of buttons for threshold crossings or shuffle stages
       // We only care about crossing thresholds upward now for adding features
-      const crossedExpansion = prevMaxScore < STROOP_CONFIG.stages.expansion && gameState.maxScore >= STROOP_CONFIG.stages.expansion;
-      const crossedShuffleLevel = prevMaxScore < STROOP_CONFIG.stages.shuffle && gameState.maxScore >= STROOP_CONFIG.stages.shuffle;
-      const crossedGreyMode = prevMaxScore < STROOP_CONFIG.stages.greyMode && gameState.maxScore >= STROOP_CONFIG.stages.greyMode;
-      const crossedMismatched = prevMaxScore < STROOP_CONFIG.stages.mismatched && gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
-      const crossedMismatchedShuffle = prevMaxScore < STROOP_CONFIG.stages.mismatchedShuffle && gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle;
-      
-      const justCrossedStage = crossedExpansion || crossedShuffleLevel || crossedGreyMode || crossedMismatched || crossedMismatchedShuffle;
-      
-      const isShuffleStage = gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode;
-      const isMismatchedStage = gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
-      
+      const crossedExpansion =
+        prevMaxScore < STROOP_CONFIG.stages.expansion &&
+        gameState.maxScore >= STROOP_CONFIG.stages.expansion;
+      const crossedShuffleLevel =
+        prevMaxScore < STROOP_CONFIG.stages.shuffle &&
+        gameState.maxScore >= STROOP_CONFIG.stages.shuffle;
+      const crossedGreyMode =
+        prevMaxScore < STROOP_CONFIG.stages.greyMode &&
+        gameState.maxScore >= STROOP_CONFIG.stages.greyMode;
+      const crossedMismatched =
+        prevMaxScore < STROOP_CONFIG.stages.mismatched &&
+        gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
+      const crossedMismatchedShuffle =
+        prevMaxScore < STROOP_CONFIG.stages.mismatchedShuffle &&
+        gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle;
+
+      const justCrossedStage =
+        crossedExpansion ||
+        crossedShuffleLevel ||
+        crossedGreyMode ||
+        crossedMismatched ||
+        crossedMismatchedShuffle;
+
+      const isShuffleStage =
+        gameState.maxScore >= STROOP_CONFIG.stages.shuffle &&
+        gameState.maxScore < STROOP_CONFIG.stages.greyMode;
+      const isMismatchedStage =
+        gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
+
       // We want to shuffle positions in shuffle stage, or shuffle backgrounds in mismatched stage
       const shouldUpdate = (isShuffleStage || isMismatchedStage) && isCorrect;
-      
+
       if (justCrossedStage || shouldUpdate) {
         renderButtons(justCrossedStage);
-        
+
         if (justCrossedStage) {
           setTimeout(() => {
             if (DOM.bottomScroller) {
