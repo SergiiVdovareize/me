@@ -217,6 +217,7 @@
       currentColorObj: null,
       currentWordObj: null,
       audioCtx: null,
+      bonusMilestonesReached: 0,
     };
 
     const initAudio = () => {
@@ -236,9 +237,11 @@
       END: "end",
       WARNING10: "warning10",
       TICK: "tick",
+      BONUS: "bonus", // New positive bonus sound
     };
 
     const playTone = (type) => {
+      console.log("playTone", type);
       if (!gameState.audioCtx) return;
       if (gameState.audioCtx.state === "suspended") gameState.audioCtx.resume();
 
@@ -297,6 +300,18 @@
           gainNode.gain.linearRampToValueAtTime(0.1, now + 0.05);
           gainNode.gain.setValueAtTime(0, now + 0.1); // gap
           gainNode.gain.setValueAtTime(0.1, now + 0.15);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+          break;
+        case TONE_TYPES.BONUS:
+          osc.type = "sine";
+          // Play a quick two-note happy chord-like sweep
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+          osc.frequency.setValueAtTime(880, now + 0.1);
+          osc.frequency.exponentialRampToValueAtTime(1200, now + 0.3);
+          gainNode.gain.setValueAtTime(0.3, now);
           gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
           osc.start(now);
           osc.stop(now + 0.3);
@@ -523,11 +538,38 @@
       const isCorrect = clickedColorName === gameState.currentColorObj.name;
       
       if (isCorrect) {
-        playTone(TONE_TYPES.CORRECT);
         gameState.score++;
+        
+        let playedBonusSound = false;
+        
+        // Track the highest score and give bonuses at every 10 points
         if (gameState.score > gameState.maxScore) {
           gameState.maxScore = gameState.score;
+          
+          const currentMilestone = Math.floor(gameState.maxScore / 10);
+          if (currentMilestone > gameState.bonusMilestonesReached && gameState.maxScore > 0 && gameState.maxScore % 10 === 0) {
+            gameState.bonusMilestonesReached = currentMilestone;
+            gameState.time += 5;
+            
+            // Play positive bonus sound instead of the basic correct ping
+            playTone(TONE_TYPES.BONUS);
+            playedBonusSound = true;
+
+            // visually pop the timer display
+            if (DOM.timerDisplay) {
+              DOM.timerDisplay.textContent = gameState.time;
+              DOM.timerDisplay.classList.add("anim-pop");
+              setTimeout(() => {
+                if (DOM.timerDisplay) DOM.timerDisplay.classList.remove("anim-pop");
+              }, 100);
+            }
+          }
         }
+        
+        if (!playedBonusSound) {
+          playTone(TONE_TYPES.CORRECT);
+        }
+        
         if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
         if (DOM.wordDisplay) {
           DOM.wordDisplay.classList.add("anim-pop");
@@ -635,6 +677,7 @@
 
       gameState.score = 0;
       gameState.maxScore = 0;
+      gameState.bonusMilestonesReached = 0;
       gameState.time = STROOP_CONFIG.defaultTime;
 
       if (DOM.colorButtons) DOM.colorButtons.classList.remove("grey-mode");
