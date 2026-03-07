@@ -161,7 +161,7 @@
 
   const initStroopGame = () => {
     const STROOP_CONFIG = {
-      defaultTime: 60,
+      defaultTime: 90,
       warningTime: 10,
       tickTime: 3,
       trickProbability: 0.3,
@@ -741,7 +741,7 @@
       if (justCrossedStage || shouldUpdate) {
         renderButtons(justCrossedStage);
 
-        if (justCrossedStage) {
+        if (crossedExpansion) {
           setTimeout(() => {
             if (DOM.bottomScroller) {
               DOM.bottomScroller.scrollIntoView({
