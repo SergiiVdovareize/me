@@ -1095,7 +1095,18 @@ body.high-contrast .color-cyan {
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
+  transition: max-width 0.3s ease-in-out;
+}
+
+.color-buttons.max-5-layout {
+  max-width: 650px;
+  /* Force max 3 per row (with 100px min-width + gap) */
+}
+
+.color-buttons.max-8-layout {
+  max-width: 850px;
+  /* Force max 4 per row (with 100px min-width + gap) */
 }
 
 .color-btn {
@@ -1120,6 +1131,17 @@ body.high-contrast .color-cyan {
 .color-btn:active {
   transform: scale(0.95);
   filter: brightness(0.8);
+}
+
+.grey-mode .color-btn {
+  --game-color: #cccccc !important;
+  --game-text: #000 !important;
+}
+
+body.high-contrast .grey-mode .color-btn {
+  --game-color: #000000 !important;
+  --game-text: #ffffff !important;
+  border-color: #ffffff !important;
 }
 
 @keyframes stroop-btn-enter {

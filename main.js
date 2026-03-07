@@ -335,6 +335,11 @@
       
       // If container is empty (game start), just append all at once
       if (DOM.colorButtons.children.length === 0) {
+        if (colors.length === 5) {
+          DOM.colorButtons.classList.add('max-5-layout');
+          DOM.colorButtons.classList.remove('max-8-layout');
+        }
+
         colors.forEach((color) => {
           const btn = document.createElement("button");
           btn.dataset.colorName = color.name;
@@ -344,6 +349,11 @@
           DOM.colorButtons.appendChild(btn);
         });
         return;
+      }
+
+      if (colors.length > 5) {
+        DOM.colorButtons.classList.add('max-8-layout');
+        DOM.colorButtons.classList.remove('max-5-layout');
       }
 
       const existingButtons = Array.from(DOM.colorButtons.children);
@@ -374,8 +384,48 @@
         }
       });
 
-      // FLIP Animation logic when only shuffling is required (score >= 20)
-      if (gameState.maxScore >= 20) {
+      // FLIP Animation logic when only shuffling is required (score >= 20 and < 30)
+      // This block is for shuffling existing buttons without adding/removing,
+      // or for applying grey-mode if maxScore >= 30.
+      const needsRender = existingNames.length !== targetNames.length;
+
+      if (needsRender || gameState.maxScore < 20 || gameState.maxScore >= 30) {
+        DOM.colorButtons.innerHTML = "";
+        
+        if (gameState.maxScore >= 30) {
+          DOM.colorButtons.classList.add("grey-mode");
+        } else {
+          DOM.colorButtons.classList.remove("grey-mode");
+        }
+
+        let displayColors = [...colors];
+        if (gameState.maxScore >= 20 && gameState.maxScore < 30) {
+          for (let i = displayColors.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [displayColors[i], displayColors[j]] = [displayColors[j], displayColors[i]];
+          }
+        }
+        
+        displayColors.forEach((color) => {
+          const btn = document.createElement("button");
+          btn.dataset.colorName = color.name;
+          
+          // Only add entrance animation to buttons that weren't there before
+          const isNewButton = !existingNames.includes(color.name);
+          btn.className = `color-btn color-${color.name.toLowerCase()}${isNewButton ? ' btn-enter' : ''}`;
+          
+          btn.textContent = color.name;
+          btn.onclick = () => handleColorClick(color.name);
+          
+          if (isNewButton) {
+            btn.addEventListener('animationend', () => btn.classList.remove('btn-enter'), { once: true });
+          }
+          
+          DOM.colorButtons.appendChild(btn);
+        });
+      } else if (gameState.maxScore >= 20 && gameState.maxScore < 30) {
+        // This is the FLIP animation for shuffling when buttons are already present
+        // and no new buttons are added/removed, and maxScore is between 20 and 30.
         const children = Array.from(DOM.colorButtons.children).filter(b => targetNames.includes(b.dataset.colorName));
         
         // FIRST: get initial positions of all child elements before moving them
@@ -501,12 +551,13 @@
       // Trigger a re-render of buttons for threshold crossings or >= 20 shuffling
       // We only care about crossing thresholds upward now for adding features
       const crossed10Up = prevMaxScore < 10 && gameState.maxScore >= 10;
+      const crossed30Up = prevMaxScore < 30 && gameState.maxScore >= 30;
       
-      // We want to shuffle if maxScore >= 20 and the answer was correct, or if we just crossed 10
-      if (crossed10Up || (gameState.maxScore >= 20 && isCorrect)) {
+      // We want to shuffle if 20 <= maxScore < 30 and the answer was correct, or if we just crossed 10 or 30
+      if (crossed10Up || crossed30Up || (gameState.maxScore >= 20 && gameState.maxScore < 30 && isCorrect)) {
         renderButtons();
         
-        if (crossed10Up) {
+        if (crossed10Up || crossed30Up) {
           setTimeout(() => {
             if (DOM.bottomScroller) {
               DOM.bottomScroller.scrollIntoView({
@@ -586,6 +637,7 @@
       gameState.maxScore = 0;
       gameState.time = STROOP_CONFIG.defaultTime;
 
+      if (DOM.colorButtons) DOM.colorButtons.classList.remove("grey-mode");
       if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;
       if (DOM.timerDisplay) DOM.timerDisplay.textContent = gameState.time;
 
