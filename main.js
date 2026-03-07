@@ -330,7 +330,15 @@
     const renderButtons = () => {
       if (!DOM.colorButtons) return;
       DOM.colorButtons.innerHTML = "";
-      const colors = getActiveColors();
+      let colors = getActiveColors();
+      
+      if (gameState.score >= 20) {
+        for (let i = colors.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [colors[i], colors[j]] = [colors[j], colors[i]];
+        }
+      }
+
       colors.forEach((color) => {
         const btn = document.createElement("button");
         btn.className = `color-btn color-${color.name.toLowerCase()}`;
@@ -415,10 +423,12 @@
         }
       }
 
-      // If we crossed the 10 threshold, trigger a re-render of buttons
-      const crossedUp = prevScore < 10 && gameState.score >= 10;
-      const crossedDown = prevScore >= 10 && gameState.score < 10;
-      if (crossedUp || crossedDown) {
+      // Trigger a re-render of buttons for threshold crossings or >= 20 shuffling
+      const crossed10Up = prevScore < 10 && gameState.score >= 10;
+      const crossed10Down = prevScore >= 10 && gameState.score < 10;
+      const crossed20Down = prevScore >= 20 && gameState.score < 20;
+      
+      if (crossed10Up || crossed10Down || crossed20Down || gameState.score >= 20) {
         renderButtons();
       }
     };
