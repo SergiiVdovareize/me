@@ -405,20 +405,33 @@
       // or for applying grey-mode if maxScore >= 30.
       const needsRender = existingNames.length !== targetNames.length;
 
-      if (needsRender || gameState.maxScore < 20 || gameState.maxScore >= 30) {
+      if (needsRender || gameState.maxScore < 20 || (gameState.maxScore >= 30 && gameState.maxScore < 40) || gameState.maxScore >= 40) {
         DOM.colorButtons.innerHTML = "";
         
-        if (gameState.maxScore >= 30) {
+        if (gameState.maxScore >= 30 && gameState.maxScore < 40) {
           DOM.colorButtons.classList.add("grey-mode");
         } else {
           DOM.colorButtons.classList.remove("grey-mode");
         }
 
         let displayColors = [...colors];
-        if (gameState.maxScore >= 20 && gameState.maxScore < 30) {
+        // Shuffle for 20-30 AND 40+ levels
+        if ((gameState.maxScore >= 20 && gameState.maxScore < 30) || gameState.maxScore >= 40) {
           for (let i = displayColors.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [displayColors[i], displayColors[j]] = [displayColors[j], displayColors[i]];
+          }
+        }
+
+        // Prepare mismatched assignments for backgrounds if at 40+
+        let backgroundColorsMap = {};
+        if (gameState.maxScore >= 40) {
+          // We need a derangement: a permutation where no element appears in its original position.
+          // Since displayColors is already shuffled, we can just shift them by 1.
+          // This ensures unique backgrounds and that background !== text (if array has > 1 element).
+          for (let i = 0; i < displayColors.length; i++) {
+            const nextIndex = (i + 1) % displayColors.length;
+            backgroundColorsMap[displayColors[i].name] = displayColors[nextIndex].name.toLowerCase();
           }
         }
         
@@ -426,9 +439,14 @@
           const btn = document.createElement("button");
           btn.dataset.colorName = color.name;
           
+          let colorClass = color.name.toLowerCase();
+          if (gameState.maxScore >= 40) {
+            colorClass = backgroundColorsMap[color.name];
+          }
+          
           // Only add entrance animation to buttons that weren't there before
           const isNewButton = !existingNames.includes(color.name);
-          btn.className = `color-btn color-${color.name.toLowerCase()}${isNewButton ? ' btn-enter' : ''}`;
+          btn.className = `color-btn color-${colorClass}${isNewButton ? ' btn-enter' : ''}`;
           
           btn.textContent = color.name;
           btn.onclick = () => handleColorClick(color.name);
@@ -439,9 +457,9 @@
           
           DOM.colorButtons.appendChild(btn);
         });
-      } else if (gameState.maxScore >= 20 && gameState.maxScore < 30) {
+      } else if ((gameState.maxScore >= 20 && gameState.maxScore < 30) || gameState.maxScore >= 40) {
         // This is the FLIP animation for shuffling when buttons are already present
-        // and no new buttons are added/removed, and maxScore is between 20 and 30.
+        // and no new buttons are added/removed.
         const children = Array.from(DOM.colorButtons.children).filter(b => targetNames.includes(b.dataset.colorName));
         
         // FIRST: get initial positions of all child elements before moving them
@@ -595,12 +613,15 @@
       // We only care about crossing thresholds upward now for adding features
       const crossed10Up = prevMaxScore < 10 && gameState.maxScore >= 10;
       const crossed30Up = prevMaxScore < 30 && gameState.maxScore >= 30;
+      const crossed40Up = prevMaxScore < 40 && gameState.maxScore >= 40;
       
-      // We want to shuffle if 20 <= maxScore < 30 and the answer was correct, or if we just crossed 10 or 30
-      if (crossed10Up || crossed30Up || (gameState.maxScore >= 20 && gameState.maxScore < 30 && isCorrect)) {
+      // We want to shuffle if 20 <= maxScore < 30 or maxScore >= 40 and the answer was correct, or if we just crossed thresholds
+      const shouldShuffle = (gameState.maxScore >= 20 && gameState.maxScore < 30 && isCorrect) || (gameState.maxScore >= 40 && isCorrect);
+      
+      if (crossed10Up || crossed30Up || crossed40Up || shouldShuffle) {
         renderButtons();
         
-        if (crossed10Up || crossed30Up) {
+        if (crossed10Up || crossed30Up || crossed40Up) {
           setTimeout(() => {
             if (DOM.bottomScroller) {
               DOM.bottomScroller.scrollIntoView({
