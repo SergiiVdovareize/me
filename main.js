@@ -172,6 +172,7 @@
         shuffle: 20,
         greyMode: 30,
         mismatched: 40,
+        mismatchedShuffle: 50,
       },
     };
 
@@ -414,7 +415,7 @@
       const needsRender = existingNames.length !== targetNames.length;
 
       const isGreyModeStage = gameState.maxScore >= STROOP_CONFIG.stages.greyMode && gameState.maxScore < STROOP_CONFIG.stages.mismatched;
-      const isShuffleStage = gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode;
+      const isShuffleStage = (gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode) || gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle;
 
       if (needsRender || gameState.maxScore < STROOP_CONFIG.stages.shuffle || isGreyModeStage || gameState.maxScore >= STROOP_CONFIG.stages.mismatched) {
         DOM.colorButtons.innerHTML = "";
@@ -637,7 +638,7 @@
       const crossedGreyMode = prevMaxScore < STROOP_CONFIG.stages.greyMode && gameState.maxScore >= STROOP_CONFIG.stages.greyMode;
       const crossedMismatched = prevMaxScore < STROOP_CONFIG.stages.mismatched && gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
       
-      const isShuffleStage = gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode;
+      const isShuffleStage = (gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode) || gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle;
       const isMismatchedStage = gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
       
       // We want to shuffle positions in shuffle stage, or shuffle backgrounds in mismatched stage
