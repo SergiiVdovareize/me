@@ -161,18 +161,18 @@
 
   const initStroopGame = () => {
     const STROOP_CONFIG = {
-      defaultTime: 60,
+      defaultTime: 200,
       warningTime: 10,
       tickTime: 3,
       trickProbability: 0.3,
       bonusSeconds: 5,
-      bonusInterval: 10,
+      bonusInterval: 100,
       stages: {
-        expansion: 10,
-        shuffle: 20,
-        greyMode: 30,
-        mismatched: 40,
-        mismatchedShuffle: 50,
+        expansion: 3,
+        shuffle: 6,
+        greyMode: 9,
+        mismatched: 12,
+        mismatchedShuffle: 15,
       },
     };
 
@@ -417,7 +417,7 @@
       const isGreyModeStage = gameState.maxScore >= STROOP_CONFIG.stages.greyMode && gameState.maxScore < STROOP_CONFIG.stages.mismatched;
       const isShuffleStage = (gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode) || gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle;
 
-      if (needsRender || gameState.maxScore < STROOP_CONFIG.stages.shuffle || isGreyModeStage || gameState.maxScore >= STROOP_CONFIG.stages.mismatched) {
+      if (needsRender || gameState.maxScore < STROOP_CONFIG.stages.shuffle || isGreyModeStage || (gameState.maxScore >= STROOP_CONFIG.stages.mismatched && gameState.maxScore < STROOP_CONFIG.stages.mismatchedShuffle)) {
         DOM.colorButtons.innerHTML = "";
         
         if (isGreyModeStage) {
@@ -480,47 +480,75 @@
           
           DOM.colorButtons.appendChild(btn);
         });
-      } else if (isShuffleStage) {
-        // This is the FLIP animation for shuffling when buttons are already present
-        // and no new buttons are added/removed.
+      } else {
         const children = Array.from(DOM.colorButtons.children).filter(b => targetNames.includes(b.dataset.colorName));
         
-        // FIRST: get initial positions of all child elements before moving them
-        const firstPositions = children.map(child => {
-          return { el: child, rect: child.getBoundingClientRect(), color: child.dataset.colorName };
-        });
-        
-        // SHUFFLE DOM
-        const order = [...firstPositions];
-        for (let i = order.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [order[i], order[j]] = [order[j], order[i]];
-        }
+        // Handle mismatched background color shuffling for stage 50+
+        if (gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle) {
+          const names = children.map(b => b.dataset.colorName);
+          const shuffled = [...names];
+          let backgroundColorsMap = {};
+          
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          
+          for (let i = 0; i < names.length; i++) {
+            const label = names[i];
+            const bgCandidate = shuffled[i];
+            if (bgCandidate === label) {
+              const swapIdx = (i + 1) % names.length;
+              [shuffled[i], shuffled[swapIdx]] = [shuffled[swapIdx], shuffled[i]];
+            }
+            backgroundColorsMap[label] = shuffled[i].toLowerCase();
+          }
 
-        // Append in new order (this instantly updates the layout)
-        order.forEach(({el}) => DOM.colorButtons.appendChild(el));
-
-        // LAST: measure new positions
-        const lastPositions = order.map(({el}) => el.getBoundingClientRect());
-
-        // INVERT & PLAY
-        order.forEach(({el}, index) => {
-          const first = firstPositions.find(fp => fp.color === el.dataset.colorName).rect;
-          const last = lastPositions[index];
-
-          const deltaX = first.left - last.left;
-          const deltaY = first.top - last.top;
-
-          // Apply immediate transform to invert the move
-          el.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-          el.style.transition = 'transform 0s';
-
-          // Wait one frame and then apply the fast transition to its native state
-          requestAnimationFrame(() => {
-            el.style.transition = 'transform 0.15s ease-out';
-            el.style.transform = '';
+          children.forEach(btn => {
+            const name = btn.dataset.colorName;
+            btn.className = `color-btn color-${backgroundColorsMap[name]}`;
           });
-        });
+        }
+        
+        // This is the FLIP animation for shuffling positions
+        if (isShuffleStage) {
+          // FIRST: get initial positions of all child elements before moving them
+          const firstPositions = children.map(child => {
+            return { el: child, rect: child.getBoundingClientRect(), color: child.dataset.colorName };
+          });
+          
+          // SHUFFLE DOM
+          const order = [...firstPositions];
+          for (let i = order.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [order[i], order[j]] = [order[j], order[i]];
+          }
+
+          // Append in new order (this instantly updates the layout)
+          order.forEach(({el}) => DOM.colorButtons.appendChild(el));
+
+          // LAST: measure new positions
+          const lastPositions = order.map(({el}) => el.getBoundingClientRect());
+
+          // INVERT & PLAY
+          order.forEach(({el}, index) => {
+            const first = firstPositions.find(fp => fp.color === el.dataset.colorName).rect;
+            const last = lastPositions[index];
+
+            const deltaX = first.left - last.left;
+            const deltaY = first.top - last.top;
+
+            // Apply immediate transform to invert the move
+            el.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            el.style.transition = 'transform 0s';
+
+            // Wait one frame and then apply the fast transition to its native state
+            requestAnimationFrame(() => {
+              el.style.transition = 'transform 0.15s ease-out';
+              el.style.transform = '';
+            });
+          });
+        }
       }
     };
 
