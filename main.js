@@ -161,18 +161,18 @@
 
   const initStroopGame = () => {
     const STROOP_CONFIG = {
-      defaultTime: 200,
+      defaultTime: 60,
       warningTime: 10,
       tickTime: 3,
       trickProbability: 0.3,
       bonusSeconds: 5,
-      bonusInterval: 100,
+      bonusInterval: 10,
       stages: {
-        expansion: 3,
-        shuffle: 6,
-        greyMode: 9,
-        mismatched: 12,
-        mismatchedShuffle: 15,
+        expansion: 10,
+        shuffle: 20,
+        greyMode: 30,
+        mismatched: 40,
+        mismatchedShuffle: 50,
       },
     };
 
@@ -353,7 +353,7 @@
       return colors;
     };
 
-    const renderButtons = () => {
+    const renderButtons = (forceShufflePositions = false) => {
       if (!DOM.colorButtons) return;
 
       const colors = getActiveColors();
@@ -427,8 +427,8 @@
         }
 
         let displayColors = [...colors];
-        // Shuffle for shuffle stages
-        if (isShuffleStage) {
+        // Shuffle for shuffle stages or forced
+        if (isShuffleStage || forceShufflePositions) {
           for (let i = displayColors.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [displayColors[i], displayColors[j]] = [displayColors[j], displayColors[i]];
@@ -511,12 +511,11 @@
         }
         
         // This is the FLIP animation for shuffling positions
-        if (isShuffleStage) {
+        if (isShuffleStage || forceShufflePositions) {
           // FIRST: get initial positions of all child elements before moving them
-          const firstPositions = children.map(child => {
-            return { el: child, rect: child.getBoundingClientRect(), color: child.dataset.colorName };
-          });
-          
+          const firstPositions = children.map(child => ({
+            el: child, rect: child.getBoundingClientRect(), color: child.dataset.colorName
+          }));
           // SHUFFLE DOM
           const order = [...firstPositions];
           for (let i = order.length - 1; i > 0; i--) {
@@ -663,19 +662,23 @@
       // Trigger a re-render of buttons for threshold crossings or shuffle stages
       // We only care about crossing thresholds upward now for adding features
       const crossedExpansion = prevMaxScore < STROOP_CONFIG.stages.expansion && gameState.maxScore >= STROOP_CONFIG.stages.expansion;
+      const crossedShuffleLevel = prevMaxScore < STROOP_CONFIG.stages.shuffle && gameState.maxScore >= STROOP_CONFIG.stages.shuffle;
       const crossedGreyMode = prevMaxScore < STROOP_CONFIG.stages.greyMode && gameState.maxScore >= STROOP_CONFIG.stages.greyMode;
       const crossedMismatched = prevMaxScore < STROOP_CONFIG.stages.mismatched && gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
+      const crossedMismatchedShuffle = prevMaxScore < STROOP_CONFIG.stages.mismatchedShuffle && gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle;
       
-      const isShuffleStage = (gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode) || gameState.maxScore >= STROOP_CONFIG.stages.mismatchedShuffle;
+      const justCrossedStage = crossedExpansion || crossedShuffleLevel || crossedGreyMode || crossedMismatched || crossedMismatchedShuffle;
+      
+      const isShuffleStage = gameState.maxScore >= STROOP_CONFIG.stages.shuffle && gameState.maxScore < STROOP_CONFIG.stages.greyMode;
       const isMismatchedStage = gameState.maxScore >= STROOP_CONFIG.stages.mismatched;
       
       // We want to shuffle positions in shuffle stage, or shuffle backgrounds in mismatched stage
       const shouldUpdate = (isShuffleStage || isMismatchedStage) && isCorrect;
       
-      if (crossedExpansion || crossedGreyMode || crossedMismatched || shouldUpdate) {
-        renderButtons();
+      if (justCrossedStage || shouldUpdate) {
+        renderButtons(justCrossedStage);
         
-        if (crossedExpansion || crossedGreyMode || crossedMismatched) {
+        if (justCrossedStage) {
           setTimeout(() => {
             if (DOM.bottomScroller) {
               DOM.bottomScroller.scrollIntoView({
@@ -776,7 +779,7 @@
         }, 50);
       }
 
-      renderButtons();
+      renderButtons(true);
       nextWord();
 
       if (gameState.timerInterval) clearInterval(gameState.timerInterval);
@@ -791,7 +794,7 @@
         !DOM.container.classList.contains("hidden") &&
         DOM.gameOver.classList.contains("hidden"),
       reRender: () => {
-        renderButtons();
+        renderButtons(true);
         updateStroopWordColor();
       },
     };
