@@ -166,12 +166,12 @@
       tickTime: 3,
       trickProbability: 0.3,
       bonusSeconds: 5,
-      bonusInterval: 5,
+      bonusInterval: 10,
       stages: {
-        expansion: 5,
-        shuffle: 10,
-        greyMode: 15,
-        mismatched: 20,
+        expansion: 10,
+        shuffle: 20,
+        greyMode: 30,
+        mismatched: 40,
       },
     };
 
