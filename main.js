@@ -237,11 +237,10 @@
       END: "end",
       WARNING10: "warning10",
       TICK: "tick",
-      BONUS: "bonus", // New positive bonus sound
+      BONUS: "bonus",
     };
 
     const playTone = (type) => {
-      console.log("playTone", type);
       if (!gameState.audioCtx) return;
       if (gameState.audioCtx.state === "suspended") gameState.audioCtx.resume();
 
@@ -293,16 +292,18 @@
           osc.stop(now + 0.8);
           break;
         case TONE_TYPES.WARNING10:
-          osc.type = "square";
-          osc.frequency.setValueAtTime(1200, now);
-          osc.frequency.setValueAtTime(1000, now + 0.15);
-          gainNode.gain.setValueAtTime(0, now);
-          gainNode.gain.linearRampToValueAtTime(0.1, now + 0.05);
-          gainNode.gain.setValueAtTime(0, now + 0.1); // gap
-          gainNode.gain.setValueAtTime(0.1, now + 0.15);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.type = "triangle";
+          // Create a more urgent "double heartbeat" pulse
+          [0, 0.2].forEach(offset => {
+            const start = now + offset;
+            osc.frequency.setValueAtTime(350, start);
+            osc.frequency.exponentialRampToValueAtTime(280, start + 0.1);
+            gainNode.gain.setValueAtTime(0, start);
+            gainNode.gain.linearRampToValueAtTime(0.15, start + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, start + 0.15);
+          });
           osc.start(now);
-          osc.stop(now + 0.3);
+          osc.stop(now + 0.5);
           break;
         case TONE_TYPES.BONUS:
           osc.type = "sine";
@@ -318,11 +319,11 @@
           break;
         case TONE_TYPES.TICK:
           osc.type = "sine";
-          osc.frequency.setValueAtTime(800, now);
-          gainNode.gain.setValueAtTime(0.1, now);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+          osc.frequency.setValueAtTime(2500, now);
+          gainNode.gain.setValueAtTime(0.08, now);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
           osc.start(now);
-          osc.stop(now + 0.1);
+          osc.stop(now + 0.05);
           break;
       }
     };
