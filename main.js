@@ -167,7 +167,7 @@
 
   const initStroopGame = () => {
     const STROOP_CONFIG = {
-      defaultTime: 9,
+      defaultTime: 90,
       warningTime: 10,
       tickTime: 3,
       trickProbability: 0.3,
