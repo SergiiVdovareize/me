@@ -928,7 +928,17 @@
         <div class="game-over hidden" id="stroopGameOver">
           <h3>Time's up!</h3>
           <p>Your score: <span id="finalScore">0</span></p>
-          <button id="restartStroopBtn" class="primary-btn">Play Again</button>
+          <div id="leaderboardForm" class="leaderboard-form hidden">
+            <p>Save your score to the leaderboard?</p>
+            <div class="leaderboard-input-group">
+              <input type="text" id="playerName" placeholder="Your name" maxlength="20" aria-label="Player Name" />
+              <div class="leaderboard-actions">
+                <button id="postScoreBtn" class="primary-btn">Post</button>
+                <button id="skipScoreBtn" class="secondary-btn">Skip</button>
+              </div>
+            </div>
+          </div>
+          <button id="restartStroopBtn" class="primary-btn hidden">Play Again</button>
         </div>
       </section>
 

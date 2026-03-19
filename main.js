@@ -7,6 +7,12 @@
   let lastY = window.scrollY;
   let baseProperties = {};
 
+  const API_BASE_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+      ? "http://localhost:3000"
+      : "https://api.vdovareize.me";
+
   const initEmailObfuscation = () => {
     // Obfuscated email — assembled at runtime so bots scraping static HTML won't find it
     const el = document.getElementById("email-link");
@@ -161,7 +167,7 @@
 
   const initStroopGame = () => {
     const STROOP_CONFIG = {
-      defaultTime: 90,
+      defaultTime: 9,
       warningTime: 10,
       tickTime: 3,
       trickProbability: 0.3,
@@ -216,6 +222,10 @@
       scoreDisplay: document.getElementById("stroopScore"),
       timerDisplay: document.getElementById("stroopTimer"),
       finalScoreDisplay: document.getElementById("finalScore"),
+      leaderboardForm: document.getElementById("leaderboardForm"),
+      playerNameInput: document.getElementById("playerName"),
+      postScoreBtn: document.getElementById("postScoreBtn"),
+      skipScoreBtn: document.getElementById("skipScoreBtn"),
     };
 
     const gameState = {
@@ -762,7 +772,33 @@
       if (DOM.gameOver) DOM.gameOver.classList.remove("hidden");
       if (DOM.finalScoreDisplay)
         DOM.finalScoreDisplay.textContent = gameState.score;
+
+      // Show leaderboard form
+      if (DOM.leaderboardForm) {
+        // Reset state from previous runs
+        DOM.leaderboardForm.classList.remove("hidden");
+        const prompt = DOM.leaderboardForm.querySelector("p");
+        if (prompt) prompt.textContent = "Save your score to the leaderboard?";
+        const inputGroup = DOM.leaderboardForm.querySelector(
+          ".leaderboard-input-group",
+        );
+        if (inputGroup) inputGroup.classList.remove("hidden");
+
+        if (DOM.playerNameInput) {
+          DOM.playerNameInput.value = "";
+          // Only focus if not on mobile to prevent keyboard pop-up issues
+          if (!/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+            DOM.playerNameInput.focus();
+          }
+        }
+        if (DOM.postScoreBtn) {
+          DOM.postScoreBtn.disabled = false;
+          DOM.postScoreBtn.textContent = "Post";
+        }
+      }
+
       if (DOM.restartBtn) {
+        DOM.restartBtn.classList.add("hidden");
         DOM.restartBtn.disabled = true;
         setTimeout(() => {
           if (DOM.restartBtn) DOM.restartBtn.disabled = false;
@@ -885,11 +921,59 @@
         startStroopGame();
       });
     }
+
+    const postGameResult = async () => {
+      const name = DOM.playerNameInput.value.trim() || "Anonymous";
+      const score = gameState.score;
+
+      if (DOM.postScoreBtn) {
+        DOM.postScoreBtn.disabled = true;
+        DOM.postScoreBtn.textContent = "Posting...";
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/game-results`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({  
+            gameType: "stroop",
+            name: name,
+            result: score,
+          }),
+        });
+
+        if (response.ok) {
+          if (DOM.leaderboardForm) DOM.leaderboardForm.classList.add("hidden");
+          if (DOM.restartBtn) DOM.restartBtn.classList.remove("hidden");
+        } else {
+          // If response not ok, just proceed as if it were a skip
+          if (DOM.leaderboardForm) DOM.leaderboardForm.classList.add("hidden");
+          if (DOM.restartBtn) DOM.restartBtn.classList.remove("hidden");
+        }
+      } catch (error) {
+        // Silent failure: just proceed to show restart button
+        console.warn("Leaderboard post failed:", error);
+        if (DOM.leaderboardForm) DOM.leaderboardForm.classList.add("hidden");
+        if (DOM.restartBtn) DOM.restartBtn.classList.remove("hidden");
+      }
+    };
+
+    if (DOM.postScoreBtn) {
+      DOM.postScoreBtn.addEventListener("click", postGameResult);
+    }
+    if (DOM.skipScoreBtn) {
+      DOM.skipScoreBtn.addEventListener("click", () => {
+        if (DOM.leaderboardForm) DOM.leaderboardForm.classList.add("hidden");
+        if (DOM.restartBtn) DOM.restartBtn.classList.remove("hidden");
+      });
+    }
   };
 
   // Create a globally accessible tracking method
   const trackEvent = (eventName, extraProperties = {}) => {
-    fetch("https://api.vdovareize.me/analytics/track", {
+    fetch(`${API_BASE_URL}/analytics/track`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
