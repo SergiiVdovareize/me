@@ -67,22 +67,18 @@ a:hover {
   width: 40px;
   z-index: 100;
   background-image:
-    linear-gradient(
-      45deg,
+    linear-gradient(45deg,
       var(--accent-red) 25%,
       transparent 25%,
       transparent 75%,
       var(--accent-red) 75%,
-      var(--accent-red)
-    ),
-    linear-gradient(
-      45deg,
+      var(--accent-red)),
+    linear-gradient(45deg,
       var(--accent-red) 25%,
       transparent 25%,
       transparent 75%,
       var(--accent-red) 75%,
-      var(--accent-red)
-    );
+      var(--accent-red));
   background-position:
     0 0,
     10px 10px;
@@ -1109,7 +1105,7 @@ body.high-contrast .color-cyan {
 }
 
 .color-buttons.max-8-layout {
-  max-width: 850px;
+  max-width: 800px;
   /* Force max 4 per row (with 100px min-width + gap) */
 }
 
@@ -1166,8 +1162,7 @@ body.high-contrast .grey-mode .color-btn {
 }
 
 .btn-enter {
-  animation: stroop-btn-enter 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)
-    forwards;
+  animation: stroop-btn-enter 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 body.high-contrast .color-btn:hover {
