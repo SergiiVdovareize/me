@@ -926,6 +926,8 @@
       const name = DOM.playerNameInput.value.trim() || "Anonymous";
       const score = gameState.score;
 
+      trackEvent("PostGameResult", { name, score });
+
       if (DOM.postScoreBtn) {
         DOM.postScoreBtn.disabled = true;
         DOM.postScoreBtn.textContent = "Posting...";
