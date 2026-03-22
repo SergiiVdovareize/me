@@ -6,10 +6,11 @@
   let modeSwitchTimeout = null;
   let lastY = window.scrollY;
   let baseProperties = {};
+  const isLocal = window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
 
   const API_BASE_URL =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
+    isLocal
       ? "http://localhost:3000"
       : "https://api.vdovareize.me";
 
@@ -167,7 +168,7 @@
 
   const initStroopGame = () => {
     const STROOP_CONFIG = {
-      defaultTime: 90,
+      defaultTime: isLocal ? 9 : 90,
       warningTime: 10,
       tickTime: 3,
       trickProbability: 0.3,
@@ -226,6 +227,7 @@
       playerNameInput: document.getElementById("playerName"),
       postScoreBtn: document.getElementById("postScoreBtn"),
       skipScoreBtn: document.getElementById("skipScoreBtn"),
+      leaderboardList: document.getElementById("leaderboardList"),
     };
 
     const gameState = {
@@ -237,6 +239,7 @@
       currentWordObj: null,
       audioCtx: null,
       bonusMilestonesReached: 0,
+      topScores: [],
     };
 
     const initAudio = () => {
@@ -246,6 +249,19 @@
       }
       if (gameState.audioCtx && gameState.audioCtx.state === "suspended") {
         gameState.audioCtx.resume();
+      }
+    };
+
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/game-results/leaders?type=stroop`,
+        );
+        if (response.ok) {
+          gameState.topScores = await response.json();
+        }
+      } catch (error) {
+        console.warn("Could not fetch leaderboard:", error);
       }
     };
 
@@ -795,6 +811,31 @@
           DOM.postScoreBtn.disabled = false;
           DOM.postScoreBtn.textContent = "Post";
         }
+
+        // Render top scores
+        if (DOM.leaderboardList) {
+          if (gameState.topScores && gameState.topScores.length > 0) {
+            console.log(gameState.topScores);
+            const listHtml = gameState.topScores
+              .map(
+                (entry, index) => `
+                <div class="leaderboard-entry">
+                  <div class="rank-name">
+                    <span class="rank">#${index + 1}</span>
+                    <span class="name">${entry.name}</span>
+                  </div>
+                  <span class="result">${entry.result}</span>
+                </div>
+              `,
+              )
+              .join("");
+            DOM.leaderboardList.innerHTML = listHtml;
+            DOM.leaderboardList.classList.remove("hidden");
+          } else {
+            DOM.leaderboardList.innerHTML =
+              "<p class='no-scores'>No scores yet. Be the first!</p>";
+          }
+        }
       }
 
       if (DOM.restartBtn) {
@@ -857,6 +898,8 @@
       gameState.maxScore = 0;
       gameState.bonusMilestonesReached = 0;
       gameState.time = STROOP_CONFIG.defaultTime;
+
+      fetchLeaderboard();
 
       if (DOM.colorButtons) DOM.colorButtons.classList.remove("grey-mode");
       if (DOM.scoreDisplay) DOM.scoreDisplay.textContent = gameState.score;

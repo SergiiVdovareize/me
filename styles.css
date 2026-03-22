@@ -260,8 +260,6 @@ a:hover {
 }
 
 .name {
-  font-family: var(--font-heading);
-  font-size: 4rem;
   color: var(--accent-black);
   margin-bottom: 0.5rem;
 }
@@ -1220,6 +1218,54 @@ body.high-contrast .color-btn:hover {
   font-weight: normal;
 }
 
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 2rem;
+  max-width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var(--font-body);
+}
+
+.leaderboard-entry {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+  padding: 0.2rem 0;
+}
+
+.leaderboard-entry .rank-name {
+  display: flex;
+  gap: 0.8rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.leaderboard-entry .rank {
+  /* color: var(--accent-red); */
+  font-weight: bold;
+}
+
+.leaderboard-entry .name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.leaderboard-entry .result {
+  font-weight: bold;
+  /* color: var(--accent-blue); */
+  flex-shrink: 0;
+}
+
+.no-scores {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 1rem;
+}
+
 .leaderboard-input-group {
   display: flex;
   flex-direction: column;
@@ -1293,4 +1339,17 @@ body.high-contrast .secondary-btn {
 
 body.high-contrast #playerName:focus {
   border-color: var(--accent-yellow);
+}
+
+body.high-contrast .leaderboard-entry {
+  border-bottom-color: #444;
+  color: #fff;
+}
+
+body.high-contrast .leaderboard-entry .rank {
+  color: var(--accent-yellow);
+}
+
+body.high-contrast .leaderboard-entry .result {
+  color: var(--accent-cyan);
 }
