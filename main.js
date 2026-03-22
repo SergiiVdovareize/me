@@ -168,6 +168,7 @@
 
   const initStroopGame = () => {
     const STROOP_CONFIG = {
+      shift: 1654321,
       defaultTime: isLocal ? 9 : 90,
       warningTime: 10,
       tickTime: 3,
@@ -976,18 +977,30 @@
         DOM.postScoreBtn.textContent = "Posting...";
       }
 
+      const t = btoa(
+        (Math.floor(Date.now() / 2) + STROOP_CONFIG)
+          .toString(36)
+          .split("")
+          .reverse()
+          .join(""),
+      );
+
       try {
-        const response = await fetch(`${API_BASE_URL}/game-results`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `${API_BASE_URL}/game-results`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              gameType: "stroop",
+              name: name,
+              result: score,
+              t: t,
+            }),
           },
-          body: JSON.stringify({  
-            gameType: "stroop",
-            name: name,
-            result: score,
-          }),
-        });
+        );
 
         if (response.ok) {
           if (DOM.leaderboardForm) DOM.leaderboardForm.classList.add("hidden");
