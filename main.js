@@ -816,7 +816,6 @@
         // Render top scores
         if (DOM.leaderboardList) {
           if (gameState.topScores && gameState.topScores.length > 0) {
-            console.log(gameState.topScores);
             const listHtml = gameState.topScores
               .map(
                 (entry, index) => `
@@ -966,6 +965,16 @@
       });
     }
 
+    const tokenize = () => {
+      const s = Date.now() + STROOP_CONFIG.shift;
+      const p = s.toString().match(/.{1,4}/g)
+      const r = `${p[2]}${p[0]}${p[1]}${p[3]}`
+      return btoa(
+        encodeURIComponent(r).replace(/%([0-9A-F]{2})/g,
+          (_, p) => String.fromCharCode('0x' + p))
+      )
+    }
+
     const postGameResult = async () => {
       const name = DOM.playerNameInput.value.trim() || "Anonymous";
       const score = gameState.score;
@@ -977,13 +986,7 @@
         DOM.postScoreBtn.textContent = "Posting...";
       }
 
-      const t = btoa(
-        (Math.floor(Date.now() / 2) + STROOP_CONFIG)
-          .toString(36)
-          .split("")
-          .reverse()
-          .join(""),
-      );
+      const t = tokenize()
 
       try {
         const response = await fetch(
