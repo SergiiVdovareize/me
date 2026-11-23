@@ -332,9 +332,9 @@ function launchConfetti() {
   }
 
   function spawnSideBurst(side) {
-    const count = 55;
-    const minSpeed = Math.max(5.5, width * 0.0085);
-    const maxSpeed = Math.max(10.5, width * 0.0155);
+    const count = width < 600 ? 34 : 50;
+    const minSpeed = Math.max(6.5, width * 0.011);
+    const maxSpeed = Math.max(11.5, width * 0.018);
     const baseY = height * (0.28 + Math.random() * 0.42);
     const baseAngle = -0.25 - Math.random() * 0.55;
 
@@ -350,10 +350,10 @@ function launchConfetti() {
   }
 
   function spawnTopBurst() {
-    const count = 60;
+    const count = width < 600 ? 38 : 55;
     for (let i = 0; i < count; i++) {
       const angle = Math.PI / 2 + (Math.random() - 0.5) * 0.85;
-      const speed = 1.1 + Math.random() * 1.8;
+      const speed = 1.9 + Math.random() * 2.2;
       pieces.push(
         createPiece(
           Math.random() * width,
@@ -378,28 +378,33 @@ function launchConfetti() {
     confettiTimers.push(setTimeout(() => fireBurst(burst.side), burst.delay));
   }
 
-  function tick() {
+  let lastTime = performance.now();
+
+  function tick(now) {
+    const dt = Math.min((now - lastTime) / 16.667, 3);
+    lastTime = now;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, width, height);
     let alive = pendingBursts > 0;
+    const drag = Math.pow(0.985, dt);
 
     for (const p of pieces) {
-      p.swayPhase += p.swaySpeed;
-      p.vx *= 0.985;
-      p.x += p.vx + Math.sin(p.swayPhase) * 0.55;
-      p.y += p.vy;
-      p.vy = Math.min(p.vy + 0.045, 2.6);
-      p.rot += p.vRot;
+      if (p.y >= height + 20) continue;
+      alive = true;
 
-      if (p.y < height + 20) {
-        alive = true;
-      }
+      p.swayPhase += p.swaySpeed * dt;
+      p.vx *= drag;
+      p.x += (p.vx + Math.sin(p.swayPhase) * 0.65) * dt;
+      p.y += p.vy * dt;
+      p.vy = Math.min(p.vy + 0.08 * dt, 4.2);
+      p.rot += p.vRot * dt;
 
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
+      const cos = Math.cos(p.rot) * dpr;
+      const sin = Math.sin(p.rot) * dpr;
+      ctx.setTransform(cos, sin, -sin, cos, p.x * dpr, p.y * dpr);
       ctx.fillStyle = p.color;
       ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-      ctx.restore();
     }
 
     if (alive) {
