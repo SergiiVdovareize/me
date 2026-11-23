@@ -308,7 +308,7 @@ function launchConfetti() {
 
   for (const side of sides) {
     for (let i = 0; i < 4; i++) {
-      bursts.push({ side, delay: i * 650 + Math.random() * 450 });
+      bursts.push({ side, delay: i * 420 + Math.random() * 280 });
     }
   }
 
@@ -380,7 +380,7 @@ function launchConfetti() {
   let lastTime = performance.now();
 
   function tick(now) {
-    const dt = Math.min((now - lastTime) / 16.667, 3);
+    const dt = Math.min((now - lastTime) / 16.667, 3) * 1.9;
     lastTime = now;
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
