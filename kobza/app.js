@@ -287,12 +287,11 @@ function launchConfetti() {
     return;
   }
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = 1;
   const width = window.innerWidth;
   const height = window.innerHeight;
-  canvas.width = width * dpr;
-  canvas.height = height * dpr;
-  ctx.scale(dpr, dpr);
+  canvas.width = width;
+  canvas.height = height;
 
   const colors = [
     "#2e7d32",
@@ -309,7 +308,7 @@ function launchConfetti() {
 
   for (const side of sides) {
     for (let i = 0; i < 4; i++) {
-      bursts.push({ side, delay: i * 1050 + Math.random() * 850 });
+      bursts.push({ side, delay: i * 650 + Math.random() * 450 });
     }
   }
 
@@ -332,11 +331,11 @@ function launchConfetti() {
   }
 
   function spawnSideBurst(side) {
-    const count = width < 600 ? 34 : 50;
-    const minSpeed = Math.max(6.5, width * 0.011);
-    const maxSpeed = Math.max(11.5, width * 0.018);
+    const count = width < 600 ? 28 : 45;
+    const minSpeed = Math.max(10, width * 0.018);
+    const maxSpeed = Math.max(16, width * 0.028);
     const baseY = height * (0.28 + Math.random() * 0.42);
-    const baseAngle = -0.25 - Math.random() * 0.55;
+    const baseAngle = -0.35 - Math.random() * 0.55;
 
     for (let i = 0; i < count; i++) {
       const speed = minSpeed + Math.random() * (maxSpeed - minSpeed);
@@ -350,10 +349,10 @@ function launchConfetti() {
   }
 
   function spawnTopBurst() {
-    const count = width < 600 ? 38 : 55;
+    const count = width < 600 ? 30 : 50;
     for (let i = 0; i < count; i++) {
       const angle = Math.PI / 2 + (Math.random() - 0.5) * 0.85;
-      const speed = 1.9 + Math.random() * 2.2;
+      const speed = 4.5 + Math.random() * 4.5;
       pieces.push(
         createPiece(
           Math.random() * width,
@@ -384,7 +383,7 @@ function launchConfetti() {
     const dt = Math.min((now - lastTime) / 16.667, 3);
     lastTime = now;
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, width, height);
     let alive = pendingBursts > 0;
     const drag = Math.pow(0.985, dt);
@@ -395,14 +394,14 @@ function launchConfetti() {
 
       p.swayPhase += p.swaySpeed * dt;
       p.vx *= drag;
-      p.x += (p.vx + Math.sin(p.swayPhase) * 0.65) * dt;
+      p.x += (p.vx + Math.sin(p.swayPhase) * 0.8) * dt;
       p.y += p.vy * dt;
-      p.vy = Math.min(p.vy + 0.08 * dt, 4.2);
+      p.vy = Math.min(p.vy + 0.18 * dt, 8.5);
       p.rot += p.vRot * dt;
 
-      const cos = Math.cos(p.rot) * dpr;
-      const sin = Math.sin(p.rot) * dpr;
-      ctx.setTransform(cos, sin, -sin, cos, p.x * dpr, p.y * dpr);
+      const cos = Math.cos(p.rot);
+      const sin = Math.sin(p.rot);
+      ctx.setTransform(cos, sin, -sin, cos, p.x, p.y);
       ctx.fillStyle = p.color;
       ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
     }
