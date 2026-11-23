@@ -308,7 +308,7 @@ function launchConfetti() {
 
   for (const side of sides) {
     for (let i = 0; i < 4; i++) {
-      bursts.push({ side, delay: i * 420 + Math.random() * 280 });
+      bursts.push({ side, delay: i * 850 + Math.random() * 650 });
     }
   }
 
@@ -332,8 +332,8 @@ function launchConfetti() {
 
   function spawnSideBurst(side) {
     const count = width < 600 ? 28 : 45;
-    const minSpeed = Math.max(10, width * 0.018);
-    const maxSpeed = Math.max(16, width * 0.028);
+    const minSpeed = Math.max(8, width * 0.014);
+    const maxSpeed = Math.max(13.5, width * 0.022);
     const baseY = height * (0.28 + Math.random() * 0.42);
     const baseAngle = -0.35 - Math.random() * 0.55;
 
@@ -352,7 +352,7 @@ function launchConfetti() {
     const count = width < 600 ? 30 : 50;
     for (let i = 0; i < count; i++) {
       const angle = Math.PI / 2 + (Math.random() - 0.5) * 0.85;
-      const speed = 4.5 + Math.random() * 4.5;
+      const speed = 2.8 + Math.random() * 2.8;
       pieces.push(
         createPiece(
           Math.random() * width,
@@ -394,9 +394,9 @@ function launchConfetti() {
 
       p.swayPhase += p.swaySpeed * dt;
       p.vx *= drag;
-      p.x += (p.vx + Math.sin(p.swayPhase) * 0.8) * dt;
+      p.x += (p.vx + Math.sin(p.swayPhase) * 0.7) * dt;
       p.y += p.vy * dt;
-      p.vy = Math.min(p.vy + 0.18 * dt, 8.5);
+      p.vy = Math.min(p.vy + 0.11 * dt, 5.5);
       p.rot += p.vRot * dt;
 
       const cos = Math.cos(p.rot);
